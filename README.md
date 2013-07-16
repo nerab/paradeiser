@@ -102,7 +102,7 @@ It will be marked as unsuccessful (remember, a pomodoro is indivisible).
       }
 
 ## Output Policy
-*Paradeiser* follows the [Rule of Silence](http://www.faqs.org/docs/artu/ch01s06.html#id2878450). If all goes well, a command will not print any output to `STDOUT`. Reports are excemted from this rule.
+*Paradeiser* follows the [Rule of Silence](http://www.faqs.org/docs/artu/ch01s06.html#id2878450). If all goes well, a command will not print any output to `STDOUT`. Reports are excempted from this rule.
 
 Error messages always go to `STDERR`.
 
@@ -124,7 +124,7 @@ Instead of handling tasks itself, *Paradeiser* integrates with external tools vi
 * `pre-cancel` is called after the `cancel` command was received, but before internal action processing begins
 * `post-cancel` is called after all interal processing for the `cancel` action ended
 * `pre-break` is called after the `break` command was received, but before internal processing for the `break` action begins
-* `post-break` is called after the timer of the current break fired (the break is over), but before internal processing for the `break` action begins
+* `post-break` is called after the timer of the current break fired (the break is over), but after internal processing for the `break` action ended
 
 Terms: Commands are invoked by the user (e.g. `pom start`). Actions are what Paradeiser does internally.
 
@@ -179,7 +179,7 @@ A break cannot be interrupted or cancelled.
 *Paradeiser* uses [I18N](https://github.com/svenfuchs/i18n) to translate messages and localize time and date formats.
 
 ## API
-External tools should use the Ruby API instead or rely on the JSON export. The actual storage backend is **not a public API** and may change at any given time.
+External tools should use the Ruby API instead, or rely on the JSON export. The actual storage backend is *not a public API* and may change at any given time.
 
 # Contributing
 

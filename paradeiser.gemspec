@@ -8,9 +8,9 @@ Gem::Specification.new do |spec|
   spec.version       = Paradeiser::VERSION
   spec.authors       = ["Nicholas E. Rabenau"]
   spec.email         = ["nerab@gmx.net"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
-  spec.homepage      = ""
+  spec.description   = %q{Paradeiser is a tool for the [Pomodoro Technique](http://www.pomodorotechnique.com/). It keeps track of the current pomodoro and assists the user in managing active and past pomodori.}
+  spec.summary       = %q{Paradeiser is a tool for the Pomodoro Technique}
+  spec.homepage      = "https://github.com/nerab/paradeiser"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)

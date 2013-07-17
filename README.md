@@ -1,15 +1,15 @@
 # Paradeiser
 
-  _Please note that this tool is developed with the [readme-driven development](http://tom.preston-werner.com/2010/08/23/readme-driven-development.html) method. As such, in reality, *Paradeiser* provides much less functionality yet than it is described here. Once a major milestone is reached, this README will be updated to reflect the actual status._
+  _Please note that this project is developed with the [readme-driven development](http://tom.preston-werner.com/2010/08/23/readme-driven-development.html) method. As such, Paradeiser actually provides much less functionality than it is described here. Once a major milestone is reached, this README will be updated to reflect the actual status._
 
-*Paradeiser* is a tool for the [Pomodoro Technique](http://www.pomodorotechnique.com/). It keeps track of the current pomodoro and assists the user in managing active and past pomodori:
+Paradeiser is a tool for the [Pomodoro Technique](http://www.pomodorotechnique.com/). It keeps track of the current pomodoro and assists the user in managing active and past pomodori:
 
 * Records finished and cancelled pomodori as well as internal and external interruptions and other events
-* Keept track of the timer for the active pomodoro and the break
+* Keeps track of the timer for the active pomodoro and the break
 * Provides out-of-the-box reports that show details about finished and cancelled pomodori
 * Shows information about breaks and interruptions
 
-*Paradeiser* itself is not concerned at all with the actual task management. There are plenty of tools for that; the author prefers [TaskWarrior](http://taskwarrior.org/).
+Paradeiser itself is not concerned with the actual management of tasks. There are plenty of tools for that; the author prefers [TaskWarrior](http://taskwarrior.org/).
 
 ## Installation
 
@@ -21,38 +21,58 @@
 
       $ pom start
 
-Note that there can only be one active pomodoro (or a break) at a time.
+There can only be one active pomodoro or break at a time per user. Therefore, repeatedly calling start will have no effect (other than a warning message).
+
+If a break is still active, it will be stopped before the new pomodoro is started.
 
 ### Finish the pomodoro
 
       $ pom finish
       $ pom stop # alias
 
-It will be marked as successful, regardless of whether the 25 minutes are over or not.
+If a pomodoro is active, it will be marked as successful after stopping it, regardless of whether the 25 minutes are over or not. If a break is active, it will be stopped. If neither a  pomodoro nor or break are active, a warning message will be printed.
 
 ### Record an interruption of the current pomodoro
 
-      $ pom interrupt --external
-      $ pom interrupt --internal
+      $ pom interrupt --external Phone call from boss
+      $ pom interrupt --internal "Couldn't stay away from Twitter"
+
+Remaining arguments, if present, will be added to the interrupt as annotation. If no pomodoro is active or interrupted (status is idle or paused), the command will throw an error.
 
 ### Resume the pomodoro after an interruption
 
       $ pom resume
 
+If there is no interrupted pomodoro, the command will throw an error.
+
 ### Start a break
 
-      $ pom break
+      $ pom break [--short | --long]
 
-By default the break will be five minutes long. Only after four pomodori within a day, the break will be 30 minutes long.
+If a pomodoro is active, it will be stopped. By default the break will either be five minutes long or, after four pomodori within a day, the break will be 30 minutes long. This can be overridden with `--short` or `--long`.
 
-Note that for a single user account, not more than one pomodoro [xor](http://en.wikipedia.org/wiki/Xor) one break can be active at any given time.
+There is no command to stop a break. Either a new pomodoro is started, which will implicitely stop the break, of the break ends naturally because it is over.
+
+Note that for a single user account (technically, for a `~/.paradeiser` directory), not more than one pomodoro [xor](http://en.wikipedia.org/wiki/Xor) one break can be active at any given time.
+
+### Annotate a pomodoro
+
+      $ pom annotate This was intense, but I am happy about the work I finished.
+
+The annotation will be added to the active or, if none is active, to the most recently finished or cancelled pomodoro. Breaks cannot have annotations. If no text is given, the command throws an error.
 
 ### Cancel the pomodoro
 
-      $ pom cancel
+      $ pom cancel Just couldn't concentrate anymore.
       $ pom abandon # alias
 
-It will be marked as unsuccessful (remember, a pomodoro is indivisible).
+It will be marked as unsuccessful (remember, a pomodoro is indivisible). If no pomodoro is active or interrupted (status is idle or paused), the command will throw an error. If a break is active, the command will do nothing except printing a warning. Remaining arguments, if present, will be added to the pomodoro as annotation.
+
+### Init Paradeiser
+
+      $ pom init
+
+Creates the `~/.paradeiser` directory, an empty data store and the sample hooks in `~/.paradeiser/hooks`. If `~/.paradeiser` already exists, the command will fail with an error message.
 
 ## Status
 
@@ -87,14 +107,25 @@ It will be marked as unsuccessful (remember, a pomodoro is indivisible).
 
 ## Reports
 
-      $ pom report # defaults to --daily, alternative options are --weekly | --monthly | --yearly (exclusively)
+      $ pom report
       Daily Pomodoro Report for 2013-07-16
 
       3 pomodori finished
       1 pomodoro cancelled
-      1 internal interruptions
-      2 external interruptions
-      4 breaks (3 short, 1 long)
+      1 internal interruptions (27 minutes in total)
+      2 external interruptions (2 hours and 28 minutes in total)
+      4 breaks (3 short, 1 long; 45 minutes in total)
+
+The command defaults to --day. Alternative options are --week, --month or --year. Without a value, the argument assumes the current day / week / month / year. A date can be specified as argument, e.g. `pom report --day=2013-07-18`. Argument values are parsed with [Chronic](http://chronic.rubyforge.org/), which also enables symbolic values like `pom report --month="last month"`.
+
+### Verbose Reports (timesheet)
+
+      $ pom report --verbose
+      TODO Ordered list of pomodori and breaks, each with annotations (like a time sheet)
+
+The same options as for regular reports apply.
+
+### Exporting a Report
 
       $ pom report --weekly --format JSON # weekly report in JSON format
       {
@@ -102,12 +133,12 @@ It will be marked as unsuccessful (remember, a pomodoro is indivisible).
       }
 
 ## Output Policy
-*Paradeiser* follows the [Rule of Silence](http://www.faqs.org/docs/artu/ch01s06.html#id2878450). If all goes well, a command will not print any output to `STDOUT`. Reports are excempted from this rule.
+Paradeiser follows the [Rule of Silence](http://www.faqs.org/docs/artu/ch01s06.html#id2878450). If all goes well, a command will not print any output to `STDOUT`. Reports are excempted from this rule.
 
-Error messages always go to `STDERR`.
+Error and warning messages always go to `STDERR`.
 
 ## Hooks
-Instead of handling tasks itself, *Paradeiser* integrates with external tools via hooks. Every event will attempt to find and execute an appropriate script in ~/.paradeiser/hooks/. Sufficient information will be made available via environment variables.
+Instead of handling tasks itself, Paradeiser integrates with external tools via hooks. Every event will attempt to find and execute an appropriate script in `~/.paradeiser/hooks/`. Sufficient information will be made available via environment variables.
 
 `pre-` hooks will be called before the action is executed internally. If a `pre-`hook exits non-zero, paradeiser will abort the action and exit non-zero itself; indicating in a message to STDERR which hook caused the abort.
 
@@ -126,7 +157,7 @@ Instead of handling tasks itself, *Paradeiser* integrates with external tools vi
 * `pre-break` is called after the `break` command was received, but before internal processing for the `break` action begins
 * `post-break` is called after the timer of the current break fired (the break is over), but after internal processing for the `break` action ended
 
-Terms: Commands are invoked by the user (e.g. `pom start`). Actions are what Paradeiser does internally.
+Commands are invoked by the user (e.g. `pom start`). Actions are what Paradeiser does internally.
 
 Examples for the use of hooks are:
 
@@ -137,15 +168,15 @@ Examples for the use of hooks are:
 
 This is deployed to `~/.paradeiser/hooks/post-finish` by default.
 
-  # exit unless $(task)
+      # exit unless $(task)
 
-  # find all active
-  active = $(task active) # doesn't work yet; find the right column with 'task columns' and the info in http://taskwarrior.org/projects/taskwarrior/wiki/Feature_custom_reports
+      # find all active
+      active = $(task active) # doesn't work yet; find the right column with 'task columns' and the info in http://taskwarrior.org/projects/taskwarrior/wiki/Feature_custom_reports
 
-  # TODO tag all active tasks so that we can re-start them
+      # TODO tag all active tasks so that we can re-start them
 
-  # stop all active
-  task $(task active) stop
+      # stop all active
+      task $(task active) stop
 
 ## Similar Projects
 
@@ -157,8 +188,9 @@ These and many more exist, why another tool?
 They have a lot of what I wanted, but pomo focuses very much on the tasks themselves and less on the pomodori.
 
 ## Implementation Notes
+
 ### State Machine
-*Paradeiser* uses a [state machine](https://github.com/pluginaweek/state_machine) to model a pomodoro. Internal event handlers do the actual work; among them is the task of calling the external hooks.
+Paradeiser uses a [state machine](https://github.com/pluginaweek/state_machine) to model a pomodoro. Internal event handlers do the actual work; among them is the task of calling the external hooks.
 
 #### Pomodoro
 
@@ -171,23 +203,17 @@ They have a lot of what I wanted, but pomo focuses very much on the tasks themse
   IDLE => ACTIVE => INTERRUPTED => CANCELLED
 
 #### Break
+
 A break cannot be interrupted or cancelled.
 
   IDLE => ACTIVE => FINISHED
 
 ### I18N
-*Paradeiser* uses [I18N](https://github.com/svenfuchs/i18n) to translate messages and localize time and date formats.
+
+Paradeiser uses [I18N](https://github.com/svenfuchs/i18n) to translate messages and localize time and date formats.
 
 ## API
 External tools should use the Ruby API instead, or rely on the JSON export. The actual storage backend is *not a public API* and may change at any given time.
-
-# Contributing
-
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
 
 ## What about the name?
 In Austrian German, "Paradeiser" means tomato, of which the Italian translation is pomodoro.

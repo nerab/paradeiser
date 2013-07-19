@@ -51,7 +51,7 @@ If there is no interrupted pomodoro, the command will throw an error.
 
 If a pomodoro is active, it will be stopped. By default the break will either be five minutes long or, after four pomodori within a day, the break will be 30 minutes long. This can be overridden with `--short` or `--long`.
 
-There is no command to stop a break. Either a new pomodoro is started, which will implicitely stop the break, of the break ends naturally because it is over.
+There is no public command to stop a break. Either a new pomodoro is started, which will implicitely stop the break, of the break ends naturally because it is over.
 
 Note that for a single user account (technically, for a `~/.paradeiser` directory), not more than one pomodoro [xor](http://en.wikipedia.org/wiki/Xor) one break can be active at any given time.
 
@@ -73,6 +73,38 @@ It will be marked as unsuccessful (remember, a pomodoro is indivisible). If no p
       $ pom init
 
 Creates the `~/.paradeiser` directory, an empty data store and the sample hooks in `~/.paradeiser/hooks`. If `~/.paradeiser` already exists, the command will fail with an error message.
+
+### Location
+
+  * List all locations
+
+        $ pom location
+        macbook@01:23:45:67:89:0A "Home Office"
+        macbook@45:01:89:0A:67:23 "Starbucks"
+
+  * Show the label of a location
+
+        $ pom location macbook@01:23:45:67:89:0A
+         Home Office
+
+  * Show the identifier of a location
+
+        $ pom location "Home Office"
+        macbook@01:23:45:67:89:0A
+
+  * Label a location
+
+        $ pom location macbook@01:23:45:67:89:0A "Your Label"
+
+## Low-level commands
+
+We don't want another daemon, and `at` exists. We just tell `at` to call
+
+      pom _stop-break
+
+when the break is over. The underscore convention marks this command as a protected one that is not to be called from outside.
+
+So when `at` calls Paradeiser with this line, the pomodoro or break are over and Paradeiser does all the internal processing related to stopping the break (incl. calling the appropriate hooks, see below).
 
 ## Status
 
@@ -115,6 +147,13 @@ Creates the `~/.paradeiser` directory, an empty data store and the sample hooks 
       1 internal interruptions (27 minutes in total)
       2 external interruptions (2 hours and 28 minutes in total)
       4 breaks (3 short, 1 long; 45 minutes in total)
+
+      Most efficient location: Home Office (2/0/1/0)
+      Least efficient location: Coffeshop (1/1/0/2)
+
+      The following locations do not have a label. Assign it with
+
+        $ pom location macbook@01:23:45:67:89:0A "Your Label"
 
 The command defaults to --day. Alternative options are --week, --month or --year. Without a value, the argument assumes the current day / week / month / year. A date can be specified as argument, e.g. `pom report --day=2013-07-18`. Argument values are parsed with [Chronic](http://chronic.rubyforge.org/), which also enables symbolic values like `pom report --month="last month"`.
 
@@ -163,6 +202,23 @@ Examples for the use of hooks are:
 
 * Displaying a desktop notification on `pre-finish`
 * tmux status bar integration like [pomo](https://github.com/visionmedia/pomo) by writing the status to `~/.pomo_stat` from the `post-` hooks.
+* Displaying a desktop notification on Linux:
+
+      # ~/.paradeiser/hooks/post-stop
+      notify-send "Break" "$POMODORO_TITLE is over." -u critical
+
+* Displaying a desktop notification on MacOS:
+
+      # ~/.paradeiser/hooks/post-stop
+      terminal-notifier-success  -message "$POMODORO_TITLE is over."
+
+`$POMODORO_TITLE` is one of the environment variables set by Paradeiser that provides the context for hooks. See below for the full list of available environment variables.
+
+### Edit a hook
+
+      $ pom edit post-stop
+
+Launches $VISUAL or, if empty, $EDITOR with the given hook.
 
 ## Taskwarrior Integration
 
@@ -192,28 +248,38 @@ They have a lot of what I wanted, but pomo focuses very much on the tasks themse
 ### State Machine
 Paradeiser uses a [state machine](https://github.com/pluginaweek/state_machine) to model a pomodoro. Internal event handlers do the actual work; among them is the task of calling the external hooks.
 
-#### Pomodoro
-
-  IDLE => ACTIVE => FINISHED
-
-  IDLE => ACTIVE => CANCELLED
-
-  IDLE => ACTIVE => INTERRUPTED => ACTIVE => FINISHED
-
-  IDLE => ACTIVE => INTERRUPTED => CANCELLED
-
-#### Break
-
-A break cannot be interrupted or cancelled.
-
-  IDLE => ACTIVE => FINISHED
-
 ### I18N
-
 Paradeiser uses [I18N](https://github.com/svenfuchs/i18n) to translate messages and localize time and date formats.
 
 ## API
-External tools should use the Ruby API instead, or rely on the JSON export. The actual storage backend is *not a public API* and may change at any given time.
+The actual storage backend is *not a public API* and may change at any given time. External tools should use the Ruby API instead, or rely on the JSON export.
 
-## What about the name?
+## Sync
+In todays world of distributed devices, synching data is a problem almost every app needs to solve. Paradeiser is no exception - it is very easy to come up with use cases that involve many computers. Maybe the user has different devices (mobile and desktop), maybe the user works in different environments, and wants to record all pomodori into a single system.
+
+There are many potential solutions to this problem:
+
+  1. A centralized server could host a data store (relational database, NoSQL store, etc.)
+  1. A shared directory could host a single file and access could be coordinated using lock files
+  1. Commercial solutions like the [Dropbox Sync API](https://www.dropbox.com/developers/sync)
+  1. Custom solutions like [toystore](https://github.com/jnunemaker/toystore) with a [git adapter](https://github.com/bkeepers/adapter-git)
+
+All of these are too much overhead right now, so the decision was made to keep Paradeiser simple and not implement any sync features. This may me revisited in a later version of the app.
+
+## Location
+Recording the location of a pomodoro allows Paradeiser to compare the average count of successful and cancelled pomodori and the number of interruptions by location, so that a report can tell in which environment we get the most work done.
+
+In order to record the current location at the start of the pomodoro, Paradeiser will record the hostname and the MAC address of the default gateway:
+
+* OSX
+
+      arp 0.0.0.0 | head -1 | awk {'print $4'}
+
+* Linux:
+
+      GATEWAY=$(netstat -rn | grep "^0.0.0.0" | cut -c17-31); ping -c1 $GATEWAY >/dev/null; arp -n $GATEWAY | tail -n1 | cut -c34-50
+
+The location is then used to assign a label to one or more hostname@MAC strings, which will be used in a report.
+
+## What about the app's name?
 In Austrian German, "Paradeiser" means tomato, of which the Italian translation is pomodoro.

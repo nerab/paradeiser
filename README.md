@@ -25,6 +25,8 @@ There can only be one active pomodoro or break at a time per user. Therefore, re
 
 If a break is still active, it will be stopped before the new pomodoro is started.
 
+Note that for a single user account (technically, for a `~/.paradeiser` directory), not more than one pomodoro [xor](http://en.wikipedia.org/wiki/Xor) one break can be active at any given time.
+
 ### Finish the pomodoro
 
       $ pom finish
@@ -49,11 +51,9 @@ If there is no interrupted pomodoro, the command will throw an error.
 
       $ pom break [--short | --long]
 
-If a pomodoro is active, it will be stopped. By default the break will either be five minutes long or, after four pomodori within a day, the break will be 30 minutes long. This can be overridden with `--short` or `--long`.
+If a pomodoro is active, it will be stopped. By default the break will be five minutes long. After four pomodori within a day, the break will be 30 minutes long. This can be overridden with `--short` or `--long`, with an optional argument value that determines the lenght of the break in minutes (e.g. `pom break --short=10`).
 
 There is no public command to stop a break. Either a new pomodoro is started, which will implicitely stop the break, of the break ends naturally because it is over.
-
-Note that for a single user account (technically, for a `~/.paradeiser` directory), not more than one pomodoro [xor](http://en.wikipedia.org/wiki/Xor) one break can be active at any given time.
 
 ### Annotate a pomodoro
 
@@ -155,7 +155,9 @@ So when `at` calls Paradeiser with this line, the pomodoro or break are over and
 
         $ pom location macbook@01:23:45:67:89:0A "Your Label"
 
-The command defaults to --day. Alternative options are --week, --month or --year. Without a value, the argument assumes the current day / week / month / year. A date can be specified as argument, e.g. `pom report --day=2013-07-18`. Argument values are parsed with [Chronic](http://chronic.rubyforge.org/), which also enables symbolic values like `pom report --month="last month"`.
+The command defaults to `--day`. Alternative options are `--week`, `--month` or `--year`. Without a value, the argument assumes the current day / week / month / year. The first day of the period can be specified as argument, e.g. `pom report --day=2013-07-18`. The period is parsed with [Chronic](http://chronic.rubyforge.org/), which also enables symbolic values like `pom report --month="last month"`.
+
+The efficiency is calculated (per location) from the number of successful vs. cancelled pomodori, together with the number and length of interruptions. Breaks are not counted towards efficiency.
 
 ### Verbose Reports (timesheet)
 
@@ -172,7 +174,7 @@ The same options as for regular reports apply.
       }
 
 ## Output Policy
-Paradeiser follows the [Rule of Silence](http://www.faqs.org/docs/artu/ch01s06.html#id2878450). If all goes well, a command will not print any output to `STDOUT`. Reports are excempted from this rule.
+Paradeiser follows the [Rule of Silence](http://www.faqs.org/docs/artu/ch01s06.html#id2878450). If all goes well, a command will not print any output to `STDOUT`. Reports are exempted from this rule.
 
 Error and warning messages always go to `STDERR`.
 
@@ -204,13 +206,13 @@ Examples for the use of hooks are:
 * tmux status bar integration like [pomo](https://github.com/visionmedia/pomo) by writing the status to `~/.pomo_stat` from the `post-` hooks.
 * Displaying a desktop notification on Linux:
 
-      # ~/.paradeiser/hooks/post-stop
-      notify-send "Break" "$POMODORO_TITLE is over." -u critical
+        # ~/.paradeiser/hooks/post-stop
+        notify-send "Break" "$POMODORO_TITLE is over." -u critical
 
 * Displaying a desktop notification on MacOS:
 
-      # ~/.paradeiser/hooks/post-stop
-      terminal-notifier-success  -message "$POMODORO_TITLE is over."
+        # ~/.paradeiser/hooks/post-stop
+        terminal-notifier-success  -message "$POMODORO_TITLE is over."
 
 `$POMODORO_TITLE` is one of the environment variables set by Paradeiser that provides the context for hooks. See below for the full list of available environment variables.
 
@@ -218,7 +220,7 @@ Examples for the use of hooks are:
 
       $ pom edit post-stop
 
-Launches $VISUAL or, if empty, $EDITOR with the given hook.
+Launches `$VISUAL` (or, if empty, `$EDITOR`) with the given hook.
 
 ## Taskwarrior Integration
 

@@ -275,11 +275,11 @@ In order to record the current location at the start of the pomodoro, Paradeiser
 
 * OSX
 
-      arp 0.0.0.0 | head -1 | awk {'print $4'}
+        arp 0.0.0.0 | head -1 | awk {'print $4'}
 
 * Linux:
 
-      GATEWAY=$(netstat -rn | grep "^0.0.0.0" | cut -c17-31); ping -c1 $GATEWAY >/dev/null; arp -n $GATEWAY | tail -n1 | cut -c34-50
+        GATEWAY=$(netstat -rn | grep "^0.0.0.0" | cut -c17-31); ping -c1 $GATEWAY >/dev/null; arp -n $GATEWAY | tail -n1 | cut -c34-50
 
 The location is then used to assign a label to one or more hostname@MAC strings, which will be used in a report.
 

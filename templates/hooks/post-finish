@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# TODO Add platform switch
+
+terminal-notifier-success -title "Paradeiser" -message "Pomodoro #5 is over."

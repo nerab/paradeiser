@@ -1,5 +1,8 @@
 # Paradeiser
 
+[![Gem Version](https://badge.fury.io/rb/paradeiser.png)](http://badge.fury.io/rb/paradeiser)
+[![Build Status](https://secure.travis-ci.org/nerab/paradeiser.png?branch=master)](http://travis-ci.org/nerab/paradeiser)
+
   _Please note that this project is developed with the [readme-driven development](http://tom.preston-werner.com/2010/08/23/readme-driven-development.html) method. As such, Paradeiser actually provides much less functionality than it is described here. Once a major milestone is reached, this README will be updated to reflect the actual status._
 
 Paradeiser is a tool for the [Pomodoro Technique](http://www.pomodorotechnique.com/). It keeps track of the current pomodoro and assists the user in managing active and past pomodori:
@@ -39,13 +42,7 @@ If a pomodoro is active, it will be marked as successful after stopping it, rega
       $ pom interrupt --external Phone call from boss
       $ pom interrupt --internal "Couldn't stay away from Twitter"
 
-Remaining arguments, if present, will be added to the interrupt as annotation. If no pomodoro is active or interrupted (status is idle or paused), the command will throw an error.
-
-### Resume the pomodoro after an interruption
-
-      $ pom resume
-
-If there is no interrupted pomodoro, the command will throw an error.
+Remaining arguments, if present, will be added to the interrupt as annotation. If no pomodoro is active or interrupted (status is IDLE or BREAK), the command will throw an error.
 
 ### Start a break
 
@@ -96,7 +93,9 @@ Creates the `~/.paradeiser` directory, an empty data store and the sample hooks 
 
         $ pom location macbook@01:23:45:67:89:0A "Your Label"
 
-## Low-level commands
+## Protected commands
+
+A major aspect of a pomodoro timer is the timer itself. The remaining time of the active pomodoro or break must be displayed to the user. When the pomodoro or break is over, the user also needs to get a notification.
 
 We don't want another daemon, and `at` exists. We just tell `at` to call
 
@@ -104,7 +103,9 @@ We don't want another daemon, and `at` exists. We just tell `at` to call
 
 when the break is over. The underscore convention marks this command as a protected one that is not to be called from outside.
 
-So when `at` calls Paradeiser with this line, the pomodoro or break are over and Paradeiser does all the internal processing related to stopping the break (incl. calling the appropriate hooks, see below).
+So when `at` calls Paradeiser with this line, the pomodoro or the break is over and Paradeiser does all the internal processing related to stopping the break (incl. calling the appropriate hooks, see below).
+
+There is a dedicated `at` queue for Paradeiser.
 
 ## Status
 
@@ -129,7 +130,7 @@ So when `at` calls Paradeiser with this line, the pomodoro or break are over and
       $ pom status --format JSON # output in JSON format
       {
         "status": {
-          "type": "break",
+          "state": "break",
           "length": 600,
           "remaining": 363,
           "start": 1373988295,

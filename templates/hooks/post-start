@@ -8,4 +8,4 @@
 #
 # $POM_ID is the ID of the pomodoro that just ended. It is set by the caller.
 #
-terminal-notifier-success -message "Pomodoro $POM_ID (started at $POM_STARTED_AT) is over." > /dev/null
+terminal-notifier-success -message "Pomodoro $POM_ID started." > /dev/null

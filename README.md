@@ -95,17 +95,28 @@ Creates the `~/.paradeiser` directory, an empty data store and the sample hooks 
 
 ## Protected commands
 
-A major aspect of a pomodoro timer is the timer itself. The remaining time of the active pomodoro or break must be displayed to the user. When the pomodoro or break is over, the user also needs to get a notification.
+A major aspect of a pomodoro timer is the timer function itself:
+
+  * The remaining time of the active pomodoro or break must be displayed to the user.
+  * When the pomodoro or break is over, the user also needs to get a notification.
 
 We don't want another daemon, and `at` exists. We just tell `at` to call
 
-      pom _stop-break
+      pom _end-pomodoro
 
-when the break is over. The underscore convention marks this command as a protected one that is not to be called from outside.
+when the pomodoro is over. A similar command exists for
 
-So when `at` calls Paradeiser with this line, the pomodoro or the break is over and Paradeiser does all the internal processing related to stopping the break (incl. calling the appropriate hooks, see below).
+      pom _end-break
 
-There is a dedicated `at` queue for Paradeiser.
+that is called by `at` when the break is over.
+
+When a pomodoro is started, Paradeiser enqueues itself to `at` like this:
+
+      echo pom _end-pomodoro | at now + 25 minutes
+
+When `at` calls Paradeiser with this command, the pomodoro / break will be over and Paradeiser can do all the internal processing related to stopping the pomodoro / break (incl. calling the appropriate hooks, see below).
+
+The underscore convention marks this command as a protected one that is not to be called from outside.
 
 ## Status
 
@@ -149,8 +160,8 @@ There is a dedicated `at` queue for Paradeiser.
       2 external interruptions (2 hours and 28 minutes in total)
       4 breaks (3 short, 1 long; 45 minutes in total)
 
-      Most efficient location: Home Office (2/0/1/0)
-      Least efficient location: Coffeshop (1/1/0/2)
+      Most efficient location: Home Office
+      Least efficient location: Coffeshop
 
       The following locations do not have a label. Assign it with
 
@@ -165,7 +176,7 @@ The efficiency is calculated (per location) from the number of successful vs. ca
       $ pom report --verbose
       TODO Ordered list of pomodori and breaks, each with annotations (like a time sheet)
 
-The same options as for regular reports apply.
+The same options as for regular reports apply. The verbose report also details the efficiency of each location.
 
 ### Exporting a Report
 

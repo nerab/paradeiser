@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+
+require 'bundler'
+Bundler.require
+
+require 'commander/import'
+require 'paradeiser'
+include Paradeiser::Controller
+
+program :version, Paradeiser::VERSION
+program :description, "#{program(:name)} is a TODO."
+program :help, 'Author', 'Nicholas E. Rabenau <nerab@gmx.at>'
+
+global_option '-V', '--verbose', 'Enable verbose output'
+
+command :start do |c|
+  c.syntax = "#{program(:name)} #{c.name}"
+  c.summary = 'Start a new pomodoro'
+  c.action Start.new
+end

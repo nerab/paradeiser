@@ -5,7 +5,7 @@ Bundler.require
 
 require 'commander/import'
 require 'paradeiser'
-include Paradeiser::Controller
+include Paradeiser
 
 program :version, Paradeiser::VERSION
 program :description, "#{program(:name)} is a TODO."
@@ -16,5 +16,5 @@ global_option '-V', '--verbose', 'Enable verbose output'
 command :start do |c|
   c.syntax = "#{program(:name)} #{c.name}"
   c.summary = 'Start a new pomodoro'
-  c.action Start.new
+  c.action Start.new(c)
 end

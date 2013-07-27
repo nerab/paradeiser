@@ -295,5 +295,9 @@ In order to record the current location at the start of the pomodoro, Paradeiser
 
 The location is then used to assign a label to one or more hostname@MAC strings, which will be used in a report.
 
+## Issues
+
+1. `at` is disabled on MacOS by default. You will need to [turn it on](https://developer.apple.com/library/mac/#documentation/Darwin/Reference/ManPages/man8/atrun.8.html) in order to make Paradeiser work correctly.
+
 ## What about the app's name?
 In Austrian German, "Paradeiser" means tomato, of which the Italian translation is pomodoro.

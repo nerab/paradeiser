@@ -35,7 +35,7 @@ Note that for a single user account (technically, for a `~/.paradeiser` director
       $ pom finish
       $ pom stop # alias
 
-If a pomodoro is active, it will be marked as successful after stopping it, regardless of whether the 25 minutes are over or not. If a break is active, it will be stopped. If neither a  pomodoro nor or break are active, a warning message will be printed.
+If a pomodoro is active, it will be marked as successful after stopping it, regardless of whether the 25 minutes are over or not. If a break is active, it will be stopped. If neither a pomodoro nor or break are active, a warning message will be printed.
 
 ### Record an interruption of the current pomodoro
 
@@ -102,21 +102,19 @@ A major aspect of a pomodoro timer is the timer function itself:
 
 We don't want another daemon, and `at` exists. We just tell `at` to call
 
-      pom _end-pomodoro
+      pom finish
 
 when the pomodoro is over. A similar command exists for
 
-      pom _end-break
+      pom end-break
 
 that is called by `at` when the break is over.
 
 When a pomodoro is started, Paradeiser enqueues itself to `at` like this:
 
-      echo pom _end-pomodoro | at now + 25 minutes
+      echo pom finish | at now + 25 minutes
 
 When `at` calls Paradeiser with this command, the pomodoro / break will be over and Paradeiser can do all the internal processing related to stopping the pomodoro / break (incl. calling the appropriate hooks, see below).
-
-The underscore convention marks this command as a protected one that is not to be called from outside.
 
 ## Status
 
@@ -262,6 +260,12 @@ They have a lot of what I wanted, but pomo focuses very much on the tasks themse
 ### State Machine
 Paradeiser uses a [state machine](https://github.com/pluginaweek/state_machine) to model a pomodoro. Internal event handlers do the actual work; among them is the task of calling the external hooks.
 
+![State Transition Diagram](https://raw.github.com/nerab/paradeiser/master/doc/Paradeiser::Pomodoro_status.svg)
+
+The graph was created using the rake task that comes with `state_machine`:
+
+    rake state_machine:draw CLASS=Paradeiser::Pomodoro TARGET=doc FORMAT=svg HUMAN_NAMES=true
+
 ### I18N
 Paradeiser uses [I18N](https://github.com/svenfuchs/i18n) to translate messages and localize time and date formats.
 
@@ -294,6 +298,14 @@ In order to record the current location at the start of the pomodoro, Paradeiser
         GATEWAY=$(netstat -rn | grep "^0.0.0.0" | cut -c17-31); ping -c1 $GATEWAY >/dev/null; arp -n $GATEWAY | tail -n1 | cut -c34-50
 
 The location is then used to assign a label to one or more hostname@MAC strings, which will be used in a report.
+
+## Miscellaneous Design Thoughts
+
+### MVC
+
+* If a view cannot be found, just do STDOUT.puts - but what? We need the view… maybe using Highline tables with paging.
+
+* If the whole MVC thing makes sense, then `bin/pom` is the router. It defines what goes where.
 
 ## Issues
 

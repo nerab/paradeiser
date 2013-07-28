@@ -16,5 +16,11 @@ global_option '-V', '--verbose', 'Enable verbose output'
 command :start do |c|
   c.syntax = "#{program(:name)} #{c.name}"
   c.summary = 'Start a new pomodoro'
-  c.action Start.new(c)
+  c.action PomodoroController.new(c.name)
+end
+
+command :finish do |c|
+  c.syntax = "#{program(:name)} #{c.name}"
+  c.summary = 'Finish the active pomodoro'
+  c.action PomodoroController.new(c.name)
 end

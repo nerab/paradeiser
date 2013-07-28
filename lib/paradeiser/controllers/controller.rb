@@ -1,24 +1,22 @@
 module Paradeiser
   class Controller
-    def initialize(command)
-      @name = command.name
+    def initialize(method)
+      @method = method
     end
 
     def call(args, options)
       @options = options
       @args = args
-      send(subcommand(args))
-      STDOUT.puts ERB.new(File.read(File.join(File.dirname(__FILE__), '..', 'views', "#{@name}.erb")), 0, "%<>").result(binding)
+      send(@method)
+      STDOUT.puts ERB.new(File.read(File.join(File.dirname(__FILE__), '..', 'views', model_name, "#{@method}.erb")), 0, "%<>").result(binding)
     end
 
-    protected
+  protected
 
     attr_reader :options, :args
 
-    private
-
-    def subcommand(args)
-      args.shift || 'index'
+    def model_name
+      self.class.to_s.split("::").last.sub('Controller', '').downcase
     end
   end
 end

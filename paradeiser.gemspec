@@ -20,11 +20,13 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency 'commander'
   spec.add_runtime_dependency 'require_all'
+  spec.add_runtime_dependency 'state_machine'
 
   spec.add_development_dependency 'guard-minitest'
   spec.add_development_dependency 'guard-bundler'
   spec.add_development_dependency 'growl'
   spec.add_development_dependency 'pry'
-  spec.add_development_dependency "bundler"
-  spec.add_development_dependency "rake"
+  spec.add_development_dependency 'bundler'
+  spec.add_development_dependency 'rake'
+  spec.add_development_dependency 'ruby-graphviz'
 end

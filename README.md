@@ -56,7 +56,7 @@ There is no public command to stop a break. Either a new pomodoro is started, wh
 
       $ pom annotate This was intense, but I am happy about the work I finished.
 
-The annotation will be added to the active or, if none is active, to the most recently finished or cancelled pomodoro. Breaks cannot have annotations. If no text is given, the command throws an error.
+The annotation will be added to the active or, if none is active, to the most recently finished or cancelled pomodoro. Breaks cannot have annotations. If no text is given, the annotation text is read from STDIN.
 
 ### Cancel the pomodoro
 

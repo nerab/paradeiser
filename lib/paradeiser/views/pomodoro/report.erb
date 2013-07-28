@@ -1,0 +1,4 @@
+<% @pom.each do |pom| %>
+<%= pom.id %> | <%= pom.status %> | <%= pom.started_at %> | <%= pom.finished_at if pom.finished? %>
+
+<% end %>

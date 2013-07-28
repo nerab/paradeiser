@@ -1,6 +1,6 @@
 module Paradeiser
   class Pomodoro
-    attr_accessor :started_at, :finished_at
+    attr_accessor :id, :started_at, :finished_at
 
     state_machine :status, :initial => :idle do
       event :start do
@@ -26,6 +26,10 @@ module Paradeiser
 
     def initialize
       super # required for state_machine
+    end
+
+    def new?
+      @id.nil?
     end
   end
 end

@@ -24,3 +24,9 @@ command :finish do |c|
   c.summary = 'Finish the active pomodoro'
   c.action PomodoroController.new(c.name)
 end
+
+command :report do |c|
+  c.syntax = "#{program(:name)} #{c.name}"
+  c.summary = 'Show a report on all pomodori'
+  c.action PomodoroController.new(c.name)
+end

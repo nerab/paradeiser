@@ -1,3 +1,4 @@
+require 'pstore'
 require 'state_machine'
 
 require 'require_all'

@@ -264,7 +264,7 @@ Paradeiser uses a [state machine](https://github.com/pluginaweek/state_machine) 
 
 The graph was created using the rake task that comes with `state_machine`:
 
-    rake state_machine:draw CLASS=Paradeiser::Pomodoro TARGET=doc FORMAT=svg HUMAN_NAMES=true
+    rake state_machine:draw CLASS=Paradeiser::Pomodoro TARGET=doc FORMAT=svg HUMAN_NAMES=true ORIENTATION=landscape
 
 ### I18N
 Paradeiser uses [I18N](https://github.com/svenfuchs/i18n) to translate messages and localize time and date formats.

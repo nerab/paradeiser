@@ -8,7 +8,7 @@ require 'paradeiser'
 include Paradeiser
 
 program :version, Paradeiser::VERSION
-program :description, "#{program(:name)} is a TODO."
+program :description, "Paradeiser is a command-line tool for the Pomodoro Technique. It keeps track of the current pomodoro and assists the user in managing active and past pomodori as well as breaks. Status commands and reports are provided to get insights."
 program :help, 'Author', 'Nicholas E. Rabenau <nerab@gmx.at>'
 
 global_option '-V', '--verbose', 'Enable verbose output'
@@ -16,17 +16,17 @@ global_option '-V', '--verbose', 'Enable verbose output'
 command :start do |c|
   c.syntax = "#{program(:name)} #{c.name}"
   c.summary = 'Start a new pomodoro'
-  c.action PomodoroController.new(c.name)
+  c.action PomodoriController.new(c.name)
 end
 
 command :finish do |c|
   c.syntax = "#{program(:name)} #{c.name}"
   c.summary = 'Finish the active pomodoro'
-  c.action PomodoroController.new(c.name)
+  c.action PomodoriController.new(c.name)
 end
 
 command :report do |c|
   c.syntax = "#{program(:name)} #{c.name}"
   c.summary = 'Show a report on all pomodori'
-  c.action PomodoroController.new(c.name)
+  c.action PomodoriController.new(c.name)
 end

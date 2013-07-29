@@ -184,9 +184,11 @@ The same options as for regular reports apply. The verbose report also details t
       }
 
 ## Output Policy
-Paradeiser follows the [Rule of Silence](http://www.faqs.org/docs/artu/ch01s06.html#id2878450). If all goes well, a command will not print any output to `STDOUT`. Reports are exempted from this rule.
+Paradeiser follows the [Rule of Silence](http://www.faqs.org/docs/artu/ch01s06.html#id2878450). If all goes well, a command will not print any output to `STDOUT`.
 
-Error and warning messages always go to `STDERR`.
+Reports are exempted from this rule and always print their payload to STDOUT.
+
+While a controller raise errors, the `pom` command provides proper error- and warning messages to `STDERR`.
 
 ## Hooks
 Instead of handling tasks itself, Paradeiser integrates with external tools via hooks. Every event will attempt to find and execute an appropriate script in `~/.paradeiser/hooks/`. Sufficient information will be made available via environment variables.

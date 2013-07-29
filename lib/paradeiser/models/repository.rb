@@ -22,6 +22,14 @@ module Paradeiser
         find(criteria).first
       end
 
+      def active
+        find_first(:status => 'active')
+      end
+
+      def active?
+        !!active
+      end
+
       def save(pom)
         pom.id = next_id if pom.new?
         backend.transaction do

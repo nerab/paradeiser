@@ -19,7 +19,7 @@ class TestPomodoro < MiniTest::Test
     @pom.start!
     assert_equal(:active, @pom.status_name)
 
-    now = 4711
+    now = srand
 
     Time.stub :now, Time.at(now) do
       @pom.finish!
@@ -38,7 +38,7 @@ class TestPomodoro < MiniTest::Test
   end
 
   def test_start
-    now = 42
+    now = srand
 
     Time.stub :now, Time.at(now) do
       @pom.start!

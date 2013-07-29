@@ -1,6 +1,6 @@
 require 'helper'
 
-class TestPomodoroController < MiniTest::Test
+class TestPomodoriController < MiniTest::Test
   def setup
     @backend = MockPStore.new
   end
@@ -14,13 +14,17 @@ class TestPomodoroController < MiniTest::Test
   end
 
   def test_start
-    invoke(:start)
+    out,err = invoke(:start)
+    assert_match(/^Starting pomodoro #1\.$/m, out)
+    assert_empty(err)
     assert_equal(1, @backend.size)
   end
 
   def test_finish
     invoke(:start)
-    invoke(:finish)
+    out,err = invoke(:finish)
+    assert_match(/^Finished pomodoro #1\.$/m, out)
+    assert_empty(err)
     assert_equal(1, @backend.size)
     assert_equal(:finished, @backend[@backend.roots.first].status_name)
   end
@@ -36,7 +40,9 @@ private
 
   def invoke(method, args = [], options = {})
     Repository.stub :backend, @backend do
-      PomodoroController.new(method).call(args, options)
+      capture_io do
+        PomodoriController.new(method).call(args, options)
+      end
     end
   end
 end

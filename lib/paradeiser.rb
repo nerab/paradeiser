@@ -1,4 +1,5 @@
 require 'pstore'
+require 'erb'
 require 'state_machine'
 
 require 'require_all'

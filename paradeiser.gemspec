@@ -24,7 +24,10 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency 'guard-minitest'
   spec.add_development_dependency 'guard-bundler'
-  spec.add_development_dependency 'growl'
+  spec.add_development_dependency 'terminal-notifier-guard'
+  spec.add_development_dependency 'libnotify'
+  spec.add_development_dependency 'rb-inotify'
+  spec.add_development_dependency 'rb-fsevent'
   spec.add_development_dependency 'pry'
   spec.add_development_dependency 'bundler'
   spec.add_development_dependency 'rake'

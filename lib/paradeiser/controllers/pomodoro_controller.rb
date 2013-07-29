@@ -1,7 +1,19 @@
 module Paradeiser
+  SingletonError = Class.new(StandardError) do
+    def message
+      'There already is an active pomodoro that is not yet finished.'
+    end
+  end
+
+  NoActivePomodoroError = Class.new(StandardError) do
+    def message
+      'There is no active pomodoro that could be finished'
+    end
+  end
+
   class PomodoroController < Controller
     def start
-      raise 'There already is an active pomodoro that is not yet finished.' if Repository.any?(:status => 'active')
+      raise SingletonError if Repository.any?(:status => 'active')
       @pom = Pomodoro.new
       @pom.start!
       Repository.save(@pom)
@@ -9,7 +21,7 @@ module Paradeiser
 
     def finish
       @pom = Repository.find_first(:status => 'active')
-      raise 'There is no active pomodoro that could be finished' unless @pom
+      raise NoActivePomodoroError unless @pom
       @pom.finish!
       Repository.save(@pom)
     end

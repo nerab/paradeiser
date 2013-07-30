@@ -29,6 +29,40 @@ class TestPomodoro < MiniTest::Test
     assert_equal(now, @pom.finished_at.to_i)
   end
 
+  def test_duration_idle
+    assert_equal(0, @pom.duration)
+  end
+
+  def test_duration_started
+    now = srand
+
+    Time.stub :now, Time.at(now) do
+      @pom.start!
+    end
+
+    later = now + rand(42)
+
+    Time.stub :now, Time.at(later) do
+      assert_equal(later - now, @pom.duration)
+    end
+  end
+
+  def test_duration_finished
+    now = srand
+
+    Time.stub :now, Time.at(now) do
+      @pom.start!
+    end
+
+    later = now + rand(42)
+
+    Time.stub :now, Time.at(later) do
+      @pom.finish!
+    end
+
+    assert_equal(later - now, @pom.duration)
+  end
+
   def test_finish_finished
     @pom.start!
     @pom.finish!

@@ -31,5 +31,13 @@ module Paradeiser
     def new?
       @id.nil?
     end
+
+    def duration
+      if started_at.nil?
+        0
+      else
+        (finished_at || Time.now) - started_at
+      end
+    end
   end
 end

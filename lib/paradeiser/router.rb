@@ -3,13 +3,17 @@ module Paradeiser
     class << self
       def dispatch(command)
         Proc.new do |args, options|
+          # TODO Dynamically find the controller that handles command.name
+          controller = PomodoriController.new(command.name)
+
           begin
-            # TODO Dynamically find the controller that handles cmd.name
-            PomodoriController.new(command.name).call(args, options)
+            controller.call(args, options)
           rescue
             $stderr.puts("Error: #{$!.message}")
             exit(1)
           end
+
+          exit(controller.exitstatus)
         end
       end
     end

@@ -116,25 +116,57 @@ When `at` calls Paradeiser with this command, the pomodoro / break will be over 
 
 ## Status
 
-      $ pom status # with an active pomodoro
-      Pomodoro #2 started at 11:03. 14 minutes remaining.
+Paradeiser provides the current state as process exit status. With the ´--verbose´ switch, additional information is printed to STDOUT.
 
-      $ pom status # with no active pomodoro and a previously finished one
-      No pomodoro active. Last pomodoro was finished successfully at 2013-07-16 17.07.
+* Given an active pomodoro:
 
-      $ pom status # with no active pomodoro and a previously cancelled one
-      No pomodoro active. Last pomodoro was cancelled at 2013-07-16 17.07.
+      $ pom status
+      $ echo $?
+      0
 
-      $ pom status # with no active pomodoro and an active break
+      $ pom status --verbose
+      Pomodoro #2 is active (started 11:03, 14 minutes remaining).
+
+* Given no active pomodoro and the last one (not earlier as today) was finished:
+
+      $ pom status
+      $ echo $?
+      1
+
+      $ pom status --verbose
+      No active pomodoro. Last one was finished at 16:58.
+
+* Given no active pomodoro and the last one (not earlier as today) was cancelled:
+
+      $ pom status
+      $ echo $?
+      2
+
+      $ pom status --verbose
+      No pomodoro active. Last pomodoro was cancelled at 17:07.
+
+* Given an active break (implies no active pomodoro):
+
+      $ pom status
+      $ echo $?
+      3
+
+      $ pom status --verbose
       Taking a 5 minute break until 2013-07-16 17.07 (4 minutes remaining).
 
-      $ pom status --short # short status (03:39 remaining in the active pomodoro or break)
+* Short status (03:39 remaining in the active pomodoro or break):
+
+      $ pom status --short
       03:39
 
-      $ pom status --format %C-%M:%S # custom status format, similar to date +%Y-%m-%dT%H:%M:%S
+* Custom status format, similar to date +%Y-%m-%dT%H:%M:%S:
+
+      $ pom status --format %C-%M:%S
       B03:39
 
-      $ pom status --format JSON # output in JSON format
+* Output in JSON format
+
+      $ pom status --format JSON
       {
         "status": {
           "state": "break",
@@ -182,11 +214,7 @@ The same options as for regular reports apply. The timesheet report also details
       }
 
 ## Output Policy
-Paradeiser follows the [Rule of Silence](http://www.faqs.org/docs/artu/ch01s06.html#id2878450). If all goes well, a command will not print any output to `STDOUT` unless `--verbose` is given.
-
-Reports are exempted from this rule and always print their payload to STDOUT.
-
-Internally, the controllers raise errors. The router catches them and prints errors and warnings to `STDERR`.
+Paradeiser follows the [Rule of Silence](http://www.faqs.org/docs/artu/ch01s06.html#id2878450). If all goes well, a command will not print any output to `STDOUT` unless `--verbose` is given. `status`, `report` and `timesheet` are exempted from this rule as their primary purpose is to print to STDOUT.
 
 ## Hooks
 Instead of handling tasks itself, Paradeiser integrates with external tools via hooks. Every event will attempt to find and execute an appropriate script in `~/.paradeiser/hooks/`. Sufficient information will be made available via environment variables.
@@ -298,14 +326,6 @@ In order to record the current location at the start of the pomodoro, Paradeiser
         GATEWAY=$(netstat -rn | grep "^0.0.0.0" | cut -c17-31); ping -c1 $GATEWAY >/dev/null; arp -n $GATEWAY | tail -n1 | cut -c34-50
 
 The location is then used to assign a label to one or more hostname@MAC strings, which will be used in a report.
-
-## Miscellaneous Design Thoughts
-
-### MVC
-
-* If a view cannot be found, just do STDOUT.puts - but what? We need the view… maybe using Highline tables with paging.
-
-* If the whole MVC thing makes sense, then `bin/pom` is the router. It defines what goes where.
 
 ## Issues
 

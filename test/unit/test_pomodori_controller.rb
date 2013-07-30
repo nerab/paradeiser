@@ -5,6 +5,19 @@ class TestPomodoriController < MiniTest::Test
     @backend = MockPStore.new
   end
 
+  def test_status_active
+    invoke(:start)
+    _, _, status = invoke(:status, [], :verbose => false)
+    assert_equal(0, status)
+  end
+
+  def test_status_finished
+    invoke(:start)
+    invoke(:finish)
+    _, _, status = invoke(:status, [], :verbose => false)
+    assert_equal(1, status)
+  end
+
   def test_start_active
     invoke(:start)
 
@@ -14,7 +27,7 @@ class TestPomodoriController < MiniTest::Test
   end
 
   def test_start
-    out,err = invoke(:start)
+    out, err, _ = invoke(:start)
     assert_match(/^Starting pomodoro #1\.$/m, out)
     assert_empty(err)
     assert_equal(1, @backend.size)
@@ -22,7 +35,7 @@ class TestPomodoriController < MiniTest::Test
 
   def test_finish
     invoke(:start)
-    out,err = invoke(:finish)
+    out, err, _ = invoke(:finish)
     assert_match(/^Finished pomodoro #1 after .* minutes\.$/m, out)
     assert_empty(err)
     assert_equal(1, @backend.size)
@@ -38,11 +51,15 @@ class TestPomodoriController < MiniTest::Test
 
 private
 
-  def invoke(method, args = [], options = OpenStruct.new(:verbose => true))
+  def invoke(method, args = [], options = {:verbose => true})
+    controller = PomodoriController.new(method)
+
     Repository.stub :backend, @backend do
-      capture_io do
-        PomodoriController.new(method).call(args, options)
+      out, err = capture_io do
+        controller.call(args, OpenStruct.new(options))
       end
+
+      [out, err, controller.exitstatus]
     end
   end
 end

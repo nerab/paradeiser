@@ -14,19 +14,25 @@ program :help, 'Author', 'Nicholas E. Rabenau <nerab@gmx.at>'
 global_option '-V', '--verbose', 'Enable verbose output'
 
 command :start do |c|
-  c.syntax = "#{program(:name)} #{c.name}"
+  c.syntax  = "#{program(:name)} #{c.name}"
   c.summary = 'Start a new pomodoro'
   c.action Router.dispatch(c)
 end
 
 command :finish do |c|
-  c.syntax = "#{program(:name)} #{c.name}"
+  c.syntax  = "#{program(:name)} #{c.name}"
   c.summary = 'Finish the active pomodoro'
   c.action Router.dispatch(c)
 end
 
 command :report do |c|
-  c.syntax = "#{program(:name)} #{c.name}"
+  c.syntax  = "#{program(:name)} #{c.name}"
   c.summary = 'Show a report on all pomodori'
+  c.action Router.dispatch(c)
+end
+
+command :status do |c|
+  c.syntax  = "#{program(:name)} #{c.name}"
+  c.summary = 'Show status of active pomodoro or break'
   c.action Router.dispatch(c)
 end

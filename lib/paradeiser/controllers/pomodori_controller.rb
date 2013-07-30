@@ -18,5 +18,15 @@ module Paradeiser
       @pom = Repository.all
       self.verbose = true
     end
+
+    def status
+      if Repository.active
+        self.exitstatus = 0
+      elsif Repository.find_first(:status => 'finished')
+        self.exitstatus = 1
+      # elsif Repository.find_first(:status => 'cancelled')
+      #   self.exitstatus = 2
+      end
+    end
   end
 end

@@ -1,7 +1,10 @@
 module Paradeiser
   class Controller
+    attr_reader :exitstatus
+
     def initialize(method)
       @method = method
+      @exitstatus = 0
     end
 
     def call(args, options)
@@ -13,8 +16,9 @@ module Paradeiser
 
   protected
 
-    attr_reader :options, :args
+    attr_reader   :options, :args
     attr_accessor :verbose
+    attr_writer   :exitstatus
 
     def model_name
       self.class.to_s.split("::").last.sub('Controller', '').downcase

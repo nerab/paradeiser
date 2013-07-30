@@ -120,62 +120,62 @@ Paradeiser provides the current state as process exit status. With the ´--verbo
 
 * Given an active pomodoro:
 
-      $ pom status
-      $ echo $?
-      0
+          $ pom status
+          $ echo $?
+          0
 
-      $ pom status --verbose
-      Pomodoro #2 is active (started 11:03, 14 minutes remaining).
+          $ pom status --verbose
+          Pomodoro #2 is active (started 11:03, 14 minutes remaining).
 
 * Given no active pomodoro and the last one (not earlier as today) was finished:
 
-      $ pom status
-      $ echo $?
-      1
+          $ pom status
+          $ echo $?
+          1
 
-      $ pom status --verbose
-      No active pomodoro. Last one was finished at 16:58.
+          $ pom status --verbose
+          No active pomodoro. Last one was finished at 16:58.
 
 * Given no active pomodoro and the last one (not earlier as today) was cancelled:
 
-      $ pom status
-      $ echo $?
-      2
+          $ pom status
+          $ echo $?
+          2
 
-      $ pom status --verbose
-      No pomodoro active. Last pomodoro was cancelled at 17:07.
+          $ pom status --verbose
+          No pomodoro active. Last pomodoro was cancelled at 17:07.
 
 * Given an active break (implies no active pomodoro):
 
-      $ pom status
-      $ echo $?
-      3
+          $ pom status
+          $ echo $?
+          3
 
-      $ pom status --verbose
-      Taking a 5 minute break until 2013-07-16 17.07 (4 minutes remaining).
+          $ pom status --verbose
+          Taking a 5 minute break until 2013-07-16 17.07 (4 minutes remaining).
 
 * Short status (03:39 remaining in the active pomodoro or break):
 
-      $ pom status --short
-      03:39
+          $ pom status --short
+          03:39
 
 * Custom status format, similar to date +%Y-%m-%dT%H:%M:%S:
 
-      $ pom status --format %C-%M:%S
-      B03:39
+          $ pom status --format %C-%M:%S
+          B03:39
 
 * Output in JSON format
 
-      $ pom status --format JSON
-      {
-        "status": {
-          "state": "break",
-          "length": 600,
-          "remaining": 363,
-          "start": 1373988295,
-          "end": 1373988595
-        }
-      }
+          $ pom status --format JSON
+          {
+            "status": {
+              "state": "break",
+              "length": 600,
+              "remaining": 363,
+              "start": 1373988295,
+              "end": 1373988595
+            }
+          }
 
 ## Reports
 

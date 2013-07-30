@@ -18,12 +18,8 @@ module Paradeiser
         end
       end
 
-      def find_first(criteria)
-        find(criteria).first
-      end
-
       def active
-        find_first(:status => 'active')
+        find(:status => 'active').first
       end
 
       def active?

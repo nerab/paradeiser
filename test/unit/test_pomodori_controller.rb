@@ -7,15 +7,19 @@ class TestPomodoriController < MiniTest::Test
 
   def test_status_active
     invoke(:start)
-    _, _, status = invoke(:status, [], :verbose => false)
+    out, err, status = invoke(:status)
     assert_equal(0, status)
+    assert_empty(err)
+    assert_match(/^Pomodoro #1 is active \(started at .*\)\.$/m, out)
   end
 
   def test_status_finished
     invoke(:start)
     invoke(:finish)
-    _, _, status = invoke(:status, [], :verbose => false)
+    out, err, status = invoke(:status)
     assert_equal(1, status)
+    assert_empty(err)
+    assert_match(/^No active pomodoro. Last one was finished at .*\.$/m, out)
   end
 
   def test_start_active
@@ -27,7 +31,8 @@ class TestPomodoriController < MiniTest::Test
   end
 
   def test_start
-    out, err, _ = invoke(:start)
+    out, err, status = invoke(:start)
+    assert_equal(0, status)
     assert_match(/^Starting pomodoro #1\.$/m, out)
     assert_empty(err)
     assert_equal(1, @backend.size)
@@ -35,7 +40,8 @@ class TestPomodoriController < MiniTest::Test
 
   def test_finish
     invoke(:start)
-    out, err, _ = invoke(:finish)
+    out, err, status = invoke(:finish)
+    assert_equal(0, status)
     assert_match(/^Finished pomodoro #1 after .* minutes\.$/m, out)
     assert_empty(err)
     assert_equal(1, @backend.size)

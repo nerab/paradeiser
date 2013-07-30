@@ -20,11 +20,11 @@ module Paradeiser
     end
 
     def status
-      if Repository.active
+      if @pom = Repository.active
         self.exitstatus = 0
-      elsif Repository.find_first(:status => 'finished')
+      elsif @pom = Repository.find(:status => 'finished').last
         self.exitstatus = 1
-      # elsif Repository.find_first(:status => 'cancelled')
+      # elsif Repository.find(:status => 'cancelled').last
       #   self.exitstatus = 2
       end
     end

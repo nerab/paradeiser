@@ -116,7 +116,7 @@ When `at` calls Paradeiser with this command, the pomodoro / break will be over 
 
 ## Status
 
-Paradeiser provides the current state as process exit status. With the ´--verbose´ switch, additional information is printed to STDOUT.
+Paradeiser provides the current state as process exit status. With the `--verbose` switch, additional information is printed to STDOUT.
 
 * Given an active pomodoro:
 

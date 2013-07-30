@@ -16,17 +16,17 @@ global_option '-V', '--verbose', 'Enable verbose output'
 command :start do |c|
   c.syntax = "#{program(:name)} #{c.name}"
   c.summary = 'Start a new pomodoro'
-  c.action PomodoriController.new(c.name)
+  c.action Router.dispatch(c)
 end
 
 command :finish do |c|
   c.syntax = "#{program(:name)} #{c.name}"
   c.summary = 'Finish the active pomodoro'
-  c.action PomodoriController.new(c.name)
+  c.action Router.dispatch(c)
 end
 
 command :report do |c|
   c.syntax = "#{program(:name)} #{c.name}"
   c.summary = 'Show a report on all pomodori'
-  c.action PomodoriController.new(c.name)
+  c.action Router.dispatch(c)
 end

@@ -8,12 +8,13 @@ module Paradeiser
       @args = args
       @options = options
       send(@method)
-      puts(template.result(binding))
+      puts(template.result(binding)) if options.verbose || verbose
     end
 
   protected
 
     attr_reader :options, :args
+    attr_accessor :verbose
 
     def model_name
       self.class.to_s.split("::").last.sub('Controller', '').downcase

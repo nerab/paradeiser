@@ -38,7 +38,7 @@ class TestPomodoriController < MiniTest::Test
 
 private
 
-  def invoke(method, args = [], options = {})
+  def invoke(method, args = [], options = OpenStruct.new(:verbose => true))
     Repository.stub :backend, @backend do
       capture_io do
         PomodoriController.new(method).call(args, options)

@@ -16,6 +16,7 @@ module Paradeiser
 
     def report
       @pom = Repository.all
+      self.verbose = true
     end
   end
 end

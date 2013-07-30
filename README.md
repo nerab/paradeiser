@@ -33,7 +33,6 @@ Note that for a single user account (technically, for a `~/.paradeiser` director
 ### Finish the pomodoro
 
       $ pom finish
-      $ pom stop # alias
 
 If a pomodoro is active, it will be marked as successful after stopping it, regardless of whether the 25 minutes are over or not. If a break is active, it will be stopped. If neither a pomodoro nor or break are active, a warning message will be printed.
 
@@ -61,7 +60,6 @@ The annotation will be added to the active or, if none is active, to the most re
 ### Cancel the pomodoro
 
       $ pom cancel Just couldn't concentrate anymore.
-      $ pom abandon # alias
 
 It will be marked as unsuccessful (remember, a pomodoro is indivisible). If no pomodoro is active or interrupted (status is idle or paused), the command will throw an error. If a break is active, the command will do nothing except printing a warning. Remaining arguments, if present, will be added to the pomodoro as annotation.
 
@@ -93,14 +91,14 @@ Creates the `~/.paradeiser` directory, an empty data store and the sample hooks 
 
         $ pom location macbook@01:23:45:67:89:0A "Your Label"
 
-## Protected commands
+## Timer with `at`
 
 A major aspect of a pomodoro timer is the timer function itself:
 
   * The remaining time of the active pomodoro or break must be displayed to the user.
   * When the pomodoro or break is over, the user also needs to get a notification.
 
-We don't want another daemon, and `at` exists. We just tell `at` to call
+The `at` command is used for this. We just tell it to call
 
       pom finish
 
@@ -169,12 +167,12 @@ The command defaults to `--day`. Alternative options are `--week`, `--month` or 
 
 The efficiency is calculated (per location) from the number of successful vs. cancelled pomodori, together with the number and length of interruptions. Breaks are not counted towards efficiency.
 
-### Verbose Reports (timesheet)
+### Timesheet
 
-      $ pom report --verbose
+      $ pom timesheet
       TODO Ordered list of pomodori and breaks, each with annotations (like a time sheet)
 
-The same options as for regular reports apply. The verbose report also details the efficiency of each location.
+The same options as for regular reports apply. The timesheet report also details the efficiency of each location.
 
 ### Exporting a Report
 
@@ -184,11 +182,11 @@ The same options as for regular reports apply. The verbose report also details t
       }
 
 ## Output Policy
-Paradeiser follows the [Rule of Silence](http://www.faqs.org/docs/artu/ch01s06.html#id2878450). If all goes well, a command will not print any output to `STDOUT`.
+Paradeiser follows the [Rule of Silence](http://www.faqs.org/docs/artu/ch01s06.html#id2878450). If all goes well, a command will not print any output to `STDOUT` unless `--verbose` is given.
 
 Reports are exempted from this rule and always print their payload to STDOUT.
 
-While a controller raise errors, the `pom` command provides proper error- and warning messages to `STDERR`.
+Internally, the controllers raise errors. The router catches them and prints errors and warnings to `STDERR`.
 
 ## Hooks
 Instead of handling tasks itself, Paradeiser integrates with external tools via hooks. Every event will attempt to find and execute an appropriate script in `~/.paradeiser/hooks/`. Sufficient information will be made available via environment variables.

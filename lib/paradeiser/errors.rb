@@ -10,4 +10,10 @@ module Paradeiser
       super('There is no active pomodoro that could be finished.')
     end
   end
+
+  class NotInitializedError < StandardError
+    def initialize(msg)
+      super("Paradeiser was not properly initialized; #{msg}.")
+    end
+  end
 end

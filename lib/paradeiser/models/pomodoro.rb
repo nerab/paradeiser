@@ -32,12 +32,11 @@ module Paradeiser
       @id.nil?
     end
 
+    # from https://github.com/travis-ci/travis/blob/master/lib/travis/client/job.rb
     def duration
-      if started_at.nil?
-        0
-      else
-        (finished_at || Time.now) - started_at
-      end
+      start  = started_at  || Time.now
+      finish = finished_at || Time.now
+      (finish - start).to_i
     end
   end
 end

@@ -1,5 +1,19 @@
 # Paradeiser Implementation TODOs
 
+* Rename `pom end-break` to `pom break end`
+
+* Router catches warnings (those that extend Warning) and prints to stderr, but does not exit. Exit code still comes from the controller.
+
+* If `at` is not there or not enabled, print warning, but continue. Still useful.
+
+* Stub kernel.exec to simulate missing at.
+
+* Check the queue after enqueing a job. Warn if not there. With trace, print the job id.
+
+* `pom doctor` checks that at is there and enabled
+
+* `pom init` warns if at is not there or not enabled (mac)
+
 * Scope the id to the day by introducing a key class the is an aggregate of day and id.
   - The view only shows the id for any given day in most reports.
   - We still want to have a global identity for a pomodoro (withing the realm of a single user).

@@ -1,4 +1,8 @@
 module Paradeiser
+  def self.pom_dir
+    ENV['POM_DIR'] || File.expand_path('~/.paradeiser/')
+  end
+
   class Repository
     class << self
       def all
@@ -36,7 +40,11 @@ module Paradeiser
     private
 
       def backend
-        @backend ||= PStore.new(File.expand_path("~/.paradeiser.pstore"), true)
+        begin
+          @backend ||= PStore.new(File.join(Paradeiser.pom_dir, 'repository.pstore'), true)
+        rescue PStore::Error => e
+          raise NotInitializedError.new(e.message)
+        end
       end
 
       def next_id

@@ -10,6 +10,7 @@ module Paradeiser
             controller.call(args, options)
           rescue
             $stderr.puts("Error: #{$!.message}")
+            $stderr.puts $!.backtrace if options.trace
             exit(1)
           end
 

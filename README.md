@@ -5,14 +5,14 @@
 
   _Please note that this project is developed with the [readme-driven development](http://tom.preston-werner.com/2010/08/23/readme-driven-development.html) method. As such, Paradeiser actually provides much less functionality than it is described here. Once a major milestone is reached, this README will be updated to reflect the actual status._
 
-Paradeiser is a tool for the [Pomodoro Technique](http://www.pomodorotechnique.com/). It keeps track of the current pomodoro and assists the user in managing active and past pomodori:
+Paradeiser is a command-line tool for the [Pomodoro Technique](http://www.pomodorotechnique.com/). It keeps track of the current pomodoro and assists the user in managing active and past pomodori:
 
 * Records finished and cancelled pomodori as well as internal and external interruptions and other events
 * Keeps track of the timer for the active pomodoro and the break
 * Provides out-of-the-box reports that show details about finished and cancelled pomodori
 * Shows information about breaks and interruptions
 
-Paradeiser itself is not concerned with the actual management of tasks. There are plenty of tools for that; the author prefers [TaskWarrior](http://taskwarrior.org/).
+Paradeiser itself is not concerned with the actual management of tasks. There are plenty of tools for that; e.g. [TaskWarrior](http://taskwarrior.org/).
 
 ## Installation
 
@@ -28,7 +28,7 @@ There can only be one active pomodoro or break at a time per user. Therefore, re
 
 If a break is still active, it will be stopped before the new pomodoro is started.
 
-Note that for a single user account (technically, for a `~/.paradeiser` directory), not more than one pomodoro [xor](http://en.wikipedia.org/wiki/Xor) one break can be active at any given time.
+Note that for a single user account (technically, for a `$POM_DIR` directory, which by default is `~/.paradeiser`), not more than one pomodoro [xor](http://en.wikipedia.org/wiki/Xor) one break can be active at any given time.
 
 ### Finish the pomodoro
 
@@ -67,7 +67,7 @@ It will be marked as unsuccessful (remember, a pomodoro is indivisible). If no p
 
       $ pom init
 
-Creates the `~/.paradeiser` directory, an empty data store and the sample hooks in `~/.paradeiser/hooks`. If `~/.paradeiser` already exists, the command will fail with an error message.
+Creates the `$POM_DIR` directory (defaults to `~/.paradeiser`), an empty data store and the sample hooks in `$POM_DIR/hooks`. If `$POM_DIR` already exists, the command will fail with an error message.
 
 ### Location
 
@@ -214,7 +214,7 @@ The same options as for regular reports apply. The timesheet report also details
       }
 
 ## Output Policy
-Paradeiser follows the [Rule of Silence](http://www.faqs.org/docs/artu/ch01s06.html#id2878450). If all goes well, a command will not print any output to `STDOUT` unless `--verbose` is given. `status`, `report` and `timesheet` are exempted from this rule as their primary purpose is to print to STDOUT.
+Paradeiser follows the [Rule of Silence](http://www.faqs.org/docs/artu/ch01s06.html#id2878450). If all goes well, a command will not print any output to `STDOUT` unless `--verbose` is given. `status`, `report` and `timesheet` are exempted from this rule, as their primary purpose is to print to STDOUT.
 
 ## Hooks
 Instead of handling tasks itself, Paradeiser integrates with external tools via hooks. Every event will attempt to find and execute an appropriate script in `~/.paradeiser/hooks/`. Sufficient information will be made available via environment variables.

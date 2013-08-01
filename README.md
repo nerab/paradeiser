@@ -288,7 +288,7 @@ They have a lot of what I wanted, but pomo focuses very much on the tasks themse
 ### State Machine
 Paradeiser uses a [state machine](https://github.com/pluginaweek/state_machine) to model a pomodoro. Internal event handlers do the actual work; among them is the task of calling the external hooks.
 
-![State Transition Diagram](https://raw.github.com/nerab/paradeiser/master/doc/Paradeiser::Pomodoro_status.svg)
+![State Transition Diagram](https://rawgithub.com/nerab/paradeiser/master/doc/Paradeiser::Pomodoro_status.svg)
 
 The graph was created using the rake task that comes with `state_machine`:
 

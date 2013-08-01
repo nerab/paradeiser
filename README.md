@@ -24,17 +24,15 @@ Paradeiser itself is not concerned with the actual management of tasks. There ar
 
       $ pom start
 
-There can only be one active pomodoro or break at a time per user. Therefore, repeatedly calling start will have no effect (other than a warning message).
-
 If a break is still active, it will be stopped before the new pomodoro is started.
 
-Note that for a single user account (technically, for a `$POM_DIR` directory, which by default is `~/.paradeiser`), not more than one pomodoro [xor](http://en.wikipedia.org/wiki/Xor) one break can be active at any given time.
+Note that for a single user account (technically, for a `$POM_DIR` directory, which by default is `~/.paradeiser/`), not more than one pomodoro [xor](http://en.wikipedia.org/wiki/Xor) one break can be active at any given time. Therefore, calling start while a pomodoro is active will print an error message.
 
 ### Finish the pomodoro
 
       $ pom finish
 
-If a pomodoro is active, it will be marked as successful after stopping it, regardless of whether the 25 minutes are over or not. If a break is active, it will be stopped. If neither a pomodoro nor or break are active, a warning message will be printed.
+If a pomodoro is active, it will be marked as successful after stopping it, regardless of whether the 25 minutes are over or not. If a break is active, it will be stopped. If neither a pomodoro nor or break are active, an error message will be printed.
 
 ### Record an interruption of the current pomodoro
 
@@ -67,7 +65,9 @@ It will be marked as unsuccessful (remember, a pomodoro is indivisible). If no p
 
       $ pom init
 
-Creates the `$POM_DIR` directory (defaults to `~/.paradeiser`), an empty data store and the sample hooks in `$POM_DIR/hooks`. If `$POM_DIR` already exists, the command will fail with an error message.
+Creates the `$POM_DIR` directory (defaults to `~/.paradeiser`) and the sample hooks in `$POM_DIR/hooks`. The data store will not be created on `pom init`, but when the first write operation happens (e.g. `pom start`, but not `pom report`).
+
+If `$POM_DIR` already exists, the command will fail with an error message.
 
 ### Location
 
@@ -116,43 +116,43 @@ When `at` calls Paradeiser with this command, the pomodoro / break will be over 
 
 ## Status
 
-Paradeiser provides the current state as process exit status. With the `--verbose` switch, additional information is printed to STDOUT.
+Paradeiser can print the current status to STDOUT with the `pom status` command (except when muted with `--quiet`). The current state is provided as process exit status.
 
 * Given an active pomodoro:
 
           $ pom status
+          Pomodoro #2 is active (started 11:03, 14 minutes remaining).
+
+          $ pom status --quiet
           $ echo $?
           0
-
-          $ pom status --verbose
-          Pomodoro #2 is active (started 11:03, 14 minutes remaining).
 
 * Given no active pomodoro and the last one (not earlier as today) was finished:
 
           $ pom status
+          No active pomodoro. Last one was finished at 16:58.
+
+          $ pom status --quiet
           $ echo $?
           1
-
-          $ pom status --verbose
-          No active pomodoro. Last one was finished at 16:58.
 
 * Given no active pomodoro and the last one (not earlier as today) was cancelled:
 
           $ pom status
+          No pomodoro active. Last pomodoro was cancelled at 17:07.
+
+          $ pom status --quiet
           $ echo $?
           2
-
-          $ pom status --verbose
-          No pomodoro active. Last pomodoro was cancelled at 17:07.
 
 * Given an active break (implies no active pomodoro):
 
           $ pom status
+          Taking a 5 minute break until 2013-07-16 17.07 (4 minutes remaining).
+
+          $ pom status --quiet
           $ echo $?
           3
-
-          $ pom status --verbose
-          Taking a 5 minute break until 2013-07-16 17.07 (4 minutes remaining).
 
 * Short status (03:39 remaining in the active pomodoro or break):
 

@@ -16,7 +16,7 @@ module Paradeiser
 
     def report
       @pom = Repository.all
-      self.verbose = true
+      self.print = true
     end
 
     def status
@@ -27,6 +27,7 @@ module Paradeiser
       # elsif Repository.find(:status => 'cancelled').last
       #   self.exitstatus = 2
       end
+      self.print = true
     end
   end
 end

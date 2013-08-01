@@ -1,20 +1,36 @@
 # Paradeiser Implementation TODOs
 
-* Change the behavior of `pom status` to be verbose by default and add --quiet to this command alone. Make sure that --quiet wins over --verbose, or throw.
+* Implement `pom init` to make the directory (copying hooks can come later)
 
-* Rename `pom end-break` to `pom break end`
+* Improve status messages with relative times and dates (`distance_of_time_in_words_to_now`)
 
-* Router catches warnings (those that extend Warning) and prints to stderr, but does not exit. Exit code still comes from the controller.
+* Implement report as defined in the README
 
-* If `at` is not there or not enabled, print warning, but continue. Still useful.
+* `pom log` could allow logging pomodoro after the fact.
 
-* Stub kernel.exec in tests to simulate missing at.
+* Do we need a config file, and if so, should it be a user-editable file? Probably.
 
-* Check the queue after enqueing a job. Warn if not there. With trace, print the job id.
+  If so, a config controller is on order.
 
-* `pom doctor` checks that `at` is there and enabled. Provides a hint what to do if not.
+* A text-based repo format would be much more UNIX-like. Think about a JSON repo. Loading it could share a lot of code with import (which we will need anyway). And we cannot trust a JSON repo any more than an import file.
 
-* `pom init` warns if `at` is not there or not enabled (mac)
+* Rename `pom end-break` to `pom break end` and allow `pom break start` to be the same as `pom break`
+
+* Have the router catch warnings (those errors that extend Warning) and print the message to STDERR, but do not exit. The actual exit code is still determined by the controller.
+
+* If the `at` command is not available or not enabled, print a warning and continue. The program will still be useful.
+
+* In tests, stub `at` via stubbing `Kernel#exec` in order to
+  - simulate the `at` command, and
+  - simulate the case that `at` is missing
+
+* Check the queue after enqueing a job.
+  - Warn if the job just added is not there.
+  - With the trace option, print the job id and instructions to look at the `at` queue.
+
+* `pom doctor` checks if `at` is there and enabled. Provides a hint what to do if not.
+
+* `pom init` warns if `at` is not there or not enabled (e.g. on the Mac)
 
 * Scope the id to the day by introducing a key class the is an aggregate of day and id.
   - The view only shows the id for any given day in most reports.
@@ -35,6 +51,6 @@
 
 * Promote Paradeiser
   - Publish an [ASCII cast](http://ascii.io/)
-  - Tell TaskWarrior community about Paradeiser
-  - Tell Pomodoro community about Paradeiser
-  - Tell Ruby community (e.g. @neverbendeasy does kanban) about Paradeiser
+  - Tell the TaskWarrior community about Paradeiser
+  - Tell the Pomodoro community about Paradeiser
+  - Tell the Ruby community about Paradeiser (e.g. @neverbendeasy does kanban)

@@ -16,4 +16,10 @@ module Paradeiser
       super("Paradeiser was not properly initialized; #{msg}.")
     end
   end
+
+  class ContradictingOptionsError < StandardError
+    def initialize(*contradictions)
+      super("The options #{contradictions.join(', ')} contradict each other.")
+    end
+  end
 end

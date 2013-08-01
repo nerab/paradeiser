@@ -5,9 +5,44 @@ class TestPomodoriController < MiniTest::Test
     @backend = MockPStore.new
   end
 
+  def test_output_status_000 # flags are verbose, quiet, printing
+    assert_output(false, false, false, false)
+  end
+
+  def test_output_status_001
+    invoke(:start) # give the report something to report
+    assert_output(true , false, false, true )
+  end
+
+  def test_output_status_010
+    assert_output(false, false, true , false)
+  end
+
+  def test_output_status_011
+    assert_output(false, false, true , true )
+  end
+
+  def test_output_status_100
+    invoke(:start)
+    assert_output(true , true , false, false)
+  end
+
+  def test_output_status_101
+    invoke(:start)
+    assert_output(true , true , false, true )
+  end
+
+  def test_output_status_110
+    assert_output(false, true,  true , false)
+  end
+
+  def test_output_status_111
+    assert_output(false, true,  true , true)
+  end
+
   def test_status_active
     invoke(:start)
-    out, err, status = invoke(:status)
+    out, err, status = invoke(:status, [], :verbose => false)
     assert_equal(0, status)
     assert_empty(err)
     assert_match(/^Pomodoro #1 is active \(started at .*\)\.$/m, out)
@@ -16,7 +51,7 @@ class TestPomodoriController < MiniTest::Test
   def test_status_finished
     invoke(:start)
     invoke(:finish)
-    out, err, status = invoke(:status)
+    out, err, status = invoke(:status, [], :verbose => false)
     assert_equal(1, status)
     assert_empty(err)
     assert_match(/^No active pomodoro. Last one was finished at .*\.$/m, out)
@@ -57,7 +92,7 @@ class TestPomodoriController < MiniTest::Test
 
 private
 
-  def invoke(method, args = [], options = {:verbose => true})
+  def invoke(method, args = [], options = {:verbose => true, :quiet => false})
     controller = PomodoriController.new(method)
 
     Repository.stub :backend, @backend do
@@ -67,5 +102,10 @@ private
 
       [out, err, controller.exitstatus]
     end
+  end
+
+  def assert_output(expected, verbose, quiet, printing, command = :report)
+    out, _, _ = invoke(command, [], :verbose => false, :quiet => false)
+    assert_equal(expected, !out.chomp.empty?, "Expect #{[verbose, quiet, printing]} to be #{expected}. Content was: '#{out}'")
   end
 end

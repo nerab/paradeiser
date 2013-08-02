@@ -1,8 +1,8 @@
 # Paradeiser Implementation TODOs
 
-* The controller tests actually test the view, too. This is too much, so we need to split them. Asserting the variables set by the controllers should do (potentially passing the controller's binding)
+* Extract the view and split off view tests from the controller tests
 
-* Commands enqueued with `at need to be added the uuid of the pom to work on; otherwise they could modify the wrong thing.
+* Commands enqueued with `at` need to be added the uuid of the pom to work on; otherwise they could modify the wrong thing.
 
   Example:
 

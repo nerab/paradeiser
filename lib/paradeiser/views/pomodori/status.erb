@@ -4,6 +4,6 @@ when :active
 when :finished
   %>No active pomodoro. Last one was finished at <%= @pom.finished_at.strftime('%R') %>.<%
 else
-  %>Current state is <%= @pom.state %>.<%
+  %>Current state is <%= @pom.status %>.<%
 end
 %>

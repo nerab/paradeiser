@@ -1,6 +1,6 @@
 # Paradeiser Implementation TODOs
 
-* Extract the view and split off view tests from the controller tests
+* Add tests for the router
 
 * Commands enqueued with `at` need to be added the uuid of the pom to work on; otherwise they could modify the wrong thing.
 

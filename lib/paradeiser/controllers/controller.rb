@@ -1,6 +1,6 @@
 module Paradeiser
   class Controller
-    attr_reader :exitstatus
+    attr_reader :exitstatus, :has_output
 
     def initialize(method)
       @method = method
@@ -12,25 +12,19 @@ module Paradeiser
       @args = args
       @options = options
       send(@method)
-      puts(template.result(binding)) if options.verbose || @has_output
+    end
+
+    def model
+      self.class.name.split("::").last.sub('Controller', '')
+    end
+
+    def get_binding
+      return binding
     end
 
   protected
 
-    attr_accessor :has_output
-    attr_writer   :exitstatus
+    attr_writer   :exitstatus, :has_output
     attr_reader   :options, :args
-
-    def model_name
-      self.class.to_s.split("::").last.sub('Controller', '').downcase
-    end
-
-    def template
-      ERB.new(File.read(template_file), 0, '%<>')
-    end
-
-    def template_file
-      File.join(File.dirname(__FILE__), '..', 'views', model_name, "#{@method}.erb")
-    end
   end
 end

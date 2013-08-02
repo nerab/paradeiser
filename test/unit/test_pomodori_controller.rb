@@ -5,47 +5,29 @@ class TestPomodoriController < MiniTest::Test
     @backend = MockPStore.new
   end
 
-  def test_status_active
-    invoke(:start)
-    out, err, status = invoke(:status, [], :verbose => false)
-    assert_equal(0, status)
-    assert_empty(err)
-    assert_match(/^Pomodoro #1 is active for another \d{1,2} minutes \(started at .*\)\.$/m, out)
-  end
-
-  def test_status_finished
-    invoke(:start)
-    invoke(:finish)
-    out, err, status = invoke(:status, [], :verbose => false)
-    assert_equal(1, status)
-    assert_empty(err)
-    assert_match(/^No active pomodoro. Last one was finished at .*\.$/m, out)
+  def test_start
+    pom, has_output = invoke(:start, '@pom', 'has_output')
+    assert_equal(:active, pom.status_name)
+    assert_equal(false, has_output)
+    assert_equal(1, @backend.size)
   end
 
   def test_start_active
     invoke(:start)
+    assert_equal(1, @backend.size)
 
     assert_raises SingletonError do
       invoke(:start)
     end
-  end
-
-  def test_start
-    out, err, status = invoke(:start)
-    assert_equal(0, status)
-    assert_match(/^Starting pomodoro #1\.$/m, out)
-    assert_empty(err)
     assert_equal(1, @backend.size)
   end
 
   def test_finish
     invoke(:start)
-    out, err, status = invoke(:finish)
-    assert_equal(0, status)
-    assert_match(/^Finished pomodoro #1 after .* minutes\.$/m, out)
-    assert_empty(err)
+    pom, has_output = invoke(:finish, '@pom', 'has_output')
+    assert_equal(:finished, pom.status_name)
+    assert_equal(false, has_output)
     assert_equal(1, @backend.size)
-    assert_equal(:finished, @backend[@backend.roots.first].status_name)
   end
 
   def test_finish_idle
@@ -55,17 +37,63 @@ class TestPomodoriController < MiniTest::Test
     assert_equal(0, @backend.size)
   end
 
+  def test_report_idle
+    pomodori, has_output = invoke(:report, '@pom', 'has_output')
+    assert_empty(pomodori)
+    assert_equal(true, has_output)
+  end
+
+  def test_report_active
+    invoke(:start)
+    pomodori, has_output = invoke(:report, '@pom', 'has_output')
+    assert_equal(1, pomodori.size)
+    assert_equal(true, has_output)
+  end
+
+  def test_report_finished
+    invoke(:start)
+    invoke(:finish)
+    invoke(:start)
+    pomodori, has_output = invoke(:report, '@pom', 'has_output')
+    assert_equal(2, pomodori.size)
+    assert_equal(true, has_output)
+  end
+
+  def test_status_idle
+    pom, has_output = invoke(:status, '@pom', 'has_output')
+    assert_equal(:idle, pom.status_name)
+    assert_equal(true, has_output)
+    assert_equal(0, @backend.size)
+  end
+
+  def test_status_active
+    invoke(:start)
+    pom, has_output = invoke(:status, '@pom', 'has_output')
+    assert_equal(:active, pom.status_name)
+    assert_equal(true, has_output)
+    assert_equal(1, @backend.size)
+  end
+
+  def test_status_finished
+    invoke(:start)
+    invoke(:finish)
+    pom, has_output = invoke(:status, '@pom', 'has_output')
+    assert_equal(:finished, pom.status_name)
+    assert_equal(true, has_output)
+    assert_equal(1, @backend.size)
+  end
+
 private
 
-  def invoke(method, args = [], options = {:verbose => true, :quiet => false})
+  def invoke(method, *attributes)
     controller = PomodoriController.new(method)
 
     Repository.stub :backend, @backend do
-      out, err = capture_io do
-        controller.call(args, OpenStruct.new(options))
-      end
+      controller.call(nil, nil)
+    end
 
-      [out, err, controller.exitstatus]
+    attributes.map do |attribute|
+      controller.get_binding.eval(attribute)
     end
   end
 end

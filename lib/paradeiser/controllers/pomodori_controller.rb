@@ -26,6 +26,8 @@ module Paradeiser
         self.exitstatus = 1
       # elsif Repository.find(:status => 'cancelled').last
       #   self.exitstatus = 2
+      else
+        @pom = Pomodoro.new # nothing found, we are idle
       end
       self.has_output = true
     end

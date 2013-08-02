@@ -1,5 +1,7 @@
 module Paradeiser
   class Pomodoro
+    LENGTH = 25 * 60
+
     attr_accessor :id, :started_at, :finished_at
 
     state_machine :status, :initial => :idle do
@@ -37,6 +39,10 @@ module Paradeiser
       start  = started_at  || Time.now
       finish = finished_at || Time.now
       (finish - start).to_i
+    end
+
+    def remaining
+
     end
   end
 end

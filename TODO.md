@@ -1,5 +1,30 @@
 # Paradeiser Implementation TODOs
 
+* Roll back what I did with the quiet switch because some if you really want to be quiet you can always go back to redirect and send it to the /dev/null. By impl quiet you just reimplement shell redirection. We can't roll back the whole thing because there was another change in the commits but at least we can remove --quiet again.
+
+* The controller tests actually test the view, too. This is too much, so we need to split them. Asserting the variables set by the controllers should do (potentially passing the controller's binding)
+
+* Commands enqueued with `at need to be added the uuid of the pom to work on; otherwise they could modify the wrong thing.
+
+  Example:
+
+      `pom break --long` # will enqueue `pom break end` for in 30 minutes
+
+      # 5 minutes later
+      `pom start` # silently ends the break
+
+      # 2 minutes later
+      `pom cancel`
+      `pom break`
+
+      # Note that the first `pom break end` is still enqueued. It will cancel the last one, which is certainly not what we want.
+
+  We need to either enqueue the ID of the break with the command
+
+    pom break djvkd-gn358-j38kfk... end
+
+  or cancel all enqueued commands with the `pom cancel`. This ois probably the better option as we deciced to have one break or pomodoro at a time anyway.
+
 * Implement `pom init` to make the directory (copying hooks can come later)
 
 * Improve status messages with relative times and dates (`distance_of_time_in_words_to_now`)

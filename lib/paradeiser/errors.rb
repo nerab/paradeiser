@@ -7,7 +7,7 @@ module Paradeiser
 
   class NoActivePomodoroError < StandardError
     def initialize
-      super('There is no active pomodoro that could be finished.')
+      super('There is no active pomodoro.')
     end
   end
 

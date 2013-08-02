@@ -42,7 +42,8 @@ module Paradeiser
     end
 
     def remaining
-
+      raise NoActivePomodoroError if !active?
+      LENGTH - Time.now.to_i + started_at.to_i
     end
   end
 end

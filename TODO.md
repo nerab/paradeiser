@@ -1,7 +1,5 @@
 # Paradeiser Implementation TODOs
 
-* Roll back what I did with the quiet switch because some if you really want to be quiet you can always go back to redirect and send it to the /dev/null. By impl quiet you just reimplement shell redirection. We can't roll back the whole thing because there was another change in the commits but at least we can remove --quiet again.
-
 * The controller tests actually test the view, too. This is too much, so we need to split them. Asserting the variables set by the controllers should do (potentially passing the controller's binding)
 
 * Commands enqueued with `at need to be added the uuid of the pom to work on; otherwise they could modify the wrong thing.

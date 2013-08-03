@@ -1,5 +1,11 @@
 # Paradeiser Implementation TODOs
 
+* Move the validations from the controller to the repo. Update the tests accordingly.
+
+  The repo should protect itself by not allowing in another pom if ther already is one. This is not the task of the controller. This one only deals with the errors from the repo. If we tried to insert a duplicate primary key into a DB, it would also be the DB that chokes and not the controller.
+
+  The import controller can then rely on the repository protecting itself, too.
+
 * Add tests for the router
 
 * Commands enqueued with `at` need to be added the uuid of the pom to work on; otherwise they could modify the wrong thing.
@@ -58,6 +64,11 @@
 * Scope the id to the day by introducing a key class the is an aggregate of day and id.
   - The view only shows the id for any given day in most reports.
   - We still want to have a global identity for a pomodoro (withing the realm of a single user).
+
+* Use Highline#color to color output pro:Paradeiser
+  - Status: red/green/yellow
+  - Errors red, warnings yellow, otherwise white
+  - Turn off when running w/o tty and when --no-color is given
 
 * Add minimal tests for the `pom` bin so that we don't have to create a lot of processes.
   - Only test behavior that cannot be tested in a controller test, like exit codes.

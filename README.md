@@ -14,6 +14,14 @@ Paradeiser is a command-line tool for the [Pomodoro Technique](http://www.pomodo
 
 Paradeiser itself is not concerned with the actual management of tasks. There are plenty of tools for that; e.g. [TaskWarrior](http://taskwarrior.org/).
 
+## Concepts
+
+### Rule #1
+
+  There must never be more than one pomodoro [xor](http://en.wikipedia.org/wiki/Xor) break at any given time.
+
+This is scoped to a single user account (technically, for one `$POM_DIR` directory, which by default is `~/.paradeiser/`).
+
 ## Installation
 
       $ gem install paradeiser
@@ -24,9 +32,7 @@ Paradeiser itself is not concerned with the actual management of tasks. There ar
 
       $ pom start
 
-If a break is still active, it will be stopped before the new pomodoro is started.
-
-Note that for a single user account (technically, for a `$POM_DIR` directory, which by default is `~/.paradeiser/`), not more than one pomodoro [xor](http://en.wikipedia.org/wiki/Xor) one break can be active at any given time. Therefore, calling start while a pomodoro is active will print an error message.
+If a break is still active, it will be stopped before the new pomodoro is started. Because of Rule #1, calling start while a pomodoro is active will print an error message.
 
 ### Finish the pomodoro
 

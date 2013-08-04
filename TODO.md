@@ -1,35 +1,12 @@
 # Paradeiser Backlog
 
-* Move the validations from the controller to the repo. Update the tests accordingly.
-
-  The repo should protect itself by not allowing in another pom if ther already is one. This is not the task of the controller. This one only deals with the errors from the repo. If we tried to insert a duplicate primary key into a DB, it would also be the DB that chokes and not the controller.
-
-  The import controller can then rely on the repository protecting itself, too.
-
-* In the controller tests, mock the repository instead of the backend. Repository tests are in its own test class.
+* Mock the repo and not the backend in the controller tests
 
 * Add tests for the router
 
-* Commands enqueued with `at` need to be added the uuid of the pom to work on; otherwise they could modify the wrong thing.
+* Cancel all enqueued commands with `pom cancel`. Otherwise commands already enqueued to `at` would accidentially change a newer thing while thinking of operating on the older thing.
 
-  Example:
-
-      `pom break --long` # will enqueue `pom break end` for in 30 minutes
-
-      # 5 minutes later
-      `pom start` # silently ends the break
-
-      # 2 minutes later
-      `pom cancel`
-      `pom break`
-
-      # Note that the first `pom break end` is still enqueued. It will cancel the last one, which is certainly not what we want.
-
-  We need to either enqueue the ID of the break with the command
-
-    pom break djvkd-gn358-j38kfk... end
-
-  or cancel all enqueued commands with the `pom cancel`. This ois probably the better option as we deciced to have one break or pomodoro at a time anyway.
+  This is save because of Rule #1.
 
 * Implement `pom init` to make the directory (copying hooks can come later)
 
@@ -65,7 +42,7 @@
 
 * Scope the id to the day by introducing a key class the is an aggregate of day and id.
   - The view only shows the id for any given day in most reports. That means that a day (current by default, others in queries or import) is the scope of a pomodoro id.
-  - We dont have globally identify pomodori with uuids because the rule #1 is that there can never be any more than one pom or break at any given time.
+  - We don't have to globally identify pomodori with uuids because of rule #1
 
   This also makes `pom import` simple - only if there is nothing on record for the time between the start and end times of the imported thing, it is accepted into our system.
 

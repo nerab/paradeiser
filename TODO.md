@@ -1,7 +1,5 @@
 # Paradeiser Backlog
 
-* Mock the repo and not the backend in the controller tests
-
 * Add tests for the router
 
 * Cancel all enqueued commands with `pom cancel`. Otherwise commands already enqueued to `at` would accidentially change a newer thing while thinking of operating on the older thing.

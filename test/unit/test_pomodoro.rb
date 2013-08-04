@@ -87,14 +87,14 @@ class TestPomodoro < MiniTest::Test
 
     Time.stub :now, Time.at(now) do
       @pom.start!
-      assert_equal(Pomodoro::LENGTH, @pom.remaining)
+      assert_equal(Pomodoro::LENGTH_SECONDS, @pom.remaining)
     end
 
     delta = 600
     later = now + delta
 
     Time.stub :now, Time.at(later) do
-      assert_equal(Pomodoro::LENGTH - delta, @pom.remaining)
+      assert_equal(Pomodoro::LENGTH_SECONDS - delta, @pom.remaining)
     end
   end
 end

@@ -1,10 +1,12 @@
 # Paradeiser Backlog
 
+* Mock the scheduler for all tests involving pomodori, otherwise we get a lot of at jobs (no need to mock Open3.capture3 for pomodoro tests)
+
 * Add tests for the router
 
 * Cancel all enqueued commands with `pom cancel`. Otherwise commands already enqueued to `at` would accidentially change a newer thing while thinking of operating on the older thing.
 
-  This is save because of Rule #1.
+  This is safe because of Rule #1.
 
 * Implement `pom init` to make the directory (copying hooks can come later)
 

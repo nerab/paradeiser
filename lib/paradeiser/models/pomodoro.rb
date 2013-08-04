@@ -1,6 +1,6 @@
 module Paradeiser
   class Pomodoro
-    LENGTH = 25 * 60
+    LENGTH_SECONDS = 25 * 60
 
     attr_accessor :id, :started_at, :finished_at
 
@@ -19,10 +19,12 @@ module Paradeiser
 
       after_transition :on => :start do |pom, transition|
         pom.started_at = Time.now
+        Scheduler.add(:finish, LENGTH_SECONDS / 60)
       end
 
       after_transition :on => :finish do |pom, transition|
         pom.finished_at = Time.now
+        # TODO Empty the queue because of Rule #1
       end
     end
 
@@ -43,7 +45,7 @@ module Paradeiser
 
     def remaining
       raise NoActivePomodoroError if !active?
-      LENGTH - Time.now.to_i + started_at.to_i
+      LENGTH_SECONDS - Time.now.to_i + started_at.to_i
     end
   end
 end

@@ -17,9 +17,9 @@ module Paradeiser
     end
   end
 
-  class ContradictingOptionsError < StandardError
-    def initialize(*contradictions)
-      super("The options #{contradictions.join(', ')} contradict each other.")
+  class IllegalStatusError < StandardError
+    def initialize
+      super('Idle pomodori cannot be saved.')
     end
   end
 end

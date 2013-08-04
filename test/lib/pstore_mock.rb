@@ -1,4 +1,4 @@
-class MockPStore
+class PStoreMock
   extend Forwardable
   def_delegators :@hash, :[]=, :[], :size
 

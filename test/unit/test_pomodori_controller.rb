@@ -2,7 +2,7 @@ require 'helper'
 
 class TestPomodoriController < MiniTest::Test
   def setup
-    @backend = MockPStore.new
+    @backend = PStoreMock.new
   end
 
   def test_start

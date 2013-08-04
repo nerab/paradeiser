@@ -11,19 +11,18 @@ module Paradeiser
         end
       end
 
-      def any?(criteria)
-        find(criteria).any?
+      def any?(&blk)
+        all.any?(&blk)
       end
 
-      def find(criteria)
-        all.select do |pom|
-          # TODO Handle multiple criteria
-          pom.send(criteria.keys.first) == criteria.values.first
-        end
+      def find(&blk)
+        all.select(&blk)
       end
 
       def active
-        find(:status => 'active').first
+        all_active = find{|pom| pom.active?}
+        raise SingletonError.new(all_active.first) if all_active.size > 1
+        all_active.first
       end
 
       def active?
@@ -31,6 +30,9 @@ module Paradeiser
       end
 
       def save(pom)
+        raise IllegalStatusError if pom.idle?
+        raise SingletonError.new(self.active) if self.active? && self.active != pom
+
         pom.id = next_id if pom.new?
         backend.transaction do
           backend[pom.id] = pom

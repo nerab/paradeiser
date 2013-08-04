@@ -1,10 +1,12 @@
-# Paradeiser Implementation TODOs
+# Paradeiser Backlog
 
 * Move the validations from the controller to the repo. Update the tests accordingly.
 
   The repo should protect itself by not allowing in another pom if ther already is one. This is not the task of the controller. This one only deals with the errors from the repo. If we tried to insert a duplicate primary key into a DB, it would also be the DB that chokes and not the controller.
 
   The import controller can then rely on the repository protecting itself, too.
+
+* In the controller tests, mock the repository instead of the backend. Repository tests are in its own test class.
 
 * Add tests for the router
 
@@ -62,8 +64,14 @@
 * `pom init` warns if `at` is not there or not enabled (e.g. on the Mac)
 
 * Scope the id to the day by introducing a key class the is an aggregate of day and id.
-  - The view only shows the id for any given day in most reports.
-  - We still want to have a global identity for a pomodoro (withing the realm of a single user).
+  - The view only shows the id for any given day in most reports. That means that a day (current by default, others in queries or import) is the scope of a pomodoro id.
+  - We dont have globally identify pomodori with uuids because the rule #1 is that there can never be any more than one pom or break at any given time.
+
+  This also makes `pom import` simple - only if there is nothing on record for the time between the start and end times of the imported thing, it is accepted into our system.
+
+  Deleting or overwriting existing pomodori is not supported. Manual editing, if ever needed, can be done with exporting, deleting the db file, fixing up the exported file, and importing it into a fresh $POM_DIR.
+
+  Active pomodori or breaks are not exported or imported.
 
 * Use Highline#color to color output pro:Paradeiser
   - Status: red/green/yellow
@@ -72,16 +80,29 @@
 
 * Add minimal tests for the `pom` bin so that we don't have to create a lot of processes.
   - Only test behavior that cannot be tested in a controller test, like exit codes.
+  - Check that the pom script itself can execute without errors
+  - Check that all valid commands can execute without error
+  - Check that calling unknown commands raise and return non-zero exit codes
+  - As usual, this test needs to mock everything but the bin script itself
 
 * Print only the id of the pom that was just created / modified / queried when not running in a tty
   - test with `if $stdin.tty?`
   - If that approach works well, suggest it for TaskWarrior too (bulk actions, e.g. In scripts)
 
-* With the first release, reduce the README. Move features that are not implemented yet away from the README, into either
-  - the doc folder as individual files, or
-  - github issues as feature (allows discussion).
+*  Move features that are not implemented yet away from the README, either into feature files or the backlog
 
-  When a feature is done, move it to a doc file (not the readme; it's getting too big) or a wiki page.
+* Documentation Approach
+  - `pom help` is what the user will use to get information.
+  - Not sure how to allow the user to look at features that are not related to a command. Either extend `pom help` to accept arbitrary keywords, or look into 'gem man`.
+
+  Development Tasks
+
+  - Remove the current README to show a "day in the life of a user"
+  - Move each feature into one md file per command (alternatively, store at GitHub issues as feature, would allow discussion).
+  - When a feature is done, move it to a doc file (not the readme; it's getting too big) or a wiki page.
+  - `pom help <command>` consumes the feature files.
+  - Feature files could be exported onto a the github wiki or static pages about Paradeiser.
+  - As part of finishing a feature, the feature file is moved from the backlog file to in individual doc file, and the README is updated to mention that feature.
 
 * Promote Paradeiser
   - Publish an [ASCII cast](http://ascii.io/)

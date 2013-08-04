@@ -15,7 +15,7 @@ module Paradeiser
     end
 
     def template_file
-      File.join(File.dirname(__FILE__), '..', 'views', @model.downcase, "#{@method}.erb")
+      File.join(File.dirname(__FILE__), 'views', @model.downcase, "#{@method}.erb")
     end
   end
 end

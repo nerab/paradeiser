@@ -31,7 +31,7 @@ module Paradeiser
 
       def save(pom)
         raise IllegalStatusError if pom.idle?
-        raise SingletonError.new(self.active) if self.active? && self.active != pom
+        raise SingletonError.new(self.active) if self.active? && active.id != pom.id
 
         pom.id = next_id if pom.new?
         backend.transaction do

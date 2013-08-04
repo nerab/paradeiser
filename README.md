@@ -110,7 +110,7 @@ Recording the location of a pomodoro allows Paradeiser to compare the average co
 
         $ pom location macbook@01:23:45:67:89:0A "Your Label"
 
-Paradeiser will automatically figure out the current location from the hostname and the MAC address of the default gateway (see below for details). This can be overridden by setting $POM_LOCATION or with a command line option:
+Paradeiser will automatically figure out the current location from the hostname and the MAC address of the default gateway (see below for details). This can be overridden by setting `$POM_LOCATION` or with a command line option:
 
     $ pom location --location="On the road"
     On the road
@@ -145,14 +145,14 @@ When `at` calls Paradeiser with this command, the pomodoro / break will be over 
 
 ## Status
 
-Paradeiser can print the current status to STDOUT with the `pom status` command (except when muted with `--quiet`). The current state is provided as process exit status.
+Paradeiser can print the current status to STDOUT with the `pom status` command. The current state is provided as process exit status (which is also useful when the output is suppressed).
 
 * Given an active pomodoro:
 
           $ pom status
           Pomodoro #2 is active (started 11:03, 14 minutes remaining).
 
-          $ pom status --quiet
+          $ pom status > /dev/null
           $ echo $?
           0
 
@@ -161,7 +161,7 @@ Paradeiser can print the current status to STDOUT with the `pom status` command 
           $ pom status
           No active pomodoro. Last one was finished at 16:58.
 
-          $ pom status --quiet
+          $ pom status > /dev/null
           $ echo $?
           1
 
@@ -170,16 +170,16 @@ Paradeiser can print the current status to STDOUT with the `pom status` command 
           $ pom status
           No pomodoro active. Last pomodoro was cancelled at 17:07.
 
-          $ pom status --quiet
+          $ pom status > /dev/null
           $ echo $?
           2
 
-* Given an active break (implies no active pomodoro):
+* Given a break (implies no active pomodoro):
 
           $ pom status
           Taking a 5 minute break until 2013-07-16 17.07 (4 minutes remaining).
 
-          $ pom status --quiet
+          $ pom status > /dev/null
           $ echo $?
           3
 
@@ -188,7 +188,7 @@ Paradeiser can print the current status to STDOUT with the `pom status` command 
           $ pom status --short
           03:39
 
-* Custom status format, similar to date +%Y-%m-%dT%H:%M:%S:
+* Given a break and a custom status format (resembles the format switch analog to `date +%Y-%m-%dT%H:%M:%S`):
 
           $ pom status --format %C-%M:%S
           B03:39
@@ -237,7 +237,7 @@ The report can also be grouped by location:
 
 Detailed report for a single location:
 
-      $ pom report location="Home Office"
+      $ pom report location "Home Office"
       Pomodoro Location Report for Home Office
 
       58 pomodori finished
@@ -267,9 +267,10 @@ The efficiency is calculated from the number of successful vs. cancelled pomodor
 
 Efficiency can be reported by day, week, month, year, or location:
 
-      $ pom report --efficiency
-      Efficiency Report
+      $ pom report efficiency
+      Efficiency Report for 2013-07-16
 
+      TODO
 
 ### Analytics
 
@@ -323,14 +324,14 @@ Examples for the use of hooks are:
 * Displaying a desktop notification on Linux:
 
         # ~/.paradeiser/hooks/post-stop
-        notify-send "Break" "$POMODORO_TITLE is over." -u critical
+        notify-send "Break" "$POM_TITLE is over." -u critical
 
 * Displaying a desktop notification on MacOS:
 
         # ~/.paradeiser/hooks/post-stop
-        terminal-notifier-success  -message "$POMODORO_TITLE is over."
+        terminal-notifier-success  -message "$POM_TITLE is over."
 
-`$POMODORO_TITLE` is one of the environment variables set by Paradeiser that provides the context for hooks. See below for the full list of available environment variables.
+`$POM_TITLE` is one of the environment variables set by Paradeiser that provides the context for hooks. See below for the full list of available environment variables.
 
 ### Edit a hook
 

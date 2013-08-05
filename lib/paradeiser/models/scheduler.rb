@@ -22,6 +22,11 @@ module Paradeiser
         Job.new(id)
       end
 
+      def clear
+        jobs = list.map{|job| job.id}
+        exec("at -q #{queue} -r #{jobs.join(' ')}")
+      end
+
     private
 
       def parse_list(line)

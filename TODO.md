@@ -1,6 +1,6 @@
 # Paradeiser Backlog
 
-* Scheduler#clear
+* There is still somewhere a call to Scheduler#clear that isn't properly mocked and clears out the real at queue
 
 * Add more tests for the scheduler (error cases like no access, or job not added due to other issues)
 

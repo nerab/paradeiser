@@ -11,7 +11,7 @@ class TestPomodoro < MiniTest::Test
 
   def test_finish_idle
     assert_raises StateMachine::InvalidTransition do
-      @pom.finish!
+      finish!
     end
   end
 
@@ -22,7 +22,7 @@ class TestPomodoro < MiniTest::Test
     now = srand
 
     Time.stub :now, Time.at(now) do
-      @pom.finish!
+      finish!
     end
 
     assert_equal(:finished, @pom.status_name)
@@ -57,7 +57,7 @@ class TestPomodoro < MiniTest::Test
     later = now + rand(42)
 
     Time.stub :now, Time.at(later) do
-      @pom.finish!
+      finish!
     end
 
     assert_equal(later - now, @pom.duration)
@@ -65,9 +65,9 @@ class TestPomodoro < MiniTest::Test
 
   def test_finish_finished
     start!
-    @pom.finish!
+    finish!
     assert_raises StateMachine::InvalidTransition do
-      @pom.finish!
+      finish!
     end
   end
 

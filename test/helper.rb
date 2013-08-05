@@ -13,4 +13,10 @@ protected
       pom.start!
     end
   end
+
+  def finish!(pom = @pom)
+    Scheduler.stub(:clear, nil) do
+      pom.finish!
+    end
+  end
 end

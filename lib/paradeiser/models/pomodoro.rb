@@ -24,7 +24,7 @@ module Paradeiser
 
       after_transition :on => :finish do |pom, transition|
         pom.finished_at = Time.now
-        # TODO Empty the queue because of Rule #1
+        Scheduler.clear # Empty the queue because of Rule #1
       end
     end
 

@@ -21,7 +21,7 @@ class TestPomodoriView < MiniTest::Test
 
   def test_status_finished
     start!
-    @pom.finish!
+    finish!
     out, err = render(:status)
     assert_match(/^No active pomodoro. Last one was finished at .*\.$/m, out)
     assert_empty(err)
@@ -47,7 +47,7 @@ class TestPomodoriView < MiniTest::Test
 
   def test_report_one_finished
     start!
-    @pom.finish!
+    finish!
     @pom = [@pom]
     out, err = render(:report)
     assert_equal(2, out.lines.size)

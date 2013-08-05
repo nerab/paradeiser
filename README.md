@@ -20,7 +20,7 @@ Paradeiser itself is not concerned with the actual management of tasks. There ar
 
   There must never be more than one pomodoro [xor](http://en.wikipedia.org/wiki/Xor) break at any given time.
 
-This is scoped to a single user account (technically, for one `$POM_DIR` directory, which by default is `~/.paradeiser/`).
+This is scoped to a single user account (not just the `$POM_DIR` directory, but also the `at` queue).
 
 ## Installation
 
@@ -71,7 +71,7 @@ It will be marked as unsuccessful (remember, a pomodoro is indivisible). If no p
 
       $ pom init
 
-Creates the `$POM_DIR` directory (defaults to `~/.paradeiser`) and the sample hooks in `$POM_DIR/hooks`. The data store will not be created on `pom init`, but when the first write operation happens (e.g. `pom start`, but not `pom report`).
+Creates the `$POM_DIR` directory and the sample hooks in `$POM_DIR/hooks`. The data store will not be created on `pom init`, but when the first write operation happens (e.g. `pom start`, but not `pom report`).
 
 If `$POM_DIR` already exists, the command will fail with an error message.
 
@@ -338,6 +338,14 @@ Examples for the use of hooks are:
       $ pom edit post-stop
 
 Launches `$VISUAL` (or, if empty, `$EDITOR`) with the given hook.
+
+## Environment Variables
+
+Variable | Used in | Description
+--- | --- | ---
+`$POM_DIR` | Everywhere | Directory where the data store and the hooks are stored. Defaults to `~/.paradeiser/`.
+`$POM_TITLE` | Hooks | Title of the pomodoro
+`$POM_LOCATION` | Location Commands | Location of the pomodoro
 
 ## Taskwarrior Integration
 

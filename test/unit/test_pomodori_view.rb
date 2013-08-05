@@ -13,14 +13,14 @@ class TestPomodoriView < MiniTest::Test
   end
 
   def test_status_active
-    @pom.start!
+    start!
     out, err = render(:status)
     assert_match(/^Pomodoro #1 is active for another \d{1,2} minutes \(started at .*\)\.$/m, out)
     assert_empty(err)
   end
 
   def test_status_finished
-    @pom.start!
+    start!
     @pom.finish!
     out, err = render(:status)
     assert_match(/^No active pomodoro. Last one was finished at .*\.$/m, out)
@@ -36,7 +36,7 @@ class TestPomodoriView < MiniTest::Test
   end
 
   def test_report_one_active
-    @pom.start!
+    start!
     @pom = [@pom]
     out, err = render(:report)
     assert_equal(2, out.lines.size)
@@ -46,7 +46,7 @@ class TestPomodoriView < MiniTest::Test
   end
 
   def test_report_one_finished
-    @pom.start!
+    start!
     @pom.finish!
     @pom = [@pom]
     out, err = render(:report)
@@ -63,7 +63,7 @@ class TestPomodoriView < MiniTest::Test
   end
 
   def test_finish
-    @pom.start!
+    start!
     out, err = render(:finish)
     assert_match(/^Finished pomodoro #1 after .* minutes\.$/m, out)
   end

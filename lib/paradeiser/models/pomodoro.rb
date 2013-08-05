@@ -19,7 +19,7 @@ module Paradeiser
 
       after_transition :on => :start do |pom, transition|
         pom.started_at = Time.now
-        Scheduler.add(:finish, LENGTH_SECONDS / 60)
+        Scheduler.add(:finish, LENGTH_SECONDS.minutes)
       end
 
       after_transition :on => :finish do |pom, transition|

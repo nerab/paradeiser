@@ -1,6 +1,8 @@
 # Paradeiser Backlog
 
-* Mock the scheduler for all tests involving pomodori, otherwise we get a lot of at jobs (no need to mock Open3.capture3 for pomodoro tests)
+* Scheduler#clear
+
+* Add more tests for the scheduler (error cases like no access, or job not added due to other issues)
 
 * Add tests for the router
 
@@ -22,7 +24,7 @@
 
 * A text-based repo format would be much more UNIX-like. Think about a JSON repo. Loading it could share a lot of code with import (which we will need anyway). And we cannot trust a JSON repo any more than an import file.
 
-* Rename `pom end-break` to `pom break end` and allow `pom break start` to be the same as `pom break`
+* Make `start` the default subcommand for `pom break`, so that `pom break` is the same as `pom break start`.
 
 * Have the router catch warnings (those errors that extend Warning) and print the message to STDERR, but do not exit. The actual exit code is still determined by the controller.
 

@@ -19,7 +19,7 @@ private
 
   def invoke(method, result, *args)
     Open3.stub(:capture3, result) do
-      Scheduler.send(method, *args)
+      Paradeiser::Scheduler.send(method, *args)
     end
   end
 end

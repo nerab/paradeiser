@@ -17,7 +17,7 @@ class TestRepository < MiniTest::Test
 
   def test_save_active
     pom = Pomodoro.new
-    pom.start!
+    start!(pom)
 
     invoke(:save, pom)
 
@@ -26,10 +26,10 @@ class TestRepository < MiniTest::Test
 
   def test_save_second_active
     pom1 = Pomodoro.new
-    pom1.start!
+    start!(pom1)
 
     pom2 = Pomodoro.new
-    pom2.start!
+    start!(pom2)
 
     invoke(:save, pom1)
 
@@ -42,7 +42,7 @@ class TestRepository < MiniTest::Test
 
   def test_save_finished
     pom = Pomodoro.new
-    pom.start!
+    start!(pom)
     pom.finish!
 
     invoke(:save, pom)
@@ -52,7 +52,7 @@ class TestRepository < MiniTest::Test
 
   def test_save_active_finish_save
     pom = Pomodoro.new
-    pom.start!
+    start!(pom)
 
     invoke(:save, pom)
     pom.finish!

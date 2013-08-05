@@ -89,7 +89,9 @@ private
     controller = PomodoriController.new(method)
 
     Repository.stub :backend, @backend do
-      controller.call(nil, nil)
+      Scheduler.stub(:add, nil) do
+        controller.call(nil, nil)
+      end
     end
 
     attributes.map do |attribute|

@@ -133,7 +133,7 @@ The `at` command is used for this. We just tell it to call
 
 when the pomodoro is over. A similar command exists for
 
-      pom end-break
+      pom break finish
 
 that is called by `at` when the break is over.
 
@@ -220,10 +220,6 @@ Paradeiser can print the current status to STDOUT with the `pom status` command.
       Most efficient location: Home Office
       Least efficient location: Coffeshop
 
-      The following locations do not have a label. Assign it with
-
-        $ pom location macbook@01:23:45:67:89:0A "Your Label"
-
 By default, the command groups by `--day`. Alternative options are `--week`, `--month` or `--year`. Without a value, the argument assumes the current day / week / month / year. The first day of the period can be specified as argument, e.g. `pom report --day=2013-07-18`. The period is parsed with [Chronic](http://chronic.rubyforge.org/), which also enables symbolic values like `pom report --month="last month"`.
 
 The report can also be grouped by location:
@@ -234,6 +230,10 @@ The report can also be grouped by location:
       Home Office: 38 finished, 12 cancelled, 21 interrupts
       Starbucks:   12 finished, 2 cancelled, 45 interrupts
       On the road: 14 finished, 0 cancelled, 12 interrupts
+
+      The following locations do not have a label. Assign it with
+
+        $ pom location macbook@01:23:45:67:89:0A "Your Label"
 
 Detailed report for a single location:
 

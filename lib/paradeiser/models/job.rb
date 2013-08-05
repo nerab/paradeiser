@@ -1,5 +1,7 @@
 module Paradeiser
   class Job
+    include Executor
+
     attr_reader :id
 
     JOB_PATTERN = %r{^pom .+$}
@@ -18,15 +20,6 @@ module Paradeiser
           return true if line.chomp.match(JOB_PATTERN)
         end
       end
-    end
-
-  private
-
-    # TODO Move this to a common place
-    def exec(cmd)
-      out, err, status = Open3.capture3(cmd)
-      raise err if 0 < status.exitstatus
-      [out, err]
     end
   end
 end

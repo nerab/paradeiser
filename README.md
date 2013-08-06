@@ -90,7 +90,7 @@ Creates the `$POM_DIR` directory and the sample hooks in `$POM_DIR/hooks`. The d
 
 If `$POM_DIR` already exists, the command will fail with an error message.
 
-* If the `at` command is not available or not enabled, `pom init` will issue a warning. The program will continue because it is still useful for recording.
+If the `at` command is not available or not enabled, `pom init` will issue a warning. The program will continue because it is still useful for recording.
 
 ### Troubleshooting
 
@@ -101,7 +101,7 @@ It checks if
 * `at` is there and enabled
 * ...
 
-`pom doctur` also provides a hint on how to correct that situation.
+`pom doctor` also provides a hint on how to correct that situation.
 
 ### Location
 Recording the location of a pomodoro allows Paradeiser to compare the average count of successful and cancelled pomodori and the number of interruptions by location, so that a report can tell in which environment we get the most work done.

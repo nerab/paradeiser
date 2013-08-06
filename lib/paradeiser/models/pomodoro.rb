@@ -19,6 +19,7 @@ module Paradeiser
 
       after_transition :on => :start do |pom, transition|
         pom.started_at = Time.now
+        Scheduler.clear # There must be no other jobs scheduled because of Rule #1
         Scheduler.add(:finish, LENGTH_SECONDS.minutes)
       end
 

@@ -37,8 +37,11 @@ If a break is still active, it will be stopped before the new pomodoro is starte
 ### Finish the pomodoro
 
       $ pom finish
+      $ pom finish This one went very well.
 
-If a pomodoro is active, it will be marked as successful after stopping it, regardless of whether the 25 minutes are over or not. If a break is active, it will be stopped. If neither a pomodoro nor or break are active, an error message will be printed.
+If a pomodoro is active, it will be marked as successful after stopping it, regardless of whether the 25 minutes are over or not. Remaining arguments, if present, will be added to the pomodoro as annotation.
+
+If there is no active pomodoro, an error message will be printed.
 
 ### Record an interruption of the current pomodoro
 
@@ -49,23 +52,35 @@ Remaining arguments, if present, will be added to the interrupt as annotation. I
 
 ### Start a break
 
-      $ pom break [--short | --long]
+      $ pom break [start] [--short | --long]
 
-If a pomodoro is active, it will be stopped. By default the break will be five minutes long. After four pomodori within a day, the break will be 30 minutes long. This can be overridden with `--short` or `--long`, with an optional argument value that determines the lenght of the break in minutes (e.g. `pom break --short=10`).
+If there is an active pomodoro, an error message will be printed. The `start` command is optional and may be omitted (it's only there for symmetry with `pom break end`, see the section about `at`).
 
-There is no public command to stop a break. Either a new pomodoro is started, which will implicitely stop the break, or the break ends naturally because it is over.
+By default the break will be five minutes long. After four pomodori within a day, the break will be 30 minutes long. This can be overridden with `--short` or `--long`, with an optional argument value that determines the lenght of the break in minutes (e.g. `pom break --short=10`).
+
+While there is a command to stop a break (see the section about `at`), it isn't really necessary to call it from a user's perspective. Either a new pomodoro is started, which will implicitely stop the break, or the break ends naturally because it is over. We do not track break time.
 
 ### Annotate a pomodoro
 
       $ pom annotate This was intense, but I am happy about the work I finished.
 
-The annotation will be added to the active or, if none is active, to the most recently finished or cancelled pomodoro. Breaks cannot have annotations. If no text is given, the annotation text is read from STDIN.
+The annotation will be added to the active or, if none is active, to the most recently finished or cancelled pomodoro. If no text is given, the annotation text is read from STDIN.
+
+Breaks cannot have annotations.
 
 ### Cancel the pomodoro
 
       $ pom cancel Just couldn't concentrate anymore.
 
 It will be marked as unsuccessful (remember, a pomodoro is indivisible). If no pomodoro is active, the command will throw an error. If a break is active, the command will do nothing except printing a warning. Remaining arguments, if present, will be added to the pomodoro as annotation.
+
+### Log a pomodoro
+
+      $ pom log
+
+Add a successfully finished pomodoro that was never recorded as being started (maybe the user forgot to call `pom start`). It will appear in the reports and will count towards efficiency calculations.
+
+The current time will be used for the finish timestamp, and the start time will be calculated from the finish time backwards.
 
 ### Init Paradeiser
 
@@ -74,6 +89,19 @@ It will be marked as unsuccessful (remember, a pomodoro is indivisible). If no p
 Creates the `$POM_DIR` directory and the sample hooks in `$POM_DIR/hooks`. The data store will not be created on `pom init`, but when the first write operation happens (e.g. `pom start`, but not `pom report`).
 
 If `$POM_DIR` already exists, the command will fail with an error message.
+
+* If the `at` command is not available or not enabled, `pom init` will issue a warning. The program will continue because it is still useful for recording.
+
+### Troubleshooting
+
+`pom doctor` performs a number of checks that ensure that Paradeiser can run with best results.
+
+It checks if
+
+* `at` is there and enabled
+* ...
+
+`pom doctur` also provides a hint on how to correct that situation.
 
 ### Location
 Recording the location of a pomodoro allows Paradeiser to compare the average count of successful and cancelled pomodori and the number of interruptions by location, so that a report can tell in which environment we get the most work done.
@@ -122,7 +150,7 @@ Both the `--location` option and the environment variable can be passed to almos
 
 ## Timer with `at`
 
-A major aspect of a pomodoro timer is the timer function itself:
+A central aspect of the Pomodoro Technique is the timer function:
 
   * The remaining time of the active pomodoro or break must be displayed to the user.
   * When the pomodoro or break is over, the user also needs to get a notification.
@@ -131,17 +159,19 @@ The `at` command is used for this. We just tell it to call
 
       pom finish
 
-when the pomodoro is over. A similar command exists for
+when the pomodoro is over. A similar command exists as
 
       pom break finish
 
-that is called by `at` when the break is over.
+which is called by `at` when the break is over.
 
 When a pomodoro is started, Paradeiser enqueues itself to `at` like this:
 
       echo pom finish | at now + 25 minutes
 
 When `at` calls Paradeiser with this command, the pomodoro / break will be over and Paradeiser can do all the internal processing related to stopping the pomodoro / break (incl. calling the appropriate hooks, see below).
+
+Paradeiser uses a dedicated at queue named 'p' to organize its jobs and to prevent accidentially overwriting other scheduled tasks.
 
 ## Status
 
@@ -346,6 +376,28 @@ Variable | Used in | Description
 `$POM_DIR` | Everywhere | Directory where the data store and the hooks are stored. Defaults to `~/.paradeiser/`.
 `$POM_TITLE` | Hooks | Title of the pomodoro
 `$POM_LOCATION` | Location Commands | Location of the pomodoro
+
+## Configuration File
+
+The configuration is stored in a config file. It is user-editable file, but editing the configuration is also exposed with `pom config`.
+
+      $ pom config POM_DIR
+      /home/nerab/.paradeiser
+
+      # Note that setting $POM_DIR does affect pom config (but all other commands)
+      $ POM_DIR=/tmp pom config POM_DIR
+      /home/nerab/.paradeiser
+
+      $ pom config POM_DIR /tmp
+      $ pom config POM_DIR
+      /tmp
+
+  Available config variables:
+
+  Variable | Description
+  --- | ---
+  `POM_DIR` | Directory where the data store and the hooks are stored. Defaults to `~/.paradeiser/`. Overridden by `$POM_DIR`.
+  `AT_QUEUE` | Name of the `at` queue to use. Defaults to `p`.
 
 ## Taskwarrior Integration
 

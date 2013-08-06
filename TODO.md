@@ -1,24 +1,22 @@
 # Paradeiser Backlog
 
-* Add more tests for the scheduler (error cases like no access, or job not added due to other issues)
+* Implement `pom init` to make the directory and create the finish hook
 
-* Add tests for the router
+* Move the contents of the current README and describe a "day in the life of a user" instead
 
-* Cancel all enqueued commands with `pom cancel`. Otherwise commands already enqueued to `at` would accidentially change a newer thing while thinking of operating on the older thing.
+* Change version to 0.1 and release it
 
-  This is safe because of Rule #1.
+* Implement break
 
-* Implement `pom init` to make the directory (copying hooks can come later)
+  Cancel all enqueued commands on `pom break`, just like with `pom start`. Otherwise commands already enqueued to `at` would accidentially change a newer thing while thinking of operating on the older thing.
+
+  This is safe (and required) because of Rule #1.
+
+* Implement interrupts
+
+* Implement `pom annotate` and annotations for most commands
 
 * Improve status messages with relative times and dates (`distance_of_time_in_words_to_now`)
-
-* Implement report as defined in the README
-
-* `pom log` could allow logging pomodoro after the fact.
-
-* Do we need a config file, and if so, should it be a user-editable file? Probably.
-
-  If so, a config controller is on order.
 
 * A text-based repo format would be much more UNIX-like. Think about a JSON repo. Loading it could share a lot of code with import (which we will need anyway). And we cannot trust a JSON repo any more than an import file.
 
@@ -26,19 +24,11 @@
 
 * Have the router catch warnings (those errors that extend Warning) and print the message to STDERR, but do not exit. The actual exit code is still determined by the controller.
 
-* If the `at` command is not available or not enabled, print a warning and continue. The program will still be useful.
+* Add more tests for the scheduler (error cases like no access, or job not added due to other issues)
 
-* In tests, stub `at` via stubbing `Kernel#exec` in order to
-  - simulate the `at` command, and
-  - simulate the case that `at` is missing
+* Add tests for the router
 
-* Check the queue after enqueing a job.
-  - Warn if the job just added is not there.
-  - With the trace option, print the job id and instructions to look at the `at` queue.
-
-* `pom doctor` checks if `at` is there and enabled. Provides a hint what to do if not.
-
-* `pom init` warns if `at` is not there or not enabled (e.g. on the Mac)
+* With the --trace option, print the job id and instructions to look at the `at` queue after enqueing a job
 
 * Scope the id to the day by introducing a key class the is an aggregate of day and id.
   - The view only shows the id for any given day in most reports. That means that a day (current by default, others in queries or import) is the scope of a pomodoro id.
@@ -74,8 +64,7 @@
 
   Development Tasks
 
-  - Remove the current README to show a "day in the life of a user"
-  - Move each feature into one md file per command (alternatively, store at GitHub issues as feature, would allow discussion).
+  - Describe each feature / command in one md file (alternatively, store at GitHub issues as feature, would allow discussion).
   - When a feature is done, move it to a doc file (not the readme; it's getting too big) or a wiki page.
   - `pom help <command>` consumes the feature files.
   - Feature files could be exported onto a the github wiki or static pages about Paradeiser.

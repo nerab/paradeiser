@@ -4,4 +4,12 @@ module Executor
     raise err if 0 < status.exitstatus
     [out, err]
   end
+
+  def at
+    'at'
+  end
+
+  def queue
+    'p'
+  end
 end

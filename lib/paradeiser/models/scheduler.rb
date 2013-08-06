@@ -6,7 +6,7 @@ module Paradeiser
       include Executor
 
       def list
-        out, _ = exec("at -l -q #{queue}")
+        out, _ = exec("#{at} -l -q #{queue}")
 
         out.lines.map do |line|
           id = parse_list(line)
@@ -17,14 +17,14 @@ module Paradeiser
       end
 
       def add(command, minutes)
-        _, err = exec("echo pom #{command} | at -q #{queue} now + #{minutes} minutes")
+        _, err = exec("echo pom #{command} | #{at} -q #{queue} now + #{minutes} minutes")
         id = parse_add(err.chomp)
         Job.new(id)
       end
 
       def clear
         jobs = list.map{|job| job.id}
-        exec("at -q #{queue} -r #{jobs.join(' ')}")
+        exec("#{at} -q #{queue} -r #{jobs.join(' ')}")
       end
 
     private
@@ -35,10 +35,6 @@ module Paradeiser
 
       def parse_add(line)
         line.match(/^job (?<job>\d+)/)[:job]
-      end
-
-      def queue
-        'p'
       end
     end
   end

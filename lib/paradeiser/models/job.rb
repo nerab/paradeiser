@@ -15,7 +15,7 @@ module Paradeiser
     end
 
     def ours?
-      exec("at -c #{@id}")[-2, 2].each do |line|
+      exec("#{at} -c #{@id}")[-2, 2].each do |line|
         if line
           return true if line.chomp.match(JOB_PATTERN)
         end

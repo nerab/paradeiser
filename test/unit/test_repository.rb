@@ -43,7 +43,7 @@ class TestRepository < MiniTest::Test
   def test_save_finished
     pom = Pomodoro.new
     start!(pom)
-    pom.finish!
+    finish!(pom)
 
     invoke(:save, pom)
 
@@ -55,7 +55,7 @@ class TestRepository < MiniTest::Test
     start!(pom)
 
     invoke(:save, pom)
-    pom.finish!
+    finish!(pom)
     invoke(:save, pom)
 
     assert_equal(1, @backend.size)

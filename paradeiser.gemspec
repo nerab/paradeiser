@@ -24,6 +24,7 @@ Gem::Specification.new do |spec|
 
   # Moved to the Gemfile so that Travis CI can load the test group
   # spec.add_development_dependency 'rake'
+  # spec.add_development_dependency 'minitest'
 
   spec.add_development_dependency 'guard-minitest'
   spec.add_development_dependency 'guard-bundler'

@@ -1,6 +1,8 @@
 # Paradeiser Backlog
 
-* Implement `pom init` to make the directory and create the finish hook
+* Implement `pom init` to make the directory
+
+* Call the finish hook
 
 * Move the contents of the current README and describe a "day in the life of a user" instead
 

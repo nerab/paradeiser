@@ -23,8 +23,10 @@ module Paradeiser
       end
 
       def clear
-        jobs = list.map{|job| job.id}
-        exec("#{at} -q #{queue} -r #{jobs.join(' ')}")
+        if list.any? # On Linux, at must not be called with an empty job list.
+          job_ids = list.map{|j| j.id}.join(' ')
+          exec("#{at} -q #{queue} -r #{job_ids}")
+        end
       end
 
     private

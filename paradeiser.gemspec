@@ -22,6 +22,9 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'require_all'
   spec.add_runtime_dependency 'state_machine'
 
+  # Moved to the Gemfile so that Travis CI can load the test group
+  # spec.add_development_dependency 'rake'
+
   spec.add_development_dependency 'guard-minitest'
   spec.add_development_dependency 'guard-bundler'
   spec.add_development_dependency 'terminal-notifier-guard'
@@ -32,6 +35,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'pry-nav'
   spec.add_development_dependency 'pry-stack_explorer'
   spec.add_development_dependency 'bundler'
-  spec.add_development_dependency 'rake'
   spec.add_development_dependency 'ruby-graphviz'
 end

@@ -6,13 +6,11 @@ end
 
 class TestRouter < MiniTest::Test
   def setup
-    @orig_pom_dir = ENV['POM_DIR']
     FakeFS.activate!
   end
 
   def teardown
     FakeFS.deactivate!
-    ENV['POM_DIR'] = @orig_pom_dir
   end
 
   def test_init

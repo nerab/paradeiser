@@ -22,4 +22,10 @@ module Paradeiser
       super('Idle pomodori cannot be saved.')
     end
   end
+
+  class HookFailedError < StandardError
+    def initialize(hook, out, err, status)
+      super("The hook #{hook} failed with status #{status.exitstatus}. STDERR contained: #{err}")
+    end
+  end
 end

@@ -23,6 +23,10 @@ module Paradeiser
         Scheduler.add(:finish, LENGTH_SECONDS.minutes)
       end
 
+      before_transition :on => :finish do |pom, transition|
+        Hook.new(:before).execute(transition)
+      end
+
       after_transition :on => :finish do |pom, transition|
         pom.finished_at = Time.now
         Scheduler.clear # There must be no other jobs scheduled because of Rule #1

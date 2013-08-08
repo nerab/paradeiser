@@ -1,8 +1,6 @@
 # Paradeiser Backlog
 
-* Call the finish hook
-
-* `pom init` should copy missing sample hooks on init
+* `pom init` should copy (missing) sample hooks to $POM_DIR/hooks
 
 * Move the contents of the current README and describe a "day in the life of a user" instead
 

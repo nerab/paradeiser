@@ -98,7 +98,7 @@ The current time will be used for the finish timestamp, and the start time will 
 
           $ pom config
 
-If the `at` command is not available or not enabled, `pom init` will issue a warning. The program will continue because it is still useful for recording, although it will not be able to enqueue itself in order to execute the (time-based) `pre-finish` and `pre-break` hooks.
+If the `at` command is not available or not enabled, `pom init` will issue a warning. The program will continue because it is still useful for recording, although it will not be able to enqueue itself in order to execute the (time-based) `before-finish` and `before-break` hooks.
 
 ### Troubleshooting
 
@@ -336,44 +336,44 @@ Paradeiser follows the [Rule of Silence](http://www.faqs.org/docs/artu/ch01s06.h
 ## Hooks
 Instead of handling tasks itself, Paradeiser integrates with external tools via hooks. Every event will attempt to find and execute an appropriate script in `$POM_DIR/hooks/`. Sufficient information will be made available via environment variables.
 
-`pre-` hooks will be called before the action is executed internally. If a `pre-`hook exits non-zero, paradeiser will abort the action and exit non-zero itself; indicating in a message to STDERR which hook caused the abort.
+`before-` hooks will be called before the action is executed internally. If a `before-`hook exits non-zero, paradeiser will abort the action and exit non-zero itself; indicating in a message to STDERR which hook caused the abort.
 
-`post-` hooks will be called after the action was executed internally. The exit status of a `post`-hook will be passed through paradeiser, but it will not affect the execution of the action anymore.
+`after-` hooks will be called after the action was executed internally. The exit status of a `post`-hook will be passed through paradeiser, but it will not affect the execution of the action anymore.
 
 ### Available Hooks
 
-* `pre-start` is called after the `start` command was received, but before internal processing for the `start` action begins
-* `post-start` is called after all interal processing for the `start` action ended
-* `pre-finish` is called after the timer of the current pomodoro fired (the pomodoro is over), but before internal processing for the `finish` action begins
-* `post-finish` is called after all interal processing for the `finish` action ended
-* `pre-interrupt` is called after the `interrupt` command was received, but before internal action processing begins
-* `post-interrupt` is called after all interal processing for the `interrupt` action ended
-* `pre-cancel` is called after the `cancel` command was received, but before internal action processing begins
-* `post-cancel` is called after all interal processing for the `cancel` action ended
-* `pre-break` is called after the `break` command was received, but before internal processing for the `break` action begins
-* `post-break` is called after the timer of the current break fired (the break is over), but after internal processing for the `break` action ended
+* `before-start` is called after the `start` command was received, but before internal processing for the `start` action begins
+* `after-start` is called after all interal processing for the `start` action ended
+* `before-finish` is called after the timer of the current pomodoro fired (the pomodoro is over), but before internal processing for the `finish` action begins
+* `after-finish` is called after all interal processing for the `finish` action ended
+* `before-interrupt` is called after the `interrupt` command was received, but before internal action processing begins
+* `after-interrupt` is called after all interal processing for the `interrupt` action ended
+* `before-cancel` is called after the `cancel` command was received, but before internal action processing begins
+* `after-cancel` is called after all interal processing for the `cancel` action ended
+* `before-break` is called after the `break` command was received, but before internal processing for the `break` action begins
+* `after-break` is called after the timer of the current break fired (the break is over), but after internal processing for the `break` action ended
 
 Commands are invoked by the user (e.g. `pom start`). Actions are what Paradeiser does internally.
 
 Examples for the use of hooks are:
 
-* Displaying a desktop notification on `pre-finish`
-* tmux status bar integration like [pomo](https://github.com/visionmedia/pomo) by writing the status to `~/.pomo_stat` from the `post-` hooks.
+* Displaying a desktop notification on `before-finish`
+* tmux status bar integration like [pomo](https://github.com/visionmedia/pomo) by writing the status to `~/.pomo_stat` from the `after-` hooks.
 * Displaying a desktop notification on Linux:
 
-        # ~/.paradeiser/hooks/post-stop
+        # ~/.paradeiser/hooks/after-stop
         notify-send "Break" "$POM_TITLE is over." -u critical
 
 * Displaying a desktop notification on MacOS:
 
-        # ~/.paradeiser/hooks/post-stop
+        # ~/.paradeiser/hooks/after-stop
         terminal-notifier-success  -message "$POM_TITLE is over."
 
 `$POM_TITLE` is one of the environment variables set by Paradeiser that provides the context for hooks. See below for the full list of available environment variables.
 
 ### Edit a hook
 
-      $ pom edit post-stop
+      $ pom edit after-stop
 
 Launches `$VISUAL` (or, if empty, `$EDITOR`) with the given hook.
 
@@ -411,7 +411,7 @@ The configuration is stored in a config file. It is user-editable file, but edit
 
 ## Taskwarrior Integration
 
-This is deployed to `~/.paradeiser/hooks/post-finish` by default.
+This is deployed to `~/.paradeiser/hooks/after-finish` by default.
 
       # exit unless $(task)
 

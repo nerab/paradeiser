@@ -1,7 +1,5 @@
 # Paradeiser Backlog
 
-* Implement `pom init` to make the directory
-
 * Call the finish hook
 
 * `pom init` should copy missing sample hooks on init

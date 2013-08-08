@@ -1,4 +1,5 @@
 require 'helper'
+require 'tmpdir'
 
 class TestPomodoroHooks < MiniTest::Test
   def setup

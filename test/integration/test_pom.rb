@@ -5,7 +5,7 @@ class TestPom < MiniTest::Test
 
   def test_no_args_defaults_to_help
     out, err, status = Open3.capture3(POM_BIN)
-    assert_equal(0, status.exitstatus)
+    assert_equal(0, status.exitstatus, "Expected exit status to be 0, but it was #{status.exitstatus}. STDERR contains: #{err}")
     assert_empty(err)
   end
 

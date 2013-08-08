@@ -94,7 +94,7 @@ The current time will be used for the finish timestamp, and the start time will 
 
           $ pom init /tmp
 
-  This command initializes `/tmp` as $POM_DIR. It also sets the config variable `dir` in `~/.pomrc`:
+  This command initializes `/tmp` as `$POM_DIR`. It also sets the config variable `dir` in `~/.pomrc`:
 
           $ pom config
 

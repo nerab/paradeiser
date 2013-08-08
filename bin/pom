@@ -14,39 +14,47 @@ program :help, 'Author', 'Nicholas E. Rabenau <nerab@gmx.at>'
 global_option '-V', '--verbose', 'Enable verbose output'
 default_command :help
 
+router = Router.new
+
 begin
   command :init do |c|
     c.syntax  = "#{program(:name)} #{c.name}"
     c.summary = 'Init paradeiser'
-    c.action Router.dispatch(c)
+    c.action router.dispatch(c)
   end
 
   command :start do |c|
     c.syntax  = "#{program(:name)} #{c.name}"
     c.summary = 'Start a new pomodoro'
-    c.action Router.dispatch(c)
+    c.action router.dispatch(c)
   end
 
   command :finish do |c|
     c.syntax  = "#{program(:name)} #{c.name}"
     c.summary = 'Finish the active pomodoro'
-    c.action Router.dispatch(c)
+    c.action router.dispatch(c)
   end
 
   command :report do |c|
     c.syntax  = "#{program(:name)} #{c.name}"
     c.summary = 'Show a report on all pomodori'
-    c.action Router.dispatch(c)
+    c.action router.dispatch(c)
   end
 
   command :status do |c|
     c.syntax  = "#{program(:name)} #{c.name}"
     c.summary = 'Show status of active pomodoro or break'
     c.option '--quiet', 'Be quiet - no output is printed. The exit code reflects the status.'
-    c.action Router.dispatch(c)
+    c.action router.dispatch(c)
   end
 rescue
   $stderr.puts("Error: #{$!.message}")
   $stderr.puts $!.backtrace if options.trace
   exit(1)
+end
+
+# We replace Commander's exit hook with our own in order to set a custom exit status.
+at_exit do
+  run!
+  exit(router.status)
 end

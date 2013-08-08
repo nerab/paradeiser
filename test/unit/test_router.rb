@@ -18,7 +18,7 @@ class TestRouter < MiniTest::Test
   def test_init
     refute(Dir.exists?(Paradeiser.pom_dir), "Expect #{Paradeiser.pom_dir} to not exist yet")
 
-    block = Router.dispatch(CommandMock.new(:init))
+    block = Router.new.dispatch(CommandMock.new(:init))
     refute_nil(block)
 
     refute(Dir.exists?(Paradeiser.pom_dir), "Expect #{Paradeiser.pom_dir} to not exist yet")

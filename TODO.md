@@ -4,6 +4,8 @@
 
 * Call the finish hook
 
+* `pom init` should copy missing sample hooks on init
+
 * Move the contents of the current README and describe a "day in the life of a user" instead
 
 * Change version to 0.1 and release it
@@ -47,12 +49,10 @@
   - Errors red, warnings yellow, otherwise white
   - Turn off when running w/o tty and when --no-color is given
 
-* Add minimal tests for the `pom` bin so that we don't have to create a lot of processes.
-  - Only test behavior that cannot be tested in a controller test, like exit codes.
-  - Check that the pom script itself can execute without errors
+* Extend the tests for the `pom` bin so that we don't have to create a lot of processes.
+  - Only test behavior that cannot be tested in a controller or router test, like exit codes.
   - Check that all valid commands can execute without error
-  - Check that calling unknown commands raise and return non-zero exit codes
-  - As usual, this test needs to mock everything but the bin script itself
+  - We would like to mock everything but the bin script itself, but since the call via open3 happens in a subprocess, any mocking will be useless unless we can inject it into the subprocess.
 
 * Print only the id of the pom that was just created / modified / queried when not running in a tty
   - test with `if $stdin.tty?`

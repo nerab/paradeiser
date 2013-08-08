@@ -8,6 +8,7 @@ class TestParadeiserController < MiniTest::Test
   end
 
   def teardown
+    FileUtils.rmdir(Paradeiser.pom_dir) if Dir.exists?(Paradeiser.pom_dir)
     FakeFS.deactivate!
     ENV['POM_DIR'] = @orig_pom_dir
   end
@@ -17,22 +18,15 @@ class TestParadeiserController < MiniTest::Test
     refute(Dir.exists?(Paradeiser.pom_dir), "Expect #{Paradeiser.pom_dir} to not exist yet")
 
     ParadeiserController.new(:init).call(nil, nil)
-
     assert(Dir.exists?(Paradeiser.pom_dir))
   end
 
   def test_init_existing
-    ENV.delete('POM_DIR')
     FileUtils.mkdir_p(Paradeiser.pom_dir, 0700)
     assert(Dir.exists?(Paradeiser.pom_dir))
 
-    begin
-      assert_raises AlreadyInitializedError do
-        ParadeiserController.new(:init).call(nil, nil)
-      end
-    ensure
-      FileUtils.rmdir(Paradeiser.pom_dir)
-    end
+    ParadeiserController.new(:init).call(nil, nil)
+    assert(Dir.exists?(Paradeiser.pom_dir))
   end
 
   def test_init_virgin_with_env_override
@@ -56,9 +50,8 @@ class TestParadeiserController < MiniTest::Test
       assert_equal(dir, Paradeiser.pom_dir)
       assert(Dir.exists?(Paradeiser.pom_dir), "POM_DIR override #{Paradeiser.pom_dir} must exist")
 
-      assert_raises AlreadyInitializedError do
-        ParadeiserController.new(:init).call(nil, nil)
-      end
+      ParadeiserController.new(:init).call(nil, nil)
+      assert(Dir.exists?(Paradeiser.pom_dir), "POM_DIR override #{Paradeiser.pom_dir} must exist")
     end
   end
 

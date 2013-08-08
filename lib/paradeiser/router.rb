@@ -6,19 +6,18 @@ module Paradeiser
           method = command.name
 
           # TODO Dynamically find the controller that handles the method. :pomodoro is the default.
-          controller = PomodoriController.new(method)
-
-          begin
-            controller.call(args, options)
-          rescue
-            $stderr.puts("Error: #{$!.message}")
-            $stderr.puts $!.backtrace if options.trace
-            exit(1)
+          if (:init == method.to_sym)
+            controller_class = ParadeiserController
+          else
+            controller_class = PomodoriController
           end
+
+          controller = controller_class.new(method)
+          controller.call(args, options)
 
           View.new(controller.model, method).render(controller.get_binding) if options.verbose || controller.has_output
 
-          exit(controller.exitstatus)
+          controller.exitstatus
         end
       end
     end

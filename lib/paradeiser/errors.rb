@@ -17,12 +17,6 @@ module Paradeiser
     end
   end
 
-  class AlreadyInitializedError < StandardError
-    def initialize(dir)
-      super("Paradeiser was already initialized; #{dir} exists.")
-    end
-  end
-
   class IllegalStatusError < StandardError
     def initialize
       super('Idle pomodori cannot be saved.')

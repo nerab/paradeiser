@@ -82,15 +82,23 @@ Add a successfully finished pomodoro that was never recorded as being started (m
 
 The current time will be used for the finish timestamp, and the start time will be calculated from the finish time backwards.
 
-### Init Paradeiser
+### Initialize Paradeiser
 
-      $ pom init
+* Initialize the default directory that is used to store the Paradeiser configuration and data:
 
-Creates the `$POM_DIR` directory and the sample hooks in `$POM_DIR/hooks`. The data store will not be created on `pom init`, but when the first write operation happens (e.g. `pom start`, but not `pom report`).
+          $ pom init
 
-If `$POM_DIR` already exists, the command will fail with an error message.
+  Creates the `$POM_DIR` directory and the sample hooks in `$POM_DIR/hooks`. The data store will not be created on `pom init`, but when the first write operation happens (e.g. `pom start`, but not `pom report`).
 
-If the `at` command is not available or not enabled, `pom init` will issue a warning. The program will continue because it is still useful for recording.
+* Initialize an abritrary directory
+
+          $ pom init /tmp
+
+  This command initializes `/tmp` as $POM_DIR. It also sets the config variable `dir` in `~/.pomrc`:
+
+          $ pom config
+
+If the `at` command is not available or not enabled, `pom init` will issue a warning. The program will continue because it is still useful for recording, although it will not be able to enqueue itself in order to execute the (time-based) `pre-finish` and `pre-break` hooks.
 
 ### Troubleshooting
 
@@ -381,16 +389,18 @@ Variable | Used in | Description
 
 The configuration is stored in a config file. It is user-editable file, but editing the configuration is also exposed with `pom config`.
 
-      $ pom config POM_DIR
+      $ pom config dir
       /home/nerab/.paradeiser
 
-      # Note that setting $POM_DIR does affect pom config (but all other commands)
-      $ POM_DIR=/tmp pom config POM_DIR
-      /home/nerab/.paradeiser
-
-      $ pom config POM_DIR /tmp
-      $ pom config POM_DIR
+      # Note how setting $POM_DIR affects pom config
+      $ POM_DIR=/tmp pom config dir
       /tmp
+
+      $ pom config dir /var/tmp
+      $ pom config dir
+      /var/tmp
+
+`pom config` shows the _active_ config when called, i.e. it takes `$POM_DIR` into account.
 
   Available config variables:
 

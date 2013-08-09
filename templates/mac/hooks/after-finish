@@ -4,8 +4,7 @@
 # Sample post-finish hook for Paradeiser (called when a pomodoro ended). It
 # displays a simple notification.
 #
-# TODO Add platform switch for Mac / GNOME.
-#
-# $POM_ID is the ID of the pomodoro that just ended. It is set by the caller.
+# $POM_ID - the ID of the pomodoro that just ended
+# $POM_STARTED_AT - the time when the pomodoro was started
 #
 terminal-notifier-success -message "Pomodoro $POM_ID (started at $POM_STARTED_AT) is over." > /dev/null

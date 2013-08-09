@@ -359,15 +359,7 @@ Examples for the use of hooks are:
 
 * Displaying a desktop notification on `before-finish`
 * tmux status bar integration like [pomo](https://github.com/visionmedia/pomo) by writing the status to `~/.pomo_stat` from the `after-` hooks.
-* Displaying a desktop notification on Linux:
-
-        # ~/.paradeiser/hooks/after-stop
-        notify-send "Break" "$POM_TITLE is over." -u critical
-
-* Displaying a desktop notification on MacOS:
-
-        # ~/.paradeiser/hooks/after-stop
-        terminal-notifier-success  -message "$POM_TITLE is over."
+* Displaying a desktop notification
 
 `$POM_TITLE` is one of the environment variables set by Paradeiser that provides the context for hooks. See below for the full list of available environment variables.
 

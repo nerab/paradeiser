@@ -45,7 +45,7 @@ private
   def create_hook(name, hook_succeeds = true)
     token_file = File.join(Dir.tmpdir, SecureRandom.uuid)
 
-    hooks_dir = File.join(Paradeiser.pom_dir, 'hooks')
+    hooks_dir = Paradeiser.hooks_dir
     FileUtils.mkdir(hooks_dir)
 
     hook_file = File.join(hooks_dir, name)

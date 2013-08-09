@@ -30,7 +30,7 @@ class TestRouter < MiniTest::Test
     begin
       block.call(nil, OptionsMock.new(:trace => true, :verbose => false))
     ensure
-      FileUtils.rmdir(Paradeiser.pom_dir)
+      FileUtils.rm_r(Paradeiser.pom_dir, :force => true)
     end
   end
 end

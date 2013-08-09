@@ -23,8 +23,10 @@ module Paradeiser
         Scheduler.add(:finish, LENGTH_SECONDS.minutes)
       end
 
-      before_transition :on => :finish do |pom, transition|
+      around_transition do |pom, transition, block|
         Hook.new(:before).execute(transition)
+        block.call
+        Hook.new(:after).execute(transition)
       end
 
       after_transition :on => :finish do |pom, transition|

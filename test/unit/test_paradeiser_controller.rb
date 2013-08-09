@@ -2,13 +2,16 @@ require 'helper'
 require 'fakefs/safe'
 
 class TestParadeiserController < MiniTest::Test
+  HOOKS = ['after-finish', 'before-finish']
+
   def setup
     @orig_pom_dir = ENV['POM_DIR']
     FakeFS.activate!
+    create_hook_templates
   end
 
   def teardown
-    FileUtils.rmdir(Paradeiser.pom_dir) if Dir.exists?(Paradeiser.pom_dir)
+    FileUtils.rm_r(Paradeiser.pom_dir, :force => true) if Dir.exists?(Paradeiser.pom_dir)
     FakeFS.deactivate!
     ENV['POM_DIR'] = @orig_pom_dir
   end
@@ -19,6 +22,7 @@ class TestParadeiserController < MiniTest::Test
 
     ParadeiserController.new(:init).call(nil, nil)
     assert(Dir.exists?(Paradeiser.pom_dir))
+    assert_hooks_exist
   end
 
   def test_init_existing
@@ -27,6 +31,7 @@ class TestParadeiserController < MiniTest::Test
 
     ParadeiserController.new(:init).call(nil, nil)
     assert(Dir.exists?(Paradeiser.pom_dir))
+    assert_hooks_exist
   end
 
   def test_init_virgin_with_env_override
@@ -39,6 +44,7 @@ class TestParadeiserController < MiniTest::Test
     ParadeiserController.new(:init).call(nil, nil)
 
     assert(Dir.exists?(Paradeiser.pom_dir))
+    assert_hooks_exist
   end
 
   def test_init_existing_with_env_override
@@ -52,6 +58,7 @@ class TestParadeiserController < MiniTest::Test
 
       ParadeiserController.new(:init).call(nil, nil)
       assert(Dir.exists?(Paradeiser.pom_dir), "POM_DIR override #{Paradeiser.pom_dir} must exist")
+      assert_hooks_exist
     end
   end
 
@@ -62,5 +69,20 @@ private
     dir = File.join(Dir.tmpdir, SecureRandom.uuid)
     refute(Dir.exists?(dir))
     dir
+  end
+
+  def create_hook_templates
+    hook_templates_dir = File.join(Paradeiser.templates_dir, Paradeiser.os.to_s, 'hooks')
+    FileUtils.mkdir_p(hook_templates_dir)
+
+    HOOKS.each do |hook|
+      FileUtils.touch(File.join(hook_templates_dir, hook))
+    end
+  end
+
+  def assert_hooks_exist
+    HOOKS.each do |hook|
+      assert(File.exist?(File.join(Paradeiser.hooks_dir, hook)))
+    end
   end
 end

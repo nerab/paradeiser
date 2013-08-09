@@ -17,7 +17,7 @@ module Paradeiser
   private
 
     def hook(name)
-      File.join(Paradeiser.pom_dir, 'hooks', name)
+      File.join(Paradeiser.hooks_dir, name)
     end
   end
 end

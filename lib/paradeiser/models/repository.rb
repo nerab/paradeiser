@@ -1,8 +1,4 @@
 module Paradeiser
-  def self.pom_dir
-    ENV['POM_DIR'] || File.expand_path('~/.paradeiser/')
-  end
-
   class Repository
     class << self
       def all

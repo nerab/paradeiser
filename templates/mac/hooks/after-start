@@ -1,0 +1,9 @@
+#!/bin/sh
+
+#
+# Sample post-finish hook for Paradeiser (called after a pomodoro started). It
+# displays a simple notification.
+#
+# $POM_ID - the ID of the pomodoro that just ended
+#
+terminal-notifier-success -message "Pomodoro $POM_ID started." > /dev/null

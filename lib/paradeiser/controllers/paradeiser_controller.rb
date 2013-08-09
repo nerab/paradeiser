@@ -4,6 +4,7 @@ module Paradeiser
   class ParadeiserController < Controller
     def init
       FileUtils.mkdir_p(Paradeiser.pom_dir)
+      FileUtils.cp_r(File.join(Paradeiser.templates_dir, Paradeiser.os.to_s, 'hooks'), Paradeiser.pom_dir)
     end
   end
 end

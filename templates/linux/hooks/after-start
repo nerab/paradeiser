@@ -4,6 +4,4 @@
 # Sample post-finish hook for Paradeiser (called after a pomodoro started). It
 # displays a simple notification.
 #
-# $POM_ID - the ID of the pomodoro that just ended
-#
-notify-send "Pomodoro" "Pomodoro $POM_ID started." -u critical > /dev/null
+notify-send "Pomodoro" "A new Pomodoro started." -u critical > /dev/null

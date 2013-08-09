@@ -14,22 +14,25 @@ class TestPomodoroHooks < MiniTest::Test
 
   def test_before_finish_success
     hook_name = 'before-finish'
-    token_file = create_hook(hook_name)
 
     pom = Pomodoro.new
+    pom.id = SecureRandom.random_number(1000)
     pom.start
+    token_file = create_hook(hook_name)
     refute_path_exists(token_file, "Token file must not exist before #{hook_name} hook is executed")
     pom.finish
     assert_path_exists(token_file, "#{hook_name} hook should have created a token file")
     assert_equal(:finished, pom.status_name)
+    assert_equal("Pomodoro #{pom.id} started #{pom.started_at.strftime('%H:%M')}", File.read(token_file).chomp)
   end
 
   def test_before_finish_error
     hook_name = 'before-finish'
-    token_file = create_hook(hook_name, false)
 
     pom = Pomodoro.new
+    pom.id = SecureRandom.random_number(1000)
     pom.start
+    token_file = create_hook(hook_name, false)
     refute_path_exists(token_file, "Token file must not exist before #{hook_name} hook is executed")
 
     assert_raises HookFailedError do
@@ -67,7 +70,7 @@ private
   def hook_contents_success(token_file)
     hook_contents =<<"EOF"
 #!/bin/sh
-touch #{token_file}
+echo "Pomodoro $POM_ID started $POM_STARTED_AT" > #{token_file}
 EOF
   end
 

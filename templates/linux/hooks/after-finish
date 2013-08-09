@@ -7,4 +7,4 @@
 # $POM_ID - the ID of the pomodoro that just ended
 # $POM_STARTED_AT - the time when the pomodoro was started
 #
-notify-send "Pomodoro" "Pomodoro $POM_ID (started at $POM_STARTED_AT) is over." -u critical > /dev/null
+notify-send "Pomodoro" "The Pomodoro $POM_ID (started at $POM_STARTED_AT) is over." -u critical > /dev/null

@@ -24,9 +24,9 @@ module Paradeiser
       end
 
       around_transition do |pom, transition, block|
-        Hook.new(:before).execute(transition)
+        Hook.new(:before).execute(pom, transition)
         block.call
-        Hook.new(:after).execute(transition)
+        Hook.new(:after).execute(pom, transition)
       end
 
       after_transition :on => :finish do |pom, transition|

@@ -1,10 +1,8 @@
 # Paradeiser Backlog
 
-* `pom init` should copy (missing) sample hooks to $POM_DIR/hooks
-
 * Move the contents of the current README and describe a "day in the life of a user" instead
 
-* Change version to 0.1 and release it
+* Change version to 0.1.0 and release it
 
 * Implement break
 
@@ -17,6 +15,8 @@
 * Implement `pom annotate` and annotations for most commands
 
 * Improve status messages with relative times and dates (`distance_of_time_in_words_to_now`)
+
+* POM_ID is not available to `*-start` hooks because the pomodoro wasn't saved yet. We could either assign it before saving it or allow saving idle pomodori.
 
 * A text-based repo format would be much more UNIX-like. Think about a JSON repo. Loading it could share a lot of code with import (which we will need anyway). And we cannot trust a JSON repo any more than an import file.
 

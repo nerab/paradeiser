@@ -374,6 +374,7 @@ Launches `$VISUAL` (or, if empty, `$EDITOR`) with the given hook.
 Variable | Used in | Description
 --- | --- | ---
 `$POM_DIR` | Everywhere | Directory where the data store and the hooks are stored. Defaults to `~/.paradeiser/`.
+`$POM_ID` | Hooks | Identifier of the pomodoro
 `$POM_TITLE` | Hooks | Title of the pomodoro
 `$POM_LOCATION` | Location Commands | Location of the pomodoro
 

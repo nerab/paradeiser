@@ -1,9 +1,5 @@
 # Paradeiser Backlog
 
-* Move the contents of the current README and describe a "day in the life of a user" instead
-
-* Change version to 0.1.0 and release it
-
 * Implement break
 
   Cancel all enqueued commands on `pom break`, just like with `pom start`. Otherwise commands already enqueued to `at` would accidentially change a newer thing while thinking of operating on the older thing.
@@ -26,9 +22,7 @@
 
 * Add more tests for the scheduler (error cases like no access, or job not added due to other issues)
 
-* Add tests for the router
-
-* With the --trace option, print the job id and instructions to look at the `at` queue after enqueing a job
+* With the --trace option, print the job id and instructions to look at the `at` queue after enqueing a job. Also, print if a hook wasn't found or was found, but is not executable.
 
 * Scope the id to the day by introducing a key class the is an aggregate of day and id.
   - The view only shows the id for any given day in most reports. That means that a day (current by default, others in queries or import) is the scope of a pomodoro id.
@@ -45,18 +39,11 @@
   - Errors red, warnings yellow, otherwise white
   - Turn off when running w/o tty and when --no-color is given
 
-* Extend the tests for the `pom` bin so that we don't have to create a lot of processes.
-  - Only test behavior that cannot be tested in a controller or router test, like exit codes.
-  - Check that all valid commands can execute without error
-  - We would like to mock everything but the bin script itself, but since the call via open3 happens in a subprocess, any mocking will be useless unless we can inject it into the subprocess.
-
 * Print only the id of the pom that was just created / modified / queried when not running in a tty
   - test with `if $stdin.tty?`
-  - If that approach works well, suggest it for TaskWarrior too (bulk actions, e.g. In scripts)
+  - If that approach works well, suggest it for TaskWarrior too (for bulk actions, e.g. in scripts)
 
-*  Move features that are not implemented yet away from the README, either into feature files or the backlog
-
-* Documentation Approach
+* Implement documentation Approach
   - `pom help` is what the user will use to get information.
   - Not sure how to allow the user to look at features that are not related to a command. Either extend `pom help` to accept arbitrary keywords, or look into 'gem man`.
 

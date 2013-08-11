@@ -21,4 +21,10 @@ protected
       pom.finish!
     end
   end
+
+  def break!(pom = @pom)
+    Scheduler.stub(:add, nil) do
+      pom.break!
+    end
+  end
 end

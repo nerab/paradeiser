@@ -16,7 +16,7 @@ module Paradeiser
       end
 
       def active
-        all_active = find{|pom| pom.active?}
+        all_active = find{|pom| pom.active? || pom.break?}
         raise SingletonError.new(all_active.first) if all_active.size > 1
         all_active.first
       end

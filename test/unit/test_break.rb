@@ -1,12 +1,17 @@
 require 'helper'
 
-class TestPomodoro < MiniTest::Test
+class TestBreak < MiniTest::Test
   def setup
-    @pom = Pomodoro.new
+    @pom = Break.new
   end
 
   def test_virgin
     assert_equal(:idle, @pom.status_name)
+  end
+
+  def test_break
+    break!
+    assert_equal(:break, @pom.status_name)
   end
 
   def test_finish_idle
@@ -15,9 +20,9 @@ class TestPomodoro < MiniTest::Test
     end
   end
 
-  def test_finish_active
-    start!
-    assert_equal(:active, @pom.status_name)
+  def test_finish_break
+    break!
+    assert_equal(:break, @pom.status_name)
 
     now = srand
 
@@ -33,11 +38,11 @@ class TestPomodoro < MiniTest::Test
     assert_equal(0, @pom.duration)
   end
 
-  def test_duration_started
+  def test_duration
     now = srand
 
     Time.stub :now, Time.at(now) do
-      start!
+      break!
     end
 
     later = now + rand(42)
@@ -51,7 +56,7 @@ class TestPomodoro < MiniTest::Test
     now = srand
 
     Time.stub :now, Time.at(now) do
-      start!
+      break!
     end
 
     later = now + rand(42)
@@ -63,38 +68,27 @@ class TestPomodoro < MiniTest::Test
     assert_equal(later - now, @pom.duration)
   end
 
-  def test_finish_finished
-    start!
+  def test_finish_break
+    break!
     finish!
     assert_raises StateMachine::InvalidTransition do
       finish!
     end
   end
 
-  def test_start
+  def test_remaining
     now = srand
 
     Time.stub :now, Time.at(now) do
-      start!
+      break!
+      assert_equal(@pom.length, @pom.remaining)
     end
 
-    assert_equal(:active, @pom.status_name)
-    assert_equal(now, @pom.started_at.to_i)
-  end
-
-  def test_remaining_active
-    now = srand
-
-    Time.stub :now, Time.at(now) do
-      start!
-      assert_equal(Pomodoro::MINUTES_25 * 60, @pom.remaining)
-    end
-
-    delta = 600
+    delta = 120
     later = now + delta
 
     Time.stub :now, Time.at(later) do
-      assert_equal(Pomodoro::MINUTES_25 * 60 - delta, @pom.remaining)
+      assert_equal(@pom.length - delta, @pom.remaining)
     end
   end
 end

@@ -2,9 +2,7 @@
 
 * Implement break
 
-  Cancel all enqueued commands on `pom break`, just like with `pom start`. Otherwise commands already enqueued to `at` would accidentially change a newer thing while thinking of operating on the older thing.
-
-  This is safe (and required) because of Rule #1.
+* Cancel all enqueued commands on `pom break`, just like with `pom start`. Otherwise commands already enqueued to `at` would accidentially change a newer thing while thinking of operating on the older thing. This is safe (and required) because of Rule #1.
 
 * Implement interrupts
 

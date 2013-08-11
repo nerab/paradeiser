@@ -23,7 +23,7 @@ class TestPomodoriView < MiniTest::Test
     start!
     finish!
     out, err = render(:status)
-    assert_match(/^No active pomodoro. Last one was finished at .*\.$/m, out)
+    assert_match(/^Nothing active. Last pomodoro was finished at .*\.$/m, out)
     assert_empty(err)
   end
 
@@ -31,7 +31,7 @@ class TestPomodoriView < MiniTest::Test
     @pom = []
     out, err = render(:report)
     assert_equal(1, out.lines.size)
-    assert_match(/^ID \| Status \| Started \| Ended$/m, out.lines.first)
+    assert_match(/^ID \| Name \| Status \| Started \| Ended$/m, out.lines.first)
     assert_empty(err)
   end
 
@@ -40,8 +40,8 @@ class TestPomodoriView < MiniTest::Test
     @pom = [@pom]
     out, err = render(:report)
     assert_equal(2, out.lines.size)
-    assert_match(/^ID \| Status \| Started \| Ended$/m, out.lines[0])
-    assert_match(/^1 \| active \| \d{1,2}:\d{1,2} \| $/m, out.lines[1])
+    assert_match(/^ID \| Name \| Status \| Started \| Ended$/m, out.lines[0])
+    assert_match(/^1 \| pomodoro \| active \| \d{1,2}:\d{1,2} \| $/m, out.lines[1])
     assert_empty(err)
   end
 
@@ -51,8 +51,8 @@ class TestPomodoriView < MiniTest::Test
     @pom = [@pom]
     out, err = render(:report)
     assert_equal(2, out.lines.size)
-    assert_match(/^ID \| Status \| Started \| Ended$/m, out.lines[0])
-    assert_match(/^1 \| finished \| \d{1,2}:\d{1,2} \| \d{1,2}:\d{1,2}$/m, out.lines[1])
+    assert_match(/^ID \| Name \| Status \| Started \| Ended$/m, out.lines[0])
+    assert_match(/^1 \| pomodoro \| finished \| \d{1,2}:\d{1,2} \| \d{1,2}:\d{1,2}$/m, out.lines[1])
     assert_empty(err)
   end
 

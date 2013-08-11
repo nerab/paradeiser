@@ -13,6 +13,8 @@ module Paradeiser
         # TODO Dynamically find the controller that handles the method. :pomodoro is the default.
         if (:init == method.to_sym)
           controller_class = ParadeiserController
+        elsif (:break == method.to_sym)
+          controller_class = BreakController
         else
           controller_class = PomodoriController
         end

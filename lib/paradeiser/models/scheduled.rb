@@ -56,5 +56,9 @@ module Paradeiser
     def remaining
       length - Time.now.to_i + started_at.to_i
     end
+
+    def name
+      self.class.name.split("::").last.downcase
+    end
   end
 end

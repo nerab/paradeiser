@@ -1,5 +1,5 @@
-ID | Status | Started | Ended
+ID | Name | Status | Started | Ended
 <% @pom.each do |pom| %>
-<%= pom.id %> | <%= pom.status %> | <%= pom.started_at.strftime('%R') %> | <%= pom.finished_at.strftime('%R') if pom.finished? %>
+<%= pom.id %> | <%= pom.name %> | <%= pom.status %> | <%= pom.started_at.strftime('%R') %> | <%= pom.finished_at.strftime('%R') if pom.finished? %>
 
 <% end %>

@@ -1,25 +1,25 @@
 module Paradeiser
   class SingletonError < StandardError
     def initialize(pom)
-      super("Pomodoro #{pom.id} is already active.")
+      super("Pomodoro #{pom.id} is already active")
     end
   end
 
   class NotActiveError < StandardError
     def initialize
-      super('There is no active pomodoro or break.')
+      super('There is no active pomodoro or break')
     end
   end
 
   class NotInitializedError < StandardError
     def initialize(msg)
-      super("Paradeiser was not properly initialized; #{msg}.")
+      super("Paradeiser was not properly initialized; #{msg}")
     end
   end
 
   class IllegalStatusError < StandardError
     def initialize
-      super('Idle pomodori cannot be saved.')
+      super('Idle pomodori cannot be saved')
     end
   end
 

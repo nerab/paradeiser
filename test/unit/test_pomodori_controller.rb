@@ -59,30 +59,6 @@ class TestPomodoriController < MiniTest::Test
     assert_equal(true, has_output)
   end
 
-  def test_status_idle
-    pom, has_output = invoke(:status, '@pom', 'has_output')
-    assert_equal(:idle, pom.status_name)
-    assert_equal(true, has_output)
-    assert_equal(0, @backend.size)
-  end
-
-  def test_status_active
-    invoke(:start)
-    pom, has_output = invoke(:status, '@pom', 'has_output')
-    assert_equal(:active, pom.status_name)
-    assert_equal(true, has_output)
-    assert_equal(1, @backend.size)
-  end
-
-  def test_status_finished
-    invoke(:start)
-    invoke(:finish)
-    pom, has_output = invoke(:status, '@pom', 'has_output')
-    assert_equal(:finished, pom.status_name)
-    assert_equal(true, has_output)
-    assert_equal(1, @backend.size)
-  end
-
 private
 
   def invoke(method, *attributes)

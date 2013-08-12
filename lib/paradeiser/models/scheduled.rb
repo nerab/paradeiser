@@ -7,16 +7,11 @@ module Paradeiser
         transition :idle => :active
       end
 
-      event :break do
-        transition :idle => :break
-      end
-
       event :finish do
         transition :active => :finished
-        transition :break  => :finished
       end
 
-      after_transition :on => [:start, :break] do |pom, transition|
+      after_transition :on => :start do |pom, transition|
         pom.started_at = Time.now
         Scheduler.clear # There must be no other jobs scheduled because of Rule #1
         Scheduler.add(:finish, pom.length)

@@ -1,9 +1,0 @@
-<% case @pom.status_name
-when :active
-  %>Pomodoro #<%= @pom.id %> is active for another <%= @pom.remaining.minutes %> minutes (started at <%= @pom.started_at.strftime('%R') %>).<%
-when :finished
-  %>Nothing active. Last <%= @pom.name %> was finished at <%= @pom.finished_at.strftime('%R') %>.<%
-else
-  %>Current state is <%= @pom.status %>.<%
-end
-%>

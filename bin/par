@@ -23,21 +23,27 @@ begin
     c.action router.dispatch(c)
   end
 
-  command :start do |c|
+  command :'pomodoro start' do |c|
     c.syntax  = "#{program(:name)} #{c.name}"
     c.summary = 'Start a new pomodoro'
     c.action router.dispatch(c)
   end
 
-  command :break do |c|
+  command :'pomodoro finish' do |c|
+    c.syntax  = "#{program(:name)} #{c.name}"
+    c.summary = 'Finish the active pomodoro'
+    c.action router.dispatch(c)
+  end
+
+  command :'break start' do |c|
     c.syntax  = "#{program(:name)} #{c.name}"
     c.summary = 'Start a break'
     c.action router.dispatch(c)
   end
 
-  command :finish do |c|
+  command :'break finish' do |c|
     c.syntax  = "#{program(:name)} #{c.name}"
-    c.summary = 'Finish the active pomodoro'
+    c.summary = 'Finish a break'
     c.action router.dispatch(c)
   end
 

@@ -1,12 +1,12 @@
 module Paradeiser
   class Break < Scheduled
-    def initialize(length = 5)
+    def initialize(length = 300)
       super()
       @length = length
     end
 
     def length
-      raise NotActiveError unless break?
+      raise NotActiveError unless active?
       @length
     end
   end

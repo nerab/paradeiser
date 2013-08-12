@@ -25,7 +25,7 @@ class TestBreakController < MiniTest::Test
   def test_finish
     invoke(:break)
     br3ak, has_output = invoke(:finish, '@pom', 'has_output')
-    assert_equal(:finished, br3ak.status_name)
+    assert_equal(:break_finished, br3ak.status_name)
     assert_equal(false, has_output)
     assert_equal(1, @backend.size)
   end
@@ -78,7 +78,7 @@ class TestBreakController < MiniTest::Test
     invoke(:break)
     invoke(:finish)
     br3ak, has_output = invoke(:status, '@pom', 'has_output')
-    assert_equal(:finished, br3ak.status_name)
+    assert_equal(:break_finished, br3ak.status_name)
     assert_equal(true, has_output)
     assert_equal(1, @backend.size)
   end

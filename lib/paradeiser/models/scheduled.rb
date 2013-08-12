@@ -11,10 +11,6 @@ module Paradeiser
         transition :idle => :break
       end
 
-      event :log do
-        transition :idle => :finished
-      end
-
       event :finish do
         transition :active => :finished
         transition :break  => :finished

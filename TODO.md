@@ -1,5 +1,7 @@
 # Paradeiser Backlog
 
+* `par break start` enqueues the `par break finish` command with far too many minutes.
+
 * Whenever par runs, it should garbage-collect pomodori or breaks (finish them and adjust their finish time) that weren't finished after they were over (e.g. because at isn't there or the hooks did not fire)
 
 * Cancel all enqueued commands on `par break start`, just like with `par pomodoro start`. Otherwise commands already enqueued to `at` would accidentially change a newer thing while thinking of operating on the older thing. This is safe (and required) because of Rule #1.

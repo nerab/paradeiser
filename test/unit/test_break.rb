@@ -34,6 +34,11 @@ class TestBreak < MiniTest::Test
     assert_equal(now, @break.finished_at.to_i)
   end
 
+  def test_length
+    assert_equal(5 * 60, @break.length)
+  end
+
+
   def test_duration_idle
     assert_equal(0, @break.duration)
   end

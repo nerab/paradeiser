@@ -3,7 +3,6 @@ module Paradeiser
     MINUTES_25 = 25
 
     def length
-      raise NotActiveError unless active?
       MINUTES_25 * 60
     end
   end

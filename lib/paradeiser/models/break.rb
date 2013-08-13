@@ -6,7 +6,6 @@ module Paradeiser
     end
 
     def length
-      raise NotActiveError unless active?
       @length
     end
   end

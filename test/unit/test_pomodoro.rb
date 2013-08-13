@@ -29,6 +29,10 @@ class TestPomodoro < MiniTest::Test
     assert_equal(now, @pom.finished_at.to_i)
   end
 
+  def test_length
+    assert_equal(25 * 60, @pom.length)
+  end
+
   def test_duration_idle
     assert_equal(0, @pom.duration)
   end

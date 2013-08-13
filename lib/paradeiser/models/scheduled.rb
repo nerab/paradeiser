@@ -45,6 +45,7 @@ module Paradeiser
     end
 
     def remaining
+      raise NotActiveError unless active?
       length - Time.now.to_i + started_at.to_i
     end
 

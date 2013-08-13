@@ -1,5 +1,6 @@
 module Paradeiser
-  class Status
+  module Status
+
     MAP = {
       'pomodoro:active' => 0,
       'pomodoro:finished' => 1,
@@ -7,18 +8,14 @@ module Paradeiser
       'break:finished' => 3,
     }
 
-    def initialize(thing)
-      @thing = thing
-    end
-
-    def to_i
-      MAP[key] || -1
+    def self.of(thing)
+      thing.nil? ? -1 : MAP[key(thing)]
     end
 
   private
 
-    def key
-      "#{@thing.name}:#{@thing.status}"
+    def self.key(thing)
+      "#{thing.name}:#{thing.status}"
     end
   end
 end

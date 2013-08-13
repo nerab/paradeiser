@@ -22,3 +22,25 @@ protected
     end
   end
 end
+
+
+class ControllerTest < MiniTest::Test
+
+protected
+
+  def invoke(method, *attributes)
+    controller = ParadeiserController.new(method)
+
+    Repository.stub :backend, @backend do
+      Scheduler.stub(:add, nil) do
+        Scheduler.stub(:clear, nil) do
+          controller.call(nil, nil)
+        end
+      end
+    end
+
+    attributes.map do |attribute|
+      controller.get_binding.eval(attribute)
+    end
+  end
+end

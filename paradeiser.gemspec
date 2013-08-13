@@ -21,6 +21,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'commander'
   spec.add_runtime_dependency 'require_all'
   spec.add_runtime_dependency 'state_machine'
+#  spec.add_runtime_dependency 'active_support'
 
   # Moved to the Gemfile so that Travis CI can load the test group
   # spec.add_development_dependency 'rake'

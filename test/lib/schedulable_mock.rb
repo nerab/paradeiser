@@ -1,11 +1,15 @@
 require 'ostruct'
 
-class PomodoroMock < OpenStruct
+class SchedulableMock < OpenStruct
   def initialize(attributes)
     super(attributes)
   end
 
   def active?
     !!active
+  end
+
+  def finished?
+    !!finished
   end
 end

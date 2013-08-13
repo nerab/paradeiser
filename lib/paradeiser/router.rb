@@ -1,3 +1,9 @@
+begin
+  require 'active_support/core_ext/string/inflections'
+rescue LoadError
+  require_relative 'refinements/inflections'
+end
+
 module Paradeiser
   class Router
     attr_reader :status
@@ -8,10 +14,9 @@ module Paradeiser
 
     def dispatch(command)
       Proc.new do |args, options|
-
         parts = command.name.split
         resource = parts.shift
-        controller_name = "#{resource.capitalize}Controller".to_sym
+        controller_name = "#{resource.pluralize.capitalize}Controller".to_sym
 
         if Paradeiser.const_defined?(controller_name)
           verb = parts.join

@@ -4,7 +4,7 @@ module Paradeiser
 
     def initialize(method)
       @method = method
-      @exitstatus = 0
+      @exitstatus = -1
       @has_output = false
     end
 
@@ -24,7 +24,7 @@ module Paradeiser
 
   protected
 
-    attr_writer   :exitstatus, :has_output
-    attr_reader   :options, :args
+    attr_writer :exitstatus, :has_output
+    attr_reader :options, :args
   end
 end

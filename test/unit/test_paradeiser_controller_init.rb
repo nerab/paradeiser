@@ -1,7 +1,7 @@
 require 'helper'
 require 'fakefs/safe'
 
-class TestParadeiserController < MiniTest::Test
+class TestParadeiserControllerInit < MiniTest::Test
   HOOKS = ['after-finish', 'before-finish']
 
   def setup
@@ -20,7 +20,7 @@ class TestParadeiserController < MiniTest::Test
     ENV.delete('POM_DIR')
     refute(Dir.exists?(Paradeiser.pom_dir), "Expect #{Paradeiser.pom_dir} to not exist yet")
 
-    ParadeiserController.new(:init).call(nil, nil)
+    invoke(:init)
     assert(Dir.exists?(Paradeiser.pom_dir))
     assert_hooks_exist
   end
@@ -29,7 +29,7 @@ class TestParadeiserController < MiniTest::Test
     FileUtils.mkdir_p(Paradeiser.pom_dir, 0700)
     assert(Dir.exists?(Paradeiser.pom_dir))
 
-    ParadeiserController.new(:init).call(nil, nil)
+    invoke(:init)
     assert(Dir.exists?(Paradeiser.pom_dir))
     assert_hooks_exist
   end
@@ -41,7 +41,7 @@ class TestParadeiserController < MiniTest::Test
     assert_equal(dir, Paradeiser.pom_dir)
     refute(Dir.exists?(Paradeiser.pom_dir), "POM_DIR override #{Paradeiser.pom_dir} must not exist")
 
-    ParadeiserController.new(:init).call(nil, nil)
+    invoke(:init)
 
     assert(Dir.exists?(Paradeiser.pom_dir))
     assert_hooks_exist
@@ -56,13 +56,17 @@ class TestParadeiserController < MiniTest::Test
       assert_equal(dir, Paradeiser.pom_dir)
       assert(Dir.exists?(Paradeiser.pom_dir), "POM_DIR override #{Paradeiser.pom_dir} must exist")
 
-      ParadeiserController.new(:init).call(nil, nil)
+      invoke(:init)
       assert(Dir.exists?(Paradeiser.pom_dir), "POM_DIR override #{Paradeiser.pom_dir} must exist")
       assert_hooks_exist
     end
   end
 
 private
+
+  def invoke(verb)
+    ParadeiserController.new(verb).call(nil, nil)
+  end
 
   # Makes a temporary directory name, but does not create the directory
   def tempdir_name

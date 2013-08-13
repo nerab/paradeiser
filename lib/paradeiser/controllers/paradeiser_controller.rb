@@ -13,13 +13,8 @@ module Paradeiser
     end
 
     def status
-      if @pom = Repository.active
-        self.exitstatus = 0
-      elsif @pom = Repository.last_finished
-        self.exitstatus = Status.new(@pom).to_i
-      # elsif Repository.find(:status => 'cancelled').last
-      #   self.exitstatus = 2
-      end
+      @pom = Repository.active || Repository.last_finished
+      self.exitstatus = Status.of(@pom).to_i
       self.has_output = true
     end
   end

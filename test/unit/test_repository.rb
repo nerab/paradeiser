@@ -74,9 +74,9 @@ class TestRepository < MiniTest::Test
   end
 
   def test_find
-    @backend[:foo] = PomodoroMock.new(:length => 3)
-    @backend[:bar] = PomodoroMock.new(:length => 3)
-    @backend[:baz] = PomodoroMock.new(:length => 2)
+    @backend[:foo] = SchedulableMock.new(:length => 3)
+    @backend[:bar] = SchedulableMock.new(:length => 3)
+    @backend[:baz] = SchedulableMock.new(:length => 2)
     assert_equal(3, @backend.size)
 
     all = invoke(:find){|pom| pom.length == 3}
@@ -85,33 +85,33 @@ class TestRepository < MiniTest::Test
   end
 
   def test_active
-    @backend[:foo] = PomodoroMock.new(:active => false)
-    @backend[:bar] = PomodoroMock.new(:active => true)
-    @backend[:baz] = PomodoroMock.new(:active => false)
+    @backend[:foo] = SchedulableMock.new(:active => false)
+    @backend[:bar] = SchedulableMock.new(:active => true)
+    @backend[:baz] = SchedulableMock.new(:active => false)
 
     active = invoke(:active)
     assert_equal(@backend[:bar], active)
   end
 
   def test_active_true
-    @backend[:foo] = PomodoroMock.new(:active => false)
-    @backend[:bar] = PomodoroMock.new(:active => true)
-    @backend[:baz] = PomodoroMock.new(:active => false)
+    @backend[:foo] = SchedulableMock.new(:active => false)
+    @backend[:bar] = SchedulableMock.new(:active => true)
+    @backend[:baz] = SchedulableMock.new(:active => false)
 
     assert(invoke(:active?))
   end
 
   def test_active_false
-    @backend[:foo] = PomodoroMock.new(:active => false)
-    @backend[:bar] = PomodoroMock.new(:active => false)
-    @backend[:baz] = PomodoroMock.new(:active => false)
+    @backend[:foo] = SchedulableMock.new(:active => false)
+    @backend[:bar] = SchedulableMock.new(:active => false)
+    @backend[:baz] = SchedulableMock.new(:active => false)
 
     refute(invoke(:active?))
   end
 
   def test_corrupted_repo
-    @backend[:foo] = PomodoroMock.new(:active => true)
-    @backend[:bar] = PomodoroMock.new(:active => true)
+    @backend[:foo] = SchedulableMock.new(:active => true)
+    @backend[:bar] = SchedulableMock.new(:active => true)
 
     assert_raises RuntimeError do
       invoke(:active?)

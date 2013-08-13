@@ -1,0 +1,10 @@
+#!/bin/sh
+
+#
+# Sample after-finish-break hook for Paradeiser (called after a break ended). It
+# displays a simple notification.
+#
+# $PAR_BREAK_ID - the ID of the break that just ended
+# $PAR_BREAK_STARTED_AT - the time when the break was started
+#
+notify-send "Pomodoro" "The break $PAR_BREAK_ID (started at $PAR_BREAK_STARTED_AT) is over." -u critical > /dev/null

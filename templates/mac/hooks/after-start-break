@@ -1,0 +1,7 @@
+#!/bin/sh
+
+#
+# Sample after-start-break hook for Paradeiser (called after a break started). It
+# displays a simple notification.
+#
+terminal-notifier-success -message "A new break started." > /dev/null

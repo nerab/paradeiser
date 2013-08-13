@@ -1,7 +1,7 @@
 #!/bin/sh
 
 #
-# Sample post-finish hook for Paradeiser (called after a pomodoro started). It
+# Sample after-start-pomodoro hook for Paradeiser (called after a pomodoro started). It
 # displays a simple notification.
 #
-terminal-notifier-success -message "A new Pomodoro started." > /dev/null
+terminal-notifier-success -message "A new pomodoro started." > /dev/null

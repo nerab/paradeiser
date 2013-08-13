@@ -113,7 +113,7 @@ class TestRepository < MiniTest::Test
     @backend[:foo] = PomodoroMock.new(:active => true)
     @backend[:bar] = PomodoroMock.new(:active => true)
 
-    assert_raises SingletonError do
+    assert_raises RuntimeError do
       invoke(:active?)
     end
   end

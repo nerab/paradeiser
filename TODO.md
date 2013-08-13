@@ -1,10 +1,14 @@
 # Paradeiser Backlog
 
-* Ending a break should lead to a different state than finish, otherwise the hooks will be confused.
+* Rename controllers to plural (Pomodoro => Pomodori)
 
 * Add status message and -code tests for break
 
+* Whenever par runs, it should garbage-collect pomodori or breaks (finish them and adjust their finish time) that weren't finished after they were over (e.g. because at isn't there or the hooks did not fire)
+
 * Cancel all enqueued commands on `pom break`, just like with `pom start`. Otherwise commands already enqueued to `at` would accidentially change a newer thing while thinking of operating on the older thing. This is safe (and required) because of Rule #1.
+
+* Abbreviate commands with the Abbrev module
 
 * Implement interrupts
 

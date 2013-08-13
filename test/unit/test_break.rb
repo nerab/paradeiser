@@ -2,16 +2,16 @@ require 'helper'
 
 class TestBreak < MiniTest::Test
   def setup
-    @pom = Break.new
+    @break = Break.new
   end
 
   def test_virgin
-    assert_equal(:idle, @pom.status_name)
+    assert_equal(:idle, @break.status_name)
   end
 
   def test_break
-    break!
-    assert_equal(:break, @pom.status_name)
+    start!
+    assert_equal(:active, @break.status_name)
   end
 
   def test_finish_idle
@@ -21,8 +21,8 @@ class TestBreak < MiniTest::Test
   end
 
   def test_finish_break
-    break!
-    assert_equal(:break, @pom.status_name)
+    start!
+    assert_equal(:active, @break.status_name)
 
     now = srand
 
@@ -30,25 +30,25 @@ class TestBreak < MiniTest::Test
       finish!
     end
 
-    assert_equal(:finished, @pom.status_name)
-    assert_equal(now, @pom.finished_at.to_i)
+    assert_equal(:finished, @break.status_name)
+    assert_equal(now, @break.finished_at.to_i)
   end
 
   def test_duration_idle
-    assert_equal(0, @pom.duration)
+    assert_equal(0, @break.duration)
   end
 
   def test_duration
     now = srand
 
     Time.stub :now, Time.at(now) do
-      break!
+      start!
     end
 
     later = now + rand(42)
 
     Time.stub :now, Time.at(later) do
-      assert_equal(later - now, @pom.duration)
+      assert_equal(later - now, @break.duration)
     end
   end
 
@@ -56,7 +56,7 @@ class TestBreak < MiniTest::Test
     now = srand
 
     Time.stub :now, Time.at(now) do
-      break!
+      start!
     end
 
     later = now + rand(42)
@@ -65,11 +65,11 @@ class TestBreak < MiniTest::Test
       finish!
     end
 
-    assert_equal(later - now, @pom.duration)
+    assert_equal(later - now, @break.duration)
   end
 
   def test_finish_break
-    break!
+    start!
     finish!
     assert_raises StateMachine::InvalidTransition do
       finish!
@@ -80,15 +80,15 @@ class TestBreak < MiniTest::Test
     now = srand
 
     Time.stub :now, Time.at(now) do
-      break!
-      assert_equal(@pom.length, @pom.remaining)
+      start!
+      assert_equal(@break.length, @break.remaining)
     end
 
     delta = 120
     later = now + delta
 
     Time.stub :now, Time.at(later) do
-      assert_equal(@pom.length - delta, @pom.remaining)
+      assert_equal(@break.length - delta, @break.remaining)
     end
   end
 end

@@ -10,21 +10,15 @@ class MiniTest::Test
 
 protected
 
-  def start!(pom = @pom)
+  def start!(thing = @pom || @break)
     Scheduler.stub(:add, nil) do
-      pom.start!
+      thing.start!
     end
   end
 
-  def finish!(pom = @pom)
+  def finish!(thing = @pom || @break)
     Scheduler.stub(:clear, nil) do
-      pom.finish!
-    end
-  end
-
-  def break!(pom = @pom)
-    Scheduler.stub(:add, nil) do
-      pom.break!
+      thing.finish!
     end
   end
 end

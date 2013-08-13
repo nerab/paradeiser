@@ -16,18 +16,27 @@ module Paradeiser
       end
 
       def active
-        all_active = find{|pom| pom.active?}.sort{|p| p.started_at}
-        raise SingletonError.new(all_active.first) if all_active.size > 1
-        all_active.first
+        all_active = find{|pom| pom.active?}.sort{|a,b| a.started_at <=> b.started_at}
+
+        # Cannot recover from an internal inconsistency.
+        if all_active.size > 1
+          raise "The repository was corrupted. There are #{all_active.size} active objects, but only one is allowed to be active."
+        end
+
+        all_active.last
       end
 
       def active?
         !!active
       end
 
+      def last_finished
+        find{|p| p.finished?}.sort{|a,b| a.started_at <=> b.started_at}.last
+      end
+
       def save(pom)
         raise IllegalStatusError if pom.idle?
-        raise SingletonError.new(self.active) if self.active? && active.id != pom.id
+        raise SingletonError.new(pom.class, self.active, :save) if self.active? && active.id != pom.id
 
         pom.id = next_id if pom.new?
         backend.transaction do

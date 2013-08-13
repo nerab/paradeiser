@@ -1,9 +1,8 @@
 module Paradeiser
   class PomodoroController < Controller
     def start
-      # The repository will protect itself, but we don't want to create
-      # a new pomodoro if saving it will fail anyway.
-      raise SingletonError.new(Repository.active) if Repository.active?
+      end_break
+      raise SingletonError.new(Pomodoro, Repository.active, :start) if Repository.active?
 
       @pom = Pomodoro.new
       @pom.start!
@@ -13,8 +12,20 @@ module Paradeiser
     def finish
       @pom = Repository.active
       raise NotActiveError unless @pom
+      raise SingletonError.new(Pomodoro, @pom, :finish) if Repository.active? && Pomodoro != @pom.class
       @pom.finish!
       Repository.save(@pom)
+    end
+
+    def end_break
+      if Repository.active?
+        active = Repository.active
+
+        if Break == active.class
+          active.finish!
+          Repository.save(active)
+        end
+      end
     end
   end
 end

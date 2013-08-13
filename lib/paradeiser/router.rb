@@ -8,6 +8,7 @@ module Paradeiser
 
     def dispatch(command)
       Proc.new do |args, options|
+
         parts = command.name.split
         resource = parts.shift
         controller_name = "#{resource.capitalize}Controller".to_sym

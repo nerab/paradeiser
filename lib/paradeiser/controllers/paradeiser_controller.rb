@@ -15,8 +15,8 @@ module Paradeiser
     def status
       if @pom = Repository.active
         self.exitstatus = 0
-      elsif @pom = Repository.find{|p| p.finished?}.sort{|a,b| a.started_at <=> b.started_at}.last
-        self.exitstatus = 1
+      elsif @pom = Repository.last_finished
+        self.exitstatus = Status.new(@pom).to_i
       # elsif Repository.find(:status => 'cancelled').last
       #   self.exitstatus = 2
       end

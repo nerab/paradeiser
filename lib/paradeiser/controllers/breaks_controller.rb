@@ -1,5 +1,5 @@
 module Paradeiser
-  class BreakController < Controller
+  class BreaksController < Controller
     def start
       raise SingletonError.new(Break, Repository.active, :start) if Repository.active?
 

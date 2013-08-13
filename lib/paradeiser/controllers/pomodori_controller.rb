@@ -1,5 +1,5 @@
 module Paradeiser
-  class PomodoroController < Controller
+  class PomodoriController < Controller
     def start
       end_break
       raise SingletonError.new(Pomodoro, Repository.active, :start) if Repository.active?

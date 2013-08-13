@@ -39,7 +39,7 @@ class TestBreakController < MiniTest::Test
 private
 
   def invoke(method, *attributes)
-    controller = BreakController.new(method)
+    controller = BreaksController.new(method)
 
     Repository.stub :backend, @backend do
       Scheduler.stub(:add, nil) do

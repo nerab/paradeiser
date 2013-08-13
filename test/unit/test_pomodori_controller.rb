@@ -40,7 +40,7 @@ class TestPomodoriController < MiniTest::Test
 private
 
   def invoke(method, *attributes)
-    controller = PomodoroController.new(method)
+    controller = PomodoriController.new(method)
 
     Repository.stub :backend, @backend do
       Scheduler.stub(:add, nil) do

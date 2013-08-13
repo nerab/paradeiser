@@ -1,7 +1,5 @@
 # Paradeiser Backlog
 
-* Rename controllers to plural (Pomodoro => Pomodori)
-
 * Add status message and -code tests for break
 
 * Whenever par runs, it should garbage-collect pomodori or breaks (finish them and adjust their finish time) that weren't finished after they were over (e.g. because at isn't there or the hooks did not fire)

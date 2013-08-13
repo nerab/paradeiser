@@ -28,18 +28,21 @@ begin
     c.summary = 'Start a new pomodoro'
     c.action router.dispatch(c)
   end
+  alias_command :start, :'pomodoro start'
 
   command :'pomodoro finish' do |c|
     c.syntax  = "#{program(:name)} #{c.name}"
     c.summary = 'Finish the active pomodoro'
     c.action router.dispatch(c)
   end
+  alias_command :finish, :'pomodoro finish'
 
   command :'break start' do |c|
     c.syntax  = "#{program(:name)} #{c.name}"
     c.summary = 'Start a break'
     c.action router.dispatch(c)
   end
+  alias_command :break, :'break start'
 
   command :'break finish' do |c|
     c.syntax  = "#{program(:name)} #{c.name}"

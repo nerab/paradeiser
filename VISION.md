@@ -30,14 +30,14 @@ This is scoped to a single user account (not just the `$POM_DIR` directory, but 
 
 ### Start a new pomodoro
 
-      $ pom start
+      $ par pomodoro start
 
 If a break is still active, it will be stopped before the new pomodoro is started. Because of Rule #1, calling start while a pomodoro is active will print an error message.
 
 ### Finish the pomodoro
 
-      $ pom finish
-      $ pom finish This one went very well.
+      $ par pomodoro finish
+      $ par pomodoro finish This one went very well.
 
 If a pomodoro is active, it will be marked as successful after stopping it, regardless of whether the 25 minutes are over or not. Remaining arguments, if present, will be added to the pomodoro as annotation.
 
@@ -45,24 +45,24 @@ If there is no active pomodoro, an error message will be printed.
 
 ### Record an interruption of the current pomodoro
 
-      $ pom interrupt --external Phone call from boss
-      $ pom interrupt --internal "Couldn't stay away from Twitter"
+      $ par interrupt --external Phone call from boss
+      $ par interrupt --internal "Couldn't stay away from Twitter"
 
 Remaining arguments, if present, will be added to the interrupt as annotation. If no pomodoro is active, the command will throw an error.
 
 ### Start a break
 
-      $ pom break [start] [--short | --long]
+      $ par break [start] [--short | --long]
 
-If there is an active pomodoro, an error message will be printed. The `start` command is optional and may be omitted (it's only there for symmetry with `pom break end`, see the section about `at`).
+If there is an active pomodoro, an error message will be printed. The `start` command is optional and may be omitted (it's only there for symmetry with `par break finish`, see the section about `at`).
 
-By default the break will be five minutes long. After four pomodori within a day, the break will be 30 minutes long. This can be overridden with `--short` or `--long`, with an optional argument value that determines the lenght of the break in minutes (e.g. `pom break --short=10`).
+By default the break will be five minutes long. After four pomodori within a day, the break will be 30 minutes long. This can be overridden with `--short` or `--long`, with an optional argument value that determines the lenght of the break in minutes (e.g. `par break --short=10`).
 
 While there is a command to stop a break (see the section about `at`), it isn't really necessary to call it from a user's perspective. Either a new pomodoro is started, which will implicitely stop the break, or the break ends naturally because it is over. We do not track break time.
 
 ### Annotate a pomodoro
 
-      $ pom annotate This was intense, but I am happy about the work I finished.
+      $ par pomodoro annotate This was intense, but I am happy about the work I finished.
 
 The annotation will be added to the active or, if none is active, to the most recently finished or cancelled pomodoro. If no text is given, the annotation text is read from STDIN.
 
@@ -70,15 +70,15 @@ Breaks cannot have annotations.
 
 ### Cancel the pomodoro
 
-      $ pom cancel Just couldn't concentrate anymore.
+      $ par pomodoro cancel Just couldn't concentrate anymore.
 
 It will be marked as unsuccessful (remember, a pomodoro is indivisible). If no pomodoro is active, the command will throw an error. If a break is active, the command will do nothing except printing a warning. Remaining arguments, if present, will be added to the pomodoro as annotation.
 
 ### Log a pomodoro
 
-      $ pom log
+      $ par pomodoro log
 
-Add a successfully finished pomodoro that was never recorded as being started (maybe the user forgot to call `pom start`). It will appear in the reports and will count towards efficiency calculations.
+Add a successfully finished pomodoro that was never recorded as being started (maybe the user forgot to call `par pomodoro start`). It will appear in the reports and will count towards efficiency calculations.
 
 The current time will be used for the finish timestamp, and the start time will be calculated from the finish time backwards.
 
@@ -86,72 +86,72 @@ The current time will be used for the finish timestamp, and the start time will 
 
 * Initialize the default directory that is used to store the Paradeiser configuration and data:
 
-          $ pom init
+          $ par init
 
-  Creates the `$POM_DIR` directory and the sample hooks in `$POM_DIR/hooks`. The data store will not be created on `pom init`, but when the first write operation happens (e.g. `pom start`, but not `pom report`).
+  Creates the `$POM_DIR` directory and the sample hooks in `$POM_DIR/hooks`. The data store will not be created on `par init`, but when the first write operation happens (e.g. `par pomodoro start`, but not `par report`).
 
 * Initialize an abritrary directory
 
-          $ pom init /tmp
+          $ par init /tmp
 
   This command initializes `/tmp` as `$POM_DIR`. It also sets the config variable `dir` in `~/.pomrc`:
 
-          $ pom config
+          $ par config
 
-If the `at` command is not available or not enabled, `pom init` will issue a warning. The program will continue because it is still useful for recording, although it will not be able to enqueue itself in order to execute the (time-based) `before-finish` and `before-break` hooks.
+If the `at` command is not available or not enabled, `par init` will issue a warning. The program will continue because it is still useful for recording, although it will not be able to enqueue itself in order to execute the (time-based) `before-finish` and `before-break` hooks.
 
 ### Troubleshooting
 
-`pom doctor` performs a number of checks that ensure that Paradeiser can run with best results.
+`par doctor` performs a number of checks that ensure that Paradeiser can run with best results.
 
 It checks if
 
 * `at` is there and enabled
 * ...
 
-`pom doctor` also provides a hint on how to correct that situation.
+`par doctor` also provides a hint on how to correct that situation.
 
 ### Location
 Recording the location of a pomodoro allows Paradeiser to compare the average count of successful and cancelled pomodori and the number of interruptions by location, so that a report can tell in which environment we get the most work done.
 
   * Show the current location
 
-        $ pom location
+        $ par location
         Home Office
 
-        $ pom location --verbose
+        $ par location --verbose
         Home Office (macbook@01:23:45:67:89:0A)
 
   * List all locations
 
-        $ pom locations
+        $ par locations
         Home Office
         Starbucks
 
-        $ pom locations --verbose
+        $ par locations --verbose
         Home Office (macbook@01:23:45:67:89:0A)
         Starbucks (macbook@45:01:89:0A:67:23)
 
   * Show the label of a location identifier
 
-        $ pom location macbook@01:23:45:67:89:0A
+        $ par location macbook@01:23:45:67:89:0A
          Home Office
 
   * Show the identifier of a location
 
-        $ pom location "Home Office"
+        $ par location "Home Office"
         macbook@01:23:45:67:89:0A
 
   * Label a location
 
-        $ pom location macbook@01:23:45:67:89:0A "Your Label"
+        $ par location macbook@01:23:45:67:89:0A "Your Label"
 
 Paradeiser will automatically figure out the current location from the hostname and the MAC address of the default gateway (see below for details). This can be overridden by setting `$POM_LOCATION` or with a command line option:
 
-    $ pom location --location="On the road"
+    $ par location --location="On the road"
     On the road
 
-    $ POM_LOCATION="On the road" pom location
+    $ POM_LOCATION="On the road" par location
     On the road
 
 Both the `--location` option and the environment variable can be passed to almost all commands.
@@ -165,17 +165,17 @@ A central aspect of the Pomodoro Technique is the timer function:
 
 The `at` command is used for this. We just tell it to call
 
-      pom finish
+      par pomodoro finish
 
 when the pomodoro is over. A similar command exists as
 
-      pom break finish
+      par break finish
 
 which is called by `at` when the break is over.
 
 When a pomodoro is started, Paradeiser enqueues itself to `at` like this:
 
-      echo pom finish | at now + 25 minutes
+      echo par pomodoro finish | at now + 25 minutes
 
 When `at` calls Paradeiser with this command, the pomodoro / break will be over and Paradeiser can do all the internal processing related to stopping the pomodoro / break (incl. calling the appropriate hooks, see below).
 
@@ -183,57 +183,57 @@ Paradeiser uses a dedicated at queue named 'p' to organize its jobs and to preve
 
 ## Status
 
-Paradeiser can print the current status to STDOUT with the `pom status` command. The current state is provided as process exit status (which is also useful when the output is suppressed).
+Paradeiser can print the current status to STDOUT with the `par status` command. The current state is provided as process exit status (which is also useful when the output is suppressed).
 
 * Given an active pomodoro:
 
-          $ pom status
+          $ par status
           Pomodoro #2 is active (started 11:03, 14 minutes remaining).
 
-          $ pom status > /dev/null
+          $ par status > /dev/null
           $ echo $?
           0
 
 * Given no active pomodoro and the last one (not earlier as today) was finished:
 
-          $ pom status
+          $ par status
           No active pomodoro. Last one was finished at 16:58.
 
-          $ pom status > /dev/null
+          $ par status > /dev/null
           $ echo $?
           1
 
 * Given no active pomodoro and the last one (not earlier as today) was cancelled:
 
-          $ pom status
+          $ par status
           No pomodoro active. Last pomodoro was cancelled at 17:07.
 
-          $ pom status > /dev/null
+          $ par status > /dev/null
           $ echo $?
           2
 
 * Given a break (implies no active pomodoro):
 
-          $ pom status
+          $ par status
           Taking a 5 minute break until 2013-07-16 17.07 (4 minutes remaining).
 
-          $ pom status > /dev/null
+          $ par status > /dev/null
           $ echo $?
           3
 
 * Short status (03:39 remaining in the active pomodoro or break):
 
-          $ pom status --short
+          $ par status --short
           03:39
 
 * Given a break and a custom status format (resembles the format switch analog to `date +%Y-%m-%dT%H:%M:%S`):
 
-          $ pom status --format %C-%M:%S
+          $ par status --format %C-%M:%S
           B03:39
 
 * Output in JSON format
 
-          $ pom status --format JSON
+          $ par status --format JSON
           {
             "status": {
               "state": "break",
@@ -246,7 +246,7 @@ Paradeiser can print the current status to STDOUT with the `pom status` command.
 
 ## Reports
 
-      $ pom report
+      $ par report
       Daily Pomodoro Report for 2013-07-16
 
       3 pomodori finished
@@ -258,11 +258,11 @@ Paradeiser can print the current status to STDOUT with the `pom status` command.
       Most efficient location: Home Office
       Least efficient location: Coffeshop
 
-By default, the command groups by `--day`. Alternative options are `--week`, `--month` or `--year`. Without a value, the argument assumes the current day / week / month / year. The first day of the period can be specified as argument, e.g. `pom report --day=2013-07-18`. The period is parsed with [Chronic](http://chronic.rubyforge.org/), which also enables symbolic values like `pom report --month="last month"`.
+By default, the command groups by `--day`. Alternative options are `--week`, `--month` or `--year`. Without a value, the argument assumes the current day / week / month / year. The first day of the period can be specified as argument, e.g. `par report --day=2013-07-18`. The period is parsed with [Chronic](http://chronic.rubyforge.org/), which also enables symbolic values like `par report --month="last month"`.
 
 The report can also be grouped by location:
 
-      $ pom report location
+      $ par report location
       Pomodoro Location Report
 
       Home Office: 38 finished, 12 cancelled, 21 interrupts
@@ -271,11 +271,11 @@ The report can also be grouped by location:
 
       The following locations do not have a label. Assign it with
 
-        $ pom location macbook@01:23:45:67:89:0A "Your Label"
+        $ par location macbook@01:23:45:67:89:0A "Your Label"
 
 Detailed report for a single location:
 
-      $ pom report location "Home Office"
+      $ par report location "Home Office"
       Pomodoro Location Report for Home Office
 
       58 pomodori finished
@@ -288,7 +288,7 @@ Detailed report for a single location:
 
 Further grouping is also possible, e.g. by year:
 
-      $ pom report location --year=2012
+      $ par report location --year=2012
       Pomodoro Location Report for 2012
 
       233 pomodori finished
@@ -305,7 +305,7 @@ The efficiency is calculated from the number of successful vs. cancelled pomodor
 
 Efficiency can be reported by day, week, month, year, or location:
 
-      $ pom report efficiency
+      $ par report efficiency
       Efficiency Report for 2013-07-16
 
       TODO
@@ -318,14 +318,14 @@ Efficiency can be reported by day, week, month, year, or location:
 
 ### Timesheet
 
-      $ pom timesheet
+      $ par timesheet
       TODO Ordered list of pomodori and breaks, each with annotations (like a time sheet)
 
 The same options as for regular reports apply. The timesheet report also details the efficiency of each location.
 
 ### Exporting a Report
 
-      $ pom report --weekly --format JSON # weekly report in JSON format
+      $ par report --weekly --format JSON # weekly report in JSON format
       {
         "TODO": "Specify"
       }
@@ -363,7 +363,7 @@ Examples for the use of hooks are:
 
 ### Edit a hook
 
-      $ pom edit after-stop
+      $ par edit after-stop
 
 Launches `$VISUAL` (or, if empty, `$EDITOR`) with the given hook.
 
@@ -379,20 +379,20 @@ Variable | Used in | Description
 
 ## Configuration File
 
-The configuration is stored in a config file. It is user-editable file, but editing the configuration is also exposed with `pom config`.
+The configuration is stored in a config file. It is user-editable file, but editing the configuration is also exposed with `par config`.
 
-      $ pom config dir
+      $ par config dir
       /home/nerab/.paradeiser
 
-      # Note how setting $POM_DIR affects pom config
-      $ POM_DIR=/tmp pom config dir
+      # Note how setting $POM_DIR affects par config
+      $ POM_DIR=/tmp par config dir
       /tmp
 
-      $ pom config dir /var/tmp
-      $ pom config dir
+      $ par config dir /var/tmp
+      $ par config dir
       /var/tmp
 
-`pom config` shows the _active_ config when called, i.e. it takes `$POM_DIR` into account.
+`par config` shows the _active_ config when called, i.e. it takes `$POM_DIR` into account.
 
   Available config variables:
 

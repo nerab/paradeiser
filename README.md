@@ -29,29 +29,44 @@ This is scoped to a single user account (not just the `$POM_DIR` directory, but 
 
 ### Start a new pomodoro
 
-      $ pom start
+      $ par pomodoro start
+
+      # This is aliased as
+      $ par start
 
 Because of Rule #1, calling start while a pomodoro is active will print an error message.
 
 ### Finish the pomodoro
 
-      $ pom finish
+      $ par pomodoro finish
+
+      # This is aliased as
+      $ par finish
 
 If a pomodoro is active, it will be marked as successful after stopping it, regardless of whether the 25 minutes are over or not.
 
 If there is no active pomodoro, an error message will be printed.
 
+### Start a break
+
+      $ par break start
+
+      # This is aliased as
+      $ par break
+
+If there is an active pomodoro, an error message will be printed. By default the break will be five minutes long. While there is a command to finish a break (see the section about `at`), it isn't really necessary to call it from a user's perspective. Either a new pomodoro is started, which will implicitely stop the break, or the break ends naturally because it is over. We do not track break time.
+
 ### Initialize Paradeiser
 
 * Initialize the default directory that is used to store the Paradeiser configuration and data:
 
-          $ pom init
+          $ par init
 
-  Creates the `$POM_DIR` directory and the sample hooks in `$POM_DIR/hooks`. The data store will not be created on `pom init`, but when the first write operation happens (e.g. `pom start`, but not `pom report`).
+  Creates the `$POM_DIR` directory and the sample hooks in `$POM_DIR/hooks`. The data store will not be created on `par init`, but when the first write operation happens (e.g. `par pomodoro start`, but not `par report`).
 
 * Initialize an abritrary directory
 
-          $ pom init /tmp
+          $ par init /tmp
 
   This command initializes `/tmp` as `$POM_DIR`.
 
@@ -64,13 +79,13 @@ A central aspect of the Pomodoro Technique is the timer function:
 
 The `at` command is used for this. We just tell it to call
 
-      pom finish
+      par pomodoro finish
 
 when the pomodoro is over.
 
 When a pomodoro is started, Paradeiser enqueues itself to `at` like this:
 
-      echo pom finish | at now + 25 minutes
+      echo par pomodoro finish | at now + 25 minutes
 
 When `at` calls Paradeiser with this command, the pomodoro / break will be over and Paradeiser can do all the internal processing related to stopping the pomodoro / break (incl. calling the appropriate hooks, see below).
 
@@ -78,30 +93,30 @@ Paradeiser uses a dedicated at queue named 'p' to organize its jobs and to preve
 
 ## Status
 
-Paradeiser can print the current status to STDOUT with the `pom status` command. The current state is provided as process exit status (which is also useful when the output is suppressed).
+Paradeiser can print the current status to STDOUT with the `par status` command. The current state is provided as process exit status (which is also useful when the output is suppressed).
 
 * Given an active pomodoro:
 
-          $ pom status
+          $ par status
           Pomodoro #2 is active (started 11:03, 14 minutes remaining).
 
-          $ pom status > /dev/null
+          $ par status > /dev/null
           $ echo $?
           0
 
 * Given no active pomodoro and the last one (not earlier as today) was finished:
 
-          $ pom status
+          $ par status
           No active pomodoro. Last one was finished at 16:58.
 
-          $ pom status > /dev/null
+          $ par status > /dev/null
           $ echo $?
           1
 
 ## Reports
 
-      $ pom report
-      <list of pomodori>
+      $ par report
+      <list of pomodori and breaks>
 
 ## Hooks
 Instead of handling tasks itself, Paradeiser integrates with external tools via hooks. Every event will attempt to find and execute an appropriate script in `$POM_DIR/hooks/`. Sufficient information will be made available via environment variables.

@@ -17,7 +17,7 @@ module Paradeiser
       end
 
       def add(command, minutes)
-        _, err = exec("echo pom #{command} | #{at} -q #{queue} now + #{minutes} minutes")
+        _, err = exec("echo par #{command} | #{at} -q #{queue} now + #{minutes} minutes")
         id = parse_add(err.chomp)
         Job.new(id)
       end

@@ -14,12 +14,12 @@ class TestRouter < MiniTest::Test
   end
 
   def test_init
-    refute(Dir.exists?(Paradeiser.pom_dir), "Expect #{Paradeiser.pom_dir} to not exist yet")
+    refute(Dir.exists?(Paradeiser.par_dir), "Expect #{Paradeiser.par_dir} to not exist yet")
 
     block = Router.new.dispatch(CommandMock.new('init'))
     refute_nil(block)
 
-    refute(Dir.exists?(Paradeiser.pom_dir), "Expect #{Paradeiser.pom_dir} to not exist yet")
+    refute(Dir.exists?(Paradeiser.par_dir), "Expect #{Paradeiser.par_dir} to not exist yet")
 
     # fake the view
     dirname = File.join(File.dirname(__FILE__), '..', '..', 'lib', 'paradeiser', 'views', 'paradeiser')
@@ -30,7 +30,7 @@ class TestRouter < MiniTest::Test
     begin
       block.call(nil, OptionsMock.new(:trace => true, :verbose => false))
     ensure
-      FileUtils.rm_r(Paradeiser.pom_dir, :force => true)
+      FileUtils.rm_r(Paradeiser.par_dir, :force => true)
     end
   end
 end

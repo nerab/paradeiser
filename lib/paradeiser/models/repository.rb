@@ -48,7 +48,7 @@ module Paradeiser
 
       def backend
         begin
-          @backend ||= PStore.new(File.join(Paradeiser.pom_dir, 'repository.pstore'), true)
+          @backend ||= PStore.new(File.join(Paradeiser.par_dir, 'repository.pstore'), true)
         rescue PStore::Error => e
           raise NotInitializedError.new(e.message)
         end

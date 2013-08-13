@@ -5,59 +5,59 @@ class TestParadeiserControllerInit < MiniTest::Test
   HOOKS = ['after-finish', 'before-finish']
 
   def setup
-    @orig_pom_dir = ENV['POM_DIR']
+    @orig_PAR_DIR = ENV['PAR_DIR']
     FakeFS.activate!
     create_hook_templates
   end
 
   def teardown
-    FileUtils.rm_r(Paradeiser.pom_dir, :force => true) if Dir.exists?(Paradeiser.pom_dir)
+    FileUtils.rm_r(Paradeiser.par_dir, :force => true) if Dir.exists?(Paradeiser.par_dir)
     FakeFS.deactivate!
-    ENV['POM_DIR'] = @orig_pom_dir
+    ENV['PAR_DIR'] = @orig_PAR_DIR
   end
 
   def test_init_virgin
-    ENV.delete('POM_DIR')
-    refute(Dir.exists?(Paradeiser.pom_dir), "Expect #{Paradeiser.pom_dir} to not exist yet")
+    ENV.delete('PAR_DIR')
+    refute(Dir.exists?(Paradeiser.par_dir), "Expect #{Paradeiser.par_dir} to not exist yet")
 
     invoke(:init)
-    assert(Dir.exists?(Paradeiser.pom_dir))
+    assert(Dir.exists?(Paradeiser.par_dir))
     assert_hooks_exist
   end
 
   def test_init_existing
-    FileUtils.mkdir_p(Paradeiser.pom_dir, 0700)
-    assert(Dir.exists?(Paradeiser.pom_dir))
+    FileUtils.mkdir_p(Paradeiser.par_dir, 0700)
+    assert(Dir.exists?(Paradeiser.par_dir))
 
     invoke(:init)
-    assert(Dir.exists?(Paradeiser.pom_dir))
+    assert(Dir.exists?(Paradeiser.par_dir))
     assert_hooks_exist
   end
 
   def test_init_virgin_with_env_override
     dir = tempdir_name
-    refute_equal(dir, Paradeiser.pom_dir)
-    ENV['POM_DIR'] = dir
-    assert_equal(dir, Paradeiser.pom_dir)
-    refute(Dir.exists?(Paradeiser.pom_dir), "POM_DIR override #{Paradeiser.pom_dir} must not exist")
+    refute_equal(dir, Paradeiser.par_dir)
+    ENV['PAR_DIR'] = dir
+    assert_equal(dir, Paradeiser.par_dir)
+    refute(Dir.exists?(Paradeiser.par_dir), "PAR_DIR override #{Paradeiser.par_dir} must not exist")
 
     invoke(:init)
 
-    assert(Dir.exists?(Paradeiser.pom_dir))
+    assert(Dir.exists?(Paradeiser.par_dir))
     assert_hooks_exist
   end
 
   def test_init_existing_with_env_override
-    ENV.delete('POM_DIR')
+    ENV.delete('PAR_DIR')
 
     Dir.mktmpdir do |dir|
-      refute_equal(dir, Paradeiser.pom_dir)
-      ENV['POM_DIR'] = dir
-      assert_equal(dir, Paradeiser.pom_dir)
-      assert(Dir.exists?(Paradeiser.pom_dir), "POM_DIR override #{Paradeiser.pom_dir} must exist")
+      refute_equal(dir, Paradeiser.par_dir)
+      ENV['PAR_DIR'] = dir
+      assert_equal(dir, Paradeiser.par_dir)
+      assert(Dir.exists?(Paradeiser.par_dir), "PAR_DIR override #{Paradeiser.par_dir} must exist")
 
       invoke(:init)
-      assert(Dir.exists?(Paradeiser.pom_dir), "POM_DIR override #{Paradeiser.pom_dir} must exist")
+      assert(Dir.exists?(Paradeiser.par_dir), "PAR_DIR override #{Paradeiser.par_dir} must exist")
       assert_hooks_exist
     end
   end

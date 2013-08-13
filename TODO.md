@@ -1,10 +1,6 @@
 # Paradeiser Backlog
 
-* `par break start` enqueues the `par break finish` command with far too many minutes.
-
 * Whenever par runs, it should garbage-collect pomodori or breaks (finish them and adjust their finish time) that weren't finished after they were over (e.g. because at isn't there or the hooks did not fire)
-
-* Cancel all enqueued commands on `par break start`, just like with `par pomodoro start`. Otherwise commands already enqueued to `at` would accidentially change a newer thing while thinking of operating on the older thing. This is safe (and required) because of Rule #1.
 
 * Abbreviate commands with Ruby's `Abbrev` module
 
@@ -14,7 +10,7 @@
 
 * Improve status messages with relative times and dates (`distance_of_time_in_words_to_now`)
 
-* POM_ID is not available to `*-start` hooks because the pomodoro wasn't saved yet. We could either assign it before saving it or allow saving idle pomodori.
+* PAR_POMODORO_ID and PAR_BREAK_ID are not available to `*-start` hooks because the pomodoro wasn't saved yet. We could either assign it before saving it or allow saving idle pomodori.
 
 * A text-based repo format would be much more UNIX-like. Think about a JSON repo. Loading it could share a lot of code with import (which we will need anyway). And we cannot trust a JSON repo any more than an import file.
 
@@ -30,7 +26,7 @@
 
   This also makes `par import` simple - only if there is nothing on record for the time between the start and end times of the imported thing, it is accepted into our system.
 
-  Deleting or overwriting existing pomodori is not supported. Manual editing, if ever needed, can be done with exporting, deleting the db file, fixing up the exported file, and importing it into a fresh $POM_DIR.
+  Deleting or overwriting existing pomodori is not supported. Manual editing, if ever needed, can be done with exporting, deleting the db file, fixing up the exported file, and importing it into a fresh $PAR_DIR.
 
   Active pomodori or breaks are not exported or imported.
 

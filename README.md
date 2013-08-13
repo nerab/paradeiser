@@ -19,7 +19,7 @@ Paradeiser itself is not concerned with the actual management of tasks. There ar
 
   There must never be more than one pomodoro [xor](http://en.wikipedia.org/wiki/Xor) break at any given time.
 
-This is scoped to a single user account (not just the `$POM_DIR` directory, but also the `at` queue).
+This is scoped to a single user account (not just the `$PAR_DIR` directory, but also the `at` queue).
 
 ## Installation
 
@@ -62,13 +62,13 @@ If there is an active pomodoro, an error message will be printed. By default the
 
           $ par init
 
-  Creates the `$POM_DIR` directory and the sample hooks in `$POM_DIR/hooks`. The data store will not be created on `par init`, but when the first write operation happens (e.g. `par pomodoro start`, but not `par report`).
+  Creates the `$PAR_DIR` directory and the sample hooks in `$PAR_DIR/hooks`. The data store will not be created on `par init`, but when the first write operation happens (e.g. `par pomodoro start`, but not `par report`).
 
 * Initialize an abritrary directory
 
           $ par init /tmp
 
-  This command initializes `/tmp` as `$POM_DIR`.
+  This command initializes `/tmp` as `$PAR_DIR`.
 
 ## Timer with `at`
 
@@ -119,7 +119,7 @@ Paradeiser can print the current status to STDOUT with the `par status` command.
       <list of pomodori and breaks>
 
 ## Hooks
-Instead of handling tasks itself, Paradeiser integrates with external tools via hooks. Every event will attempt to find and execute an appropriate script in `$POM_DIR/hooks/`. Sufficient information will be made available via environment variables.
+Instead of handling tasks itself, Paradeiser integrates with external tools via hooks. Every event will attempt to find and execute an appropriate script in `$PAR_DIR/hooks/`. Sufficient information will be made available via environment variables.
 
 `before-` hooks will be called before the action is executed internally. If a `before-`hook exits non-zero, paradeiser will abort the action and exit non-zero itself; indicating in a message to STDERR which hook caused the abort.
 
@@ -138,15 +138,17 @@ Examples for the use of hooks are:
 * tmux status bar integration like [pomo](https://github.com/visionmedia/pomo) by writing the status to `~/.pomo_stat` from the `after-` hooks.
 * Displaying a desktop notification
 
-`$POM_TITLE` is one of the environment variables set by Paradeiser that provides the context for hooks. See below for the full list of available environment variables.
+`$PAR_TITLE` is one of the environment variables set by Paradeiser that provides the context for hooks. See below for the full list of available environment variables.
 
 ## Environment Variables
 
 Variable | Used in | Description
 --- | --- | ---
-`$POM_DIR` | Everywhere | Directory where the data store and the hooks are stored. Defaults to `~/.paradeiser/`.
-`$POM_ID` | Hooks | Identifier of the pomodoro
-`$POM_STARTED_AT` | Hooks | Timestamp of when the pomodoro was started
+`$PAR_DIR` | Everywhere | Directory where the data store and the hooks are stored. Defaults to `~/.paradeiser/`.
+`$PAR_POMODORO_ID` | Hooks | Identifier of the pomodoro
+`$PAR_POMODORO_STARTED_AT` | Hooks | Timestamp of when the pomodoro was started
+`$PAR_BREAK_ID` | Hooks | Identifier of the break
+`$PAR_BREAK_STARTED_AT` | Hooks | Timestamp of when the break was started
 
 ## Similar Projects
 

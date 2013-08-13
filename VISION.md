@@ -20,7 +20,7 @@ Paradeiser itself is not concerned with the actual management of tasks. There ar
 
   There must never be more than one pomodoro [xor](http://en.wikipedia.org/wiki/Xor) break at any given time.
 
-This is scoped to a single user account (not just the `$POM_DIR` directory, but also the `at` queue).
+This is scoped to a single user account (not just the `$PAR_DIR` directory, but also the `at` queue).
 
 ## Installation
 
@@ -88,17 +88,17 @@ The current time will be used for the finish timestamp, and the start time will 
 
           $ par init
 
-  Creates the `$POM_DIR` directory and the sample hooks in `$POM_DIR/hooks`. The data store will not be created on `par init`, but when the first write operation happens (e.g. `par pomodoro start`, but not `par report`).
+  Creates the `$PAR_DIR` directory and the sample hooks in `$PAR_DIR/hooks`. The data store will not be created on `par init`, but when the first write operation happens (e.g. `par pomodoro start`, but not `par report`).
 
 * Initialize an abritrary directory
 
           $ par init /tmp
 
-  This command initializes `/tmp` as `$POM_DIR`. It also sets the config variable `dir` in `~/.pomrc`:
+  This command initializes `/tmp` as `$PAR_DIR`. It also sets the config variable `dir` in `~/.pomrc`:
 
           $ par config
 
-If the `at` command is not available or not enabled, `par init` will issue a warning. The program will continue because it is still useful for recording, although it will not be able to enqueue itself in order to execute the (time-based) `before-finish` and `before-break` hooks.
+If the `at` command is not available or not enabled, `par init` will issue a warning. The program will continue because it is still useful for recording, although it will not be able to enqueue itself in order to execute the (time-based) `before-finish-pomodoro` and `before-finish-break` hooks.
 
 ### Troubleshooting
 
@@ -146,12 +146,12 @@ Recording the location of a pomodoro allows Paradeiser to compare the average co
 
         $ par location macbook@01:23:45:67:89:0A "Your Label"
 
-Paradeiser will automatically figure out the current location from the hostname and the MAC address of the default gateway (see below for details). This can be overridden by setting `$POM_LOCATION` or with a command line option:
+Paradeiser will automatically figure out the current location from the hostname and the MAC address of the default gateway (see below for details). This can be overridden by setting `$PAR_LOCATION` or with a command line option:
 
     $ par location --location="On the road"
     On the road
 
-    $ POM_LOCATION="On the road" par location
+    $ PAR_LOCATION="On the road" par location
     On the road
 
 Both the `--location` option and the environment variable can be passed to almost all commands.
@@ -334,32 +334,37 @@ The same options as for regular reports apply. The timesheet report also details
 Paradeiser follows the [Rule of Silence](http://www.faqs.org/docs/artu/ch01s06.html#id2878450). If all goes well, a command will not print any output to `STDOUT` unless `--verbose` is given. `status`, `report` and `timesheet` are exempted from this rule, as their primary purpose is to print to STDOUT.
 
 ## Hooks
-Instead of handling tasks itself, Paradeiser integrates with external tools via hooks. Every event will attempt to find and execute an appropriate script in `$POM_DIR/hooks/`. Sufficient information will be made available via environment variables.
+Instead of handling tasks itself, Paradeiser integrates with external tools via hooks. Every event will attempt to find and execute an appropriate script in `$PAR_DIR/hooks/`. Sufficient information will be made available via environment variables.
 
-`before-` hooks will be called before the action is executed internally. If a `before-`hook exits non-zero, paradeiser will abort the action and exit non-zero itself; indicating in a message to STDERR which hook caused the abort.
+`before-` hooks will be called before the action is executed internally. If a `before-`hook exits non-zero, paradeiser will abort the action and exit non-zero itself; indicating in a message to STDERR which hook caused the abort. In this case it will not process `after-` hooks.
 
 `after-` hooks will be called after the action was executed internally. The exit status of a `post`-hook will be passed through paradeiser, but it will not affect the execution of the action anymore.
 
 ### Available Hooks
 
-* `before-start` is called after the `start` command was received, but before internal processing for the `start` action begins
-* `after-start` is called after all interal processing for the `start` action ended
-* `before-finish` is called after the timer of the current pomodoro fired (the pomodoro is over), but before internal processing for the `finish` action begins
-* `after-finish` is called after all interal processing for the `finish` action ended
-* `before-interrupt` is called after the `interrupt` command was received, but before internal action processing begins
-* `after-interrupt` is called after all interal processing for the `interrupt` action ended
-* `before-cancel` is called after the `cancel` command was received, but before internal action processing begins
-* `after-cancel` is called after all interal processing for the `cancel` action ended
-* `before-break` is called after the `break` command was received, but before internal processing for the `break` action begins
-* `after-break` is called after the timer of the current break fired (the break is over), but after internal processing for the `break` action ended
+* `before-start-pomodoro` is called before the processing of the start action begins.
+* `after-start-pomodoro` is called after the processing of the start action ended.
+* `before-finish-pomodoro` is called after the timer of the current pomodoro fired (the pomodoro is over), but before the processing of the `finish` action begins.
+* `after-finish-pomodoro` is called after the processing of the `finish` action ended.
+
+* `before-start-break` is called before the processing of the break start action begins.
+* `after-start-break` is called after the processing of the break start action ended.
+* `before-finish-break` is called after the timer of the current break fired (the break is over), but before the processing of the break finish action begins.
+* `after-finish-break` is called after the processing of the break finish action ended.
+
+* `before-interrupt-pomodoro` is called when the `interrupt` command was received, but before the action processing begins.
+* `after-interrupt-pomodoro` is called after the processing of the `interrupt` action ended.
+
+* `before-cancel-pomodoro` is called when the `cancel` command was received, but before the processing of the cancel action begins.
+* `after-cancel-pomodoro` is called after the processing of the `cancel` action ended.
 
 Examples for the use of hooks are:
 
-* Displaying a desktop notification on `after-finish`
+* Displaying a desktop notification on `after-finish-pomodoro`
 * tmux status bar integration like [pomo](https://github.com/visionmedia/pomo) by writing the status to `~/.pomo_stat` from the `after-` hooks.
 * Displaying a desktop notification
 
-`$POM_TITLE` is one of the environment variables set by Paradeiser that provides the context for hooks. See below for the full list of available environment variables.
+`$PAR_TITLE` is one of the environment variables set by Paradeiser that provides the context for hooks. See below for the full list of available environment variables.
 
 ### Edit a hook
 
@@ -371,11 +376,12 @@ Launches `$VISUAL` (or, if empty, `$EDITOR`) with the given hook.
 
 Variable | Used in | Description
 --- | --- | ---
-`$POM_DIR` | Everywhere | Directory where the data store and the hooks are stored. Defaults to `~/.paradeiser/`.
-`$POM_ID` | Hooks | Identifier of the pomodoro
-`$POM_STARTED_AT` | Hooks | Timestamp of when the pomodoro was started
-`$POM_TITLE` | Hooks | Title of the pomodoro
-`$POM_LOCATION` | Location Commands | Location of the pomodoro
+`$PAR_DIR` | Everywhere | Directory where the data store and the hooks are stored. Defaults to `~/.paradeiser/`.
+`$PAR_POMODORO_ID` | Hooks | Identifier of the pomodoro
+`$PAR_POMODORO_STARTED_AT` | Hooks | Timestamp of when the pomodoro was started
+`$PAR_BREAK_ID` | Hooks | Identifier of the break
+`$PAR_BREAK_STARTED_AT` | Hooks | Timestamp of when the break was started
+`$PAR_LOCATION` | Location Commands | Location of the pomodoro
 
 ## Configuration File
 
@@ -384,21 +390,21 @@ The configuration is stored in a config file. It is user-editable file, but edit
       $ par config dir
       /home/nerab/.paradeiser
 
-      # Note how setting $POM_DIR affects par config
-      $ POM_DIR=/tmp par config dir
+      # Note how setting $PAR_DIR affects par config
+      $ PAR_DIR=/tmp par config dir
       /tmp
 
       $ par config dir /var/tmp
       $ par config dir
       /var/tmp
 
-`par config` shows the _active_ config when called, i.e. it takes `$POM_DIR` into account.
+`par config` shows the _active_ config when called, i.e. it takes `$PAR_DIR` into account.
 
   Available config variables:
 
   Variable | Description
   --- | ---
-  `POM_DIR` | Directory where the data store and the hooks are stored. Defaults to `~/.paradeiser/`. Overridden by `$POM_DIR`.
+  `PAR_DIR` | Directory where the data store and the hooks are stored. Defaults to `~/.paradeiser/`. Overridden by `$PAR_DIR`.
   `AT_QUEUE` | Name of the `at` queue to use. Defaults to `p`.
 
 ## Taskwarrior Integration

@@ -4,7 +4,7 @@ module Paradeiser
 
     attr_reader :id
 
-    JOB_PATTERN = %r{^pom .+$}
+    JOB_PATTERN = %r|^#{BIN_PAR} .+$|
 
     def initialize(id)
       @id = id

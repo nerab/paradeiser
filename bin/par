@@ -37,6 +37,13 @@ begin
   end
   alias_command :finish, :'pomodoro finish'
 
+  command :'pomodoro interrupt' do |c|
+    c.syntax  = "#{program(:name)} #{c.name}"
+    c.summary = 'Records the interruption of the active pomodoro'
+    c.action router.dispatch(c)
+  end
+  alias_command :interrupt, :'pomodoro interrupt'
+
   command :'break start' do |c|
     c.syntax  = "#{program(:name)} #{c.name}"
     c.summary = 'Start a break'

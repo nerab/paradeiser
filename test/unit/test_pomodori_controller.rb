@@ -37,6 +37,21 @@ class TestPomodoriController < MiniTest::Test
     assert_equal(0, @backend.size)
   end
 
+  def test_interrupt_active
+    invoke(:start)
+    pom, has_output = invoke(:interrupt, '@pom', 'has_output')
+    assert_equal(:active, pom.status_name)
+
+    interrupts = pom.interrupts
+    refute_nil(interrupts)
+    refute_empty(interrupts)
+    assert_equal(1, interrupts.size)
+
+    interrupt = interrupts.first
+    refute_nil(interrupt)
+    refute_nil(interrupt.created_at)
+  end
+
 private
 
   def invoke(method, *attributes)

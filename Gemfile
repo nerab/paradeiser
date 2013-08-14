@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 gemspec
 
 group :test do
-  gem 'rake', '~> 10.0.0'
+  gem 'rake'
   gem 'minitest', '~> 5.0.0'
-  gem 'fakefs', '~> 0.4.0', :require => "fakefs/safe"
+  gem 'fakefs', :require => "fakefs/safe"
 end

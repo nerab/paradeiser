@@ -1,7 +1,5 @@
 # Paradeiser Backlog
 
-=> Implement `par pomodoro interrupt`. Alias it it `par interrupt`.
-
 * Implement `par pomodoro annotate` and annotations for most commands. Alias it it `par annotate`.
 
 * Improve status messages with relative times and dates (`distance_of_time_in_words_to_now`)

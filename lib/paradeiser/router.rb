@@ -1,8 +1,4 @@
-begin
-  require 'active_support/core_ext/string/inflections'
-rescue LoadError
-  require_relative 'refinements/inflections'
-end
+require 'active_support/core_ext/string/inflections'
 
 module Paradeiser
   class Router

@@ -1,10 +1,10 @@
 <% case @pom.status_name
 when :active
-  %><%= @pom.name.capitalize %> #<%= @pom.id %> is active for another <%= @pom.remaining.minutes %> minutes (started at <%= @pom.started_at.strftime('%R') %>).<%
+  %><%= @pom.name.capitalize %> #<%= @pom.id %> is active for another <%= @pom.remaining.minutes %> minutes (started at <%= @pom.started_at.strftime('%R') %>).<% unless @pom.interrupts.empty? %> <%= @pom.interrupts.size %> interrupts on record.<% end %><%
 when :break
   %><%= @pom.name.capitalize %> is active for another <%= @pom.remaining.minutes %> minutes.<%
 when :finished
-  %>Nothing active. Last <%= @pom.name %> was finished at <%= @pom.finished_at.strftime('%R') %>.<%
+  %>Nothing active. Last <%= @pom.name %> was finished at <%= @pom.finished_at.strftime('%R') %>.<% unless @pom.interrupts.empty? %> It had <%= @pom.interrupts.size %> interrupts.<% end %><%
 else
   %>Current state is <%= @pom.status %>.<%
 end

@@ -17,6 +17,17 @@ module Paradeiser
       Repository.save(@pom)
     end
 
+    def interrupt
+      @pom = Repository.active
+      raise NotActiveError unless @pom
+      raise SingletonError.new(Pomodoro, @pom, :finish) if Repository.active? && Pomodoro != @pom.class
+
+      @pom.interrupt
+      Repository.save(@pom)
+    end
+
+  private
+
     def end_break
       if Repository.active?
         active = Repository.active

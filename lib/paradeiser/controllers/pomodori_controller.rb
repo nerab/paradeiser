@@ -12,7 +12,7 @@ module Paradeiser
     def finish
       @pom = Repository.active
       raise NotActiveError unless @pom
-      raise SingletonError.new(Pomodoro, @pom, :finish) if Repository.active? && Pomodoro != @pom.class
+      raise SingletonError.new(Pomodoro, @pom, :finish) if Repository.active? && !@pom.kind_of?(Pomodoro)
       @pom.finish!
       Repository.save(@pom)
     end
@@ -20,7 +20,7 @@ module Paradeiser
     def interrupt
       @pom = Repository.active
       raise NotActiveError unless @pom
-      raise SingletonError.new(Pomodoro, @pom, :finish) if Repository.active? && Pomodoro != @pom.class
+      raise SingletonError.new(Pomodoro, @pom, :interrupt) if Repository.active? && !@pom.kind_of?(Pomodoro)
 
       @pom.interrupt
       Repository.save(@pom)
@@ -32,7 +32,7 @@ module Paradeiser
       if Repository.active?
         active = Repository.active
 
-        if Break == active.class
+        if active.kind_of?(Break)
           active.finish!
           Repository.save(active)
         end

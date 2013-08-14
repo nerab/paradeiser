@@ -11,7 +11,7 @@ module Paradeiser
     def finish
       @break = Repository.active
       raise NotActiveError unless @break
-      raise SingletonError.new(Break, @break, :finish) if Repository.active? && Break != @break.class
+      raise SingletonError.new(Break, @break, :finish) if Repository.active? && !@break.kind_of?(Break)
       @break.finish!
       Repository.save(@break)
     end

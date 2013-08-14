@@ -1,7 +1,7 @@
 module Paradeiser
   class SingletonError < StandardError
     def initialize(new_resource, existing_resource, verb)
-      super("Cannot #{verb} a new #{new_resource.name.split("::").last.downcase} because #{existing_resource.name} ##{existing_resource.id} is active")
+      super("Cannot #{verb} the #{new_resource.name.split("::").last.downcase} because #{existing_resource.name} ##{existing_resource.id} is active")
     end
   end
 

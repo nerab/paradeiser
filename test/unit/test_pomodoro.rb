@@ -101,4 +101,19 @@ class TestPomodoro < MiniTest::Test
       assert_equal(Pomodoro::MINUTES_25 * 60 - delta, @pom.remaining)
     end
   end
+
+  def test_interrupt
+    assert_equal(0, @pom.interrupts.size)
+
+    now = srand
+
+    Time.stub :now, Time.at(now) do
+      @pom.interrupt
+    end
+
+    assert_equal(1, @pom.interrupts.size)
+
+    int = @pom.interrupts.first
+    assert_equal(now, int.created_at.to_i)
+  end
 end

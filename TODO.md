@@ -1,15 +1,15 @@
 # Paradeiser Backlog
 
-* Whenever par runs, it should garbage-collect pomodori or breaks (finish them and adjust their finish time) that weren't finished after they were over (e.g. because at isn't there or the hooks did not fire)
-
-* Extend commander to allow abbreviated commands with Ruby's `Abbrev` module
-
-* Implement `par pomodoro interrupt`. Alias it it `par interrupt`.
+=> Implement `par pomodoro interrupt`. Alias it it `par interrupt`.
 
 * Implement `par pomodoro annotate` and annotations for most commands. Alias it it `par annotate`.
 
 * Improve status messages with relative times and dates (`distance_of_time_in_words_to_now`)
   => action_view/helpers/date_helper
+
+* Whenever par runs, it should garbage-collect pomodori or breaks (finish them and adjust their finish time) that weren't finished after they were over (e.g. because at isn't there or the hooks did not fire)
+
+* Extend commander to allow abbreviated commands with Ruby's `Abbrev` module
 
 * PAR_POMODORO_ID and PAR_BREAK_ID are not available to `*-start` hooks because the pomodoro wasn't saved yet. We could either assign it before saving it or allow saving idle pomodori.
 

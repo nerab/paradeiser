@@ -24,10 +24,10 @@ module Paradeiser
       raise NotActiveError unless @pom
       raise SingletonError.new(Pomodoro, @pom, :interrupt) if Repository.active? && !@pom.kind_of?(Pomodoro)
 
-      if @args.blank?
-        @pom.interrupt
+      if @options.external
+        @pom.interrupt(:external)
       else
-        @pom.interrupt(@args.first)
+        @pom.interrupt
       end
 
       Repository.save(@pom)

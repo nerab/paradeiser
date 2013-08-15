@@ -1,7 +1,5 @@
 # Paradeiser Backlog
 
-* Add --internal and --external to interrupts
-
 * Add `par pomodoro cancel` (aliased to `par cancel`), but without annotations
 
 * Add `par report` with a single (global) view that implements the report format described in the vision document (but isn't scoped yet)

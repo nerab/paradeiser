@@ -39,6 +39,7 @@ begin
 
   command :'pomodoro interrupt' do |c|
     c.syntax  = "#{program(:name)} #{c.name}"
+    c.option '--external', 'Record the interruption as external (default is internal)'
     c.summary = 'Records the interruption of the active pomodoro'
     c.action router.dispatch(c)
   end

@@ -41,7 +41,7 @@ class TestParadeiserView < MiniTest::Test
     out, err = render(:report)
     assert_equal(2, out.lines.size)
     assert_match(/^ID \| Name \| Status \| Started \| Ended | Interrupts$/m, out.lines[0])
-    assert_match(/^1 \| pomodoro \| active \| \d{1,2}:\d{1,2} \|  \| \d+$/m, out.lines[1])
+    assert_match(/^1 \| pomodoro \| active \| \d{1,2}:\d{1,2} \|  \| \d+ I, \d+ E$/m, out.lines[1])
     assert_empty(err)
   end
 
@@ -52,7 +52,7 @@ class TestParadeiserView < MiniTest::Test
     out, err = render(:report)
     assert_equal(2, out.lines.size)
     assert_match(/^ID \| Name \| Status \| Started \| Ended | Interrupts$/m, out.lines[0])
-    assert_match(/^1 \| pomodoro \| finished \| \d{1,2}:\d{1,2} \| \d{1,2}:\d{1,2} \| \d+$/m, out.lines[1])
+    assert_match(/^1 \| pomodoro \| finished \| \d{1,2}:\d{1,2} \| \d{1,2}:\d{1,2} \| \d+ I, \d+ E$/m, out.lines[1])
     assert_empty(err)
   end
 

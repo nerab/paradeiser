@@ -44,6 +44,18 @@ module Paradeiser
         end
       end
 
+      def delete(pom_or_id)
+        return unless pom_or_id
+        if pom_or_id.respond_to?(:id)
+          id = pom_or_id.id
+        else
+          id = pom_or_id
+        end
+
+        backend.transaction do
+          backend.delete(id)
+        end
+      end
     private
 
       def backend

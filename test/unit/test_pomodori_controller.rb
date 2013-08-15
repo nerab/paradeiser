@@ -46,7 +46,7 @@ class TestPomodoriController < MiniTest::Test
 
   def test_interrupt_active
     invoke(:start)
-    pom, has_output = invoke(:interrupt, nil, '@pom', 'has_output')
+    pom, has_output = invoke(:interrupt, OpenStruct.new, '@pom', 'has_output')
     assert_equal(:active, pom.status_name)
 
     interrupts = pom.interrupts
@@ -62,24 +62,16 @@ class TestPomodoriController < MiniTest::Test
 
   def test_interrupt_active_internal
     invoke(:start)
-    pom = invoke(:interrupt, :internal, '@pom')
+    pom = invoke(:interrupt, OpenStruct.new(:internal => true), '@pom')
     interrupt = pom.interrupts.first
     assert_equal(:internal, interrupt.type)
   end
 
   def test_interrupt_active_external
     invoke(:start)
-    pom = invoke(:interrupt, :external, '@pom')
+    pom = invoke(:interrupt, OpenStruct.new(:external => true), '@pom')
     interrupt = pom.interrupts.first
     assert_equal(:external, interrupt.type)
-  end
-
-  def test_interrupt_active_unknown
-    invoke(:start)
-
-    assert_raises InvalidTypeError do
-      invoke(:interrupt, :unknown)
-    end
   end
 
   def test_interrupt_finished
@@ -96,13 +88,13 @@ class TestPomodoriController < MiniTest::Test
 
 private
 
-  def invoke(method, args = [], *attributes)
+  def invoke(method, options = nil, *attributes)
     controller = PomodoriController.new(method)
 
     Repository.stub :backend, @backend do
       Scheduler.stub(:add, nil) do
         Scheduler.stub(:clear, nil) do
-          controller.call(Array(args), nil)
+          controller.call(nil, options)
         end
       end
     end

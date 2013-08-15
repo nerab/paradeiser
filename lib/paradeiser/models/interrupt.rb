@@ -1,31 +1,18 @@
 module Paradeiser
-  class AbstractInterrupt
+  class Interrupt
+    KNOWN_TYPES = [:internal, :external]
     attr_reader :created_at, :type
 
-  protected
-
-    def initialize
+    def initialize(type = :internal)
+      raise InvalidTypeError.new(type, KNOWN_TYPES) unless KNOWN_TYPES.include?(type)
+      @type = type
       @created_at = Time.now
     end
-
-    attr_writer :type
   end
 
-  class Interrupt < AbstractInterrupt
-    attr_reader :type
-
+  class ExternalInterrupt < Interrupt
     def initialize
-      super
-      self.type = :internal
-    end
-  end
-
-  class ExternalInterrupt < AbstractInterrupt
-    attr_reader :type
-
-    def initialize
-      super
-      self.type = :external
+      super(:external)
     end
   end
 end

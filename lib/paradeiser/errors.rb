@@ -28,4 +28,10 @@ module Paradeiser
       super("The hook #{hook} failed with status #{status.exitstatus}. STDERR contained: #{err}")
     end
   end
+
+  class InvalidTypeError < StandardError
+    def initialize(type, choices)
+      super("'#{type}' is not a valid type. Valid are only #{choices}.")
+    end
+  end
 end

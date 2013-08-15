@@ -15,6 +15,17 @@ class TestInterrupt < MiniTest::Test
     assert_equal(:internal, int.type)
   end
 
+  def test_external
+    int = new_interrupt(:external)
+    assert_equal(:external, int.type)
+  end
+
+  def test_unknown
+    assert_raises InvalidTypeError do
+      new_interrupt(:unknown)
+    end
+  end
+
 private
 
   def new_interrupt(*args)

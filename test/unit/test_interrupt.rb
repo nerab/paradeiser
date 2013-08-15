@@ -28,9 +28,9 @@ class TestInterrupt < MiniTest::Test
 
 private
 
-  def new_interrupt(*args)
+  def new_interrupt(type = nil)
     Time.stub :now, Time.at(@now) do
-      Paradeiser::Interrupt.new(*args)
+      Paradeiser::Interrupt.new(type)
     end
   end
 end

@@ -115,5 +115,26 @@ class TestPomodoro < MiniTest::Test
 
     int = @pom.interrupts.first
     assert_equal(now, int.created_at.to_i)
+    assert_equal(:internal, int.type)
+  end
+
+  def test_interrupt_internal
+    @pom.interrupt(:internal)
+    assert_equal(1, @pom.interrupts.size)
+    int = @pom.interrupts.first
+    assert_equal(:internal, int.type)
+  end
+
+  def test_interrupt_external
+    @pom.interrupt(:external)
+    assert_equal(1, @pom.interrupts.size)
+    int = @pom.interrupts.first
+    assert_equal(:external, int.type)
+  end
+
+  def test_interrupt_unknown
+    assert_raises InvalidTypeError do
+      @pom.interrupt(:unknown)
+    end
   end
 end

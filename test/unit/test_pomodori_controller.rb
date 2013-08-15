@@ -6,7 +6,7 @@ class TestPomodoriController < MiniTest::Test
   end
 
   def test_start
-    pom, has_output = invoke(:start, '@pom', 'has_output')
+    pom, has_output = invoke(:start, nil, '@pom', 'has_output')
     assert_equal(:active, pom.status_name)
     assert_equal(false, has_output)
     assert_equal(1, @backend.size)
@@ -24,7 +24,7 @@ class TestPomodoriController < MiniTest::Test
 
   def test_finish
     invoke(:start)
-    pom, has_output = invoke(:finish, '@pom', 'has_output')
+    pom, has_output = invoke(:finish, nil, '@pom', 'has_output')
     assert_equal(:finished, pom.status_name)
     assert_equal(false, has_output)
     assert_equal(1, @backend.size)
@@ -37,9 +37,16 @@ class TestPomodoriController < MiniTest::Test
     assert_equal(0, @backend.size)
   end
 
+  def test_interrupt_idle
+    assert_raises NotActiveError do
+      invoke(:interrupt)
+    end
+    assert_equal(0, @backend.size)
+  end
+
   def test_interrupt_active
     invoke(:start)
-    pom, has_output = invoke(:interrupt, '@pom', 'has_output')
+    pom, has_output = invoke(:interrupt, nil, '@pom', 'has_output')
     assert_equal(:active, pom.status_name)
 
     interrupts = pom.interrupts
@@ -50,23 +57,64 @@ class TestPomodoriController < MiniTest::Test
     interrupt = interrupts.first
     refute_nil(interrupt)
     refute_nil(interrupt.created_at)
+    assert_equal(:internal, interrupt.type)
+  end
+
+  def test_interrupt_active_internal
+    invoke(:start)
+    pom = invoke(:interrupt, :internal, '@pom')
+    interrupt = pom.interrupts.first
+    assert_equal(:internal, interrupt.type)
+  end
+
+  def test_interrupt_active_external
+    invoke(:start)
+    pom = invoke(:interrupt, :external, '@pom')
+    interrupt = pom.interrupts.first
+    assert_equal(:external, interrupt.type)
+  end
+
+  def test_interrupt_active_unknown
+    invoke(:start)
+
+    assert_raises InvalidTypeError do
+      invoke(:interrupt, :unknown)
+    end
+  end
+
+  def test_interrupt_finished
+    invoke(:start)
+    invoke(:finish)
+    assert_equal(1, @backend.size)
+
+    assert_raises NotActiveError do
+      invoke(:interrupt)
+    end
+
+    assert_equal(1, @backend.size)
   end
 
 private
 
-  def invoke(method, *attributes)
+  def invoke(method, args = [], *attributes)
     controller = PomodoriController.new(method)
 
     Repository.stub :backend, @backend do
       Scheduler.stub(:add, nil) do
         Scheduler.stub(:clear, nil) do
-          controller.call(nil, nil)
+          controller.call(Array(args), nil)
         end
       end
     end
 
-    attributes.map do |attribute|
+    result = attributes.map do |attribute|
       controller.get_binding.eval(attribute)
+    end
+
+    if 1 == result.size
+      result.first
+    else
+      result
     end
   end
 end

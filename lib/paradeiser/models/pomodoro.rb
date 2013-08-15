@@ -13,8 +13,8 @@ module Paradeiser
       MINUTES_25 * 60
     end
 
-    def interrupt
-      @interrupts << Interrupt.new
+    def interrupt(type = nil)
+      @interrupts << Interrupt.new(type)
     end
   end
 end

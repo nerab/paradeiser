@@ -1,3 +1,5 @@
+require 'active_support/core_ext/object/blank'
+
 module Paradeiser
   class PomodoriController < Controller
     def start
@@ -22,7 +24,12 @@ module Paradeiser
       raise NotActiveError unless @pom
       raise SingletonError.new(Pomodoro, @pom, :interrupt) if Repository.active? && !@pom.kind_of?(Pomodoro)
 
-      @pom.interrupt
+      if @args.blank?
+        @pom.interrupt
+      else
+        @pom.interrupt(@args.first)
+      end
+
       Repository.save(@pom)
     end
 

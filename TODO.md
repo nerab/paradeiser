@@ -2,10 +2,16 @@
 
 * Add --internal and --external to interrupts
 
+* Add `par pomodoro cancel` (aliased to `par cancel`), but without annotations
+
+* Add `par report` with a single (global) view that implements the report format described in the vision document (but isn't scoped yet)
+
 * Implement `par pomodoro annotate` and annotations for most commands. Alias it it `par annotate`.
 
 * Improve status messages with relative times and dates (`distance_of_time_in_words_to_now`)
   => action_view/helpers/date_helper
+
+* Simplify the status view. Separate views by class (break vs. pomodoro).
 
 * Whenever par runs, it should garbage-collect pomodori or breaks (finish them and adjust their finish time) that weren't finished after they were over (e.g. because at isn't there or the hooks did not fire)
 

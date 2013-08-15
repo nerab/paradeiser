@@ -3,13 +3,14 @@
 [![Gem Version](https://badge.fury.io/rb/paradeiser.png)](http://badge.fury.io/rb/paradeiser)
 [![Build Status](https://secure.travis-ci.org/nerab/paradeiser.png?branch=master)](http://travis-ci.org/nerab/paradeiser)
 
-  _This project is developed with the [readme-driven development](http://tom.preston-werner.com/2010/08/23/readme-driven-development.html) method. This file describes the functionality that is actually implemented, whereas the [VISION](VISION.md) describes the vision where the tool should go._
+  _This project is developed with the [readme-driven development](http://tom.preston-werner.com/2010/08/23/readme-driven-development.html) method. This file contains the vision, whereas the [README](README.md) reflects the functionality that is actually implemented._
 
 Paradeiser is a command-line tool for the [Pomodoro Technique](http://www.pomodorotechnique.com/). It keeps track of the current pomodoro and assists the user in managing active and past pomodori:
 
-* Records finished pomodori
+* Records finished pomodori as well as internal and external interruptions and other events
 * Keeps track of the timer for the active pomodoro and the break
-* Provides out-of-the-box reports
+* Provides out-of-the-box reports that show details about finished pomodori
+* Shows information about breaks and interruptions
 
 Paradeiser itself is not concerned with the actual management of tasks. There are plenty of tools for that; e.g. [TaskWarrior](http://taskwarrior.org/).
 
@@ -31,30 +32,35 @@ This is scoped to a single user account (not just the `$PAR_DIR` directory, but 
 
       $ par pomodoro start
 
-      # This is aliased as
-      $ par start
-
-Because of Rule #1, calling start while a pomodoro is active will print an error message.
+If a break is still active, it will be stopped before the new pomodoro is started. Because of Rule #1, calling start while a pomodoro is active will print an error message.
 
 ### Finish the pomodoro
 
       $ par pomodoro finish
 
-      # This is aliased as
-      $ par finish
-
 If a pomodoro is active, it will be marked as successful after stopping it, regardless of whether the 25 minutes are over or not.
 
 If there is no active pomodoro, an error message will be printed.
 
+### Record an interruption of the current pomodoro
+
+      # internal interrupt
+      $ par interrupt
+
+      # external interrupt
+      $ par interrupt --external
+
+If no pomodoro is active, the command will throw an error.
+
 ### Start a break
 
-      $ par break start
+      $ par break [start]
 
-      # This is aliased as
-      $ par break
+If there is an active pomodoro, an error message will be printed. The `start` command is optional and may be omitted (it's only there for symmetry with `par break finish`, see the section about `at`).
 
-If there is an active pomodoro, an error message will be printed. By default the break will be five minutes long. While there is a command to finish a break (see the section about `at`), it isn't really necessary to call it from a user's perspective. Either a new pomodoro is started, which will implicitely stop the break, or the break ends naturally because it is over. We do not track break time.
+By default the break will be five minutes long.
+
+While there is a command to stop a break (see the section about `at`), it isn't really necessary to call it from a user's perspective. Either a new pomodoro is started, which will implicitely stop the break, or the break ends naturally because it is over. We do not track break time.
 
 ### Initialize Paradeiser
 
@@ -81,7 +87,11 @@ The `at` command is used for this. We just tell it to call
 
       par pomodoro finish
 
-when the pomodoro is over.
+when the pomodoro is over. A similar command exists as
+
+      par break finish
+
+which is called by `at` when the break is over.
 
 When a pomodoro is started, Paradeiser enqueues itself to `at` like this:
 
@@ -113,28 +123,55 @@ Paradeiser can print the current status to STDOUT with the `par status` command.
           $ echo $?
           1
 
+* Given no active pomodoro and the last one (not earlier as today) was cancelled:
+
+          $ par status
+          No pomodoro active. Last pomodoro was cancelled at 17:07.
+
+          $ par status > /dev/null
+          $ echo $?
+          2
+
+* Given a break (implies no active pomodoro):
+
+          $ par status
+          Taking a 5 minute break until 2013-07-16 17.07 (4 minutes remaining).
+
+          $ par status > /dev/null
+          $ echo $?
+          3
+
 ## Reports
 
       $ par report
-      <list of pomodori and breaks>
+
+## Output Policy
+Paradeiser follows the [Rule of Silence](http://www.faqs.org/docs/artu/ch01s06.html#id2878450). If all goes well, a command will not print any output to `STDOUT` unless `--verbose` is given. `status`, `report` and `timesheet` are exempted from this rule, as their primary purpose is to print to STDOUT.
 
 ## Hooks
 Instead of handling tasks itself, Paradeiser integrates with external tools via hooks. Every event will attempt to find and execute an appropriate script in `$PAR_DIR/hooks/`. Sufficient information will be made available via environment variables.
 
-`before-` hooks will be called before the action is executed internally. If a `before-`hook exits non-zero, paradeiser will abort the action and exit non-zero itself; indicating in a message to STDERR which hook caused the abort.
+`before-` hooks will be called before the action is executed internally. If a `before-`hook exits non-zero, paradeiser will abort the action and exit non-zero itself; indicating in a message to STDERR which hook caused the abort. In this case it will not process `after-` hooks.
 
 `after-` hooks will be called after the action was executed internally. The exit status of a `post`-hook will be passed through paradeiser, but it will not affect the execution of the action anymore.
 
 ### Available Hooks
 
-* `before-start` is called after the `start` command was received, but before internal processing for the `start` action begins
-* `after-start` is called after all interal processing for the `start` action ended
-* `before-finish` is called after the timer of the current pomodoro fired (the pomodoro is over), but before internal processing for the `finish` action begins
-* `after-finish` is called after all interal processing for the `finish` action ended
+* `before-start-pomodoro` is called before the processing of the start action begins.
+* `after-start-pomodoro` is called after the processing of the start action ended.
+* `before-finish-pomodoro` is called after the timer of the current pomodoro fired (the pomodoro is over), but before the processing of the `finish` action begins.
+* `after-finish-pomodoro` is called after the processing of the `finish` action ended.
+
+* `before-start-break` is called before the processing of the break start action begins.
+* `after-start-break` is called after the processing of the break start action ended.
+* `before-finish-break` is called after the timer of the current break fired (the break is over), but before the processing of the break finish action begins.
+* `after-finish-break` is called after the processing of the break finish action ended.
+* `before-interrupt-pomodoro` is called when the `interrupt` command was received, but before the action processing begins.
+* `after-interrupt-pomodoro` is called after the processing of the `interrupt` action ended.
 
 Examples for the use of hooks are:
 
-* Displaying a desktop notification on `after-finish`
+* Displaying a desktop notification on `after-finish-pomodoro`
 * tmux status bar integration like [pomo](https://github.com/visionmedia/pomo) by writing the status to `~/.pomo_stat` from the `after-` hooks.
 * Displaying a desktop notification
 
@@ -164,14 +201,14 @@ They have a lot of what I wanted, but pomo focuses very much on the tasks themse
 ### State Machine
 Paradeiser uses a [state machine](https://github.com/pluginaweek/state_machine) to model a pomodoro. Internal event handlers do the actual work; among them is the task of calling the external hooks.
 
-![State Transition Diagram](https://rawgithub.com/nerab/paradeiser/master/doc/Paradeiser::Scheduled_status.svg)
+![State Transition Diagram](https://rawgithub.com/nerab/paradeiser/master/doc/Paradeiser::Pomodoro_status.svg)
 
 The graph was created using the rake task that comes with `state_machine`:
 
     rake state_machine:draw CLASS=Paradeiser::Pomodoro TARGET=doc FORMAT=svg HUMAN_NAMES=true ORIENTATION=landscape
 
 ## API
-The actual storage backend is *not a public API* and may change at any given time.
+The actual storage backend is *not a public API* and may change at any given time. External tools should use the Ruby API instead, or rely on the JSON export / import.
 
 ## Sync
 In todays world of distributed devices, synching data is a problem almost every app needs to solve. Paradeiser is no exception - it is very easy to come up with use cases that involve many computers. Maybe the user has different devices (mobile and desktop), maybe the user works in different environments, and wants to record all pomodori into a single system.

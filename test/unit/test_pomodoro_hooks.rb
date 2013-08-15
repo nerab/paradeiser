@@ -83,6 +83,60 @@ class TestPomodoroHooks < MiniTest::Test
     assert_equal(:active, br3ak.status_name)
   end
 
+  def test_before_interrupt_success
+    hook_name = 'before-interrupt-pomodoro'
+    pom = Pomodoro.new
+    pom.start
+    token_file = create_hook('Pomodoro', hook_name)
+    refute_path_exists(token_file, "Token file must not exist before #{hook_name} hook is executed")
+    pom.interrupt
+    assert_path_exists(token_file, "#{hook_name} hook should have created a token file")
+    assert_equal(:active, pom.status_name)
+    assert_equal("Pomodoro #{Repository.next_id} #{pom.started_at.strftime('%H:%M')}", File.read(token_file).chomp)
+  end
+
+  def test_before_interrupt_error
+    hook_name = 'before-interrupt-pomodoro'
+    pom = Pomodoro.new
+    pom.start
+    token_file = create_hook('Pomodoro', hook_name, false)
+    refute_path_exists(token_file, "Token file must not exist before #{hook_name} hook is executed")
+
+    assert_raises HookFailedError do
+      pom.interrupt
+    end
+
+    refute_path_exists(token_file, "#{hook_name} hook should have created a token file")
+    assert_equal(:active, pom.status_name)
+  end
+
+  def test_after_interrupt_success
+    hook_name = 'after-interrupt-pomodoro'
+    pom = Pomodoro.new
+    pom.start
+    token_file = create_hook('Pomodoro', hook_name, false)
+    refute_path_exists(token_file, "Token file must not exist before #{hook_name} hook is executed")
+
+    assert_raises HookFailedError do
+      pom.interrupt
+    end
+
+    refute_path_exists(token_file, "#{hook_name} hook should have created a token file")
+    assert_equal(:active, pom.status_name)
+  end
+
+  def test_after_interrupt_error
+    hook_name = 'after-interrupt-pomodoro'
+    pom = Pomodoro.new
+    pom.start
+    token_file = create_hook('Pomodoro', hook_name)
+    refute_path_exists(token_file, "Token file must not exist before #{hook_name} hook is executed")
+    pom.interrupt
+    assert_path_exists(token_file, "#{hook_name} hook should have created a token file")
+    assert_equal(:active, pom.status_name)
+    assert_equal("Pomodoro #{Repository.next_id} #{pom.started_at.strftime('%H:%M')}", File.read(token_file).chomp)
+  end
+
 private
 
   def create_hook(thing, hook_name, hook_succeeds = true)

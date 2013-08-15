@@ -45,8 +45,8 @@ If there is no active pomodoro, an error message will be printed.
 
 ### Record an interruption of the current pomodoro
 
-      $ par interrupt --external Phone call from boss
-      $ par interrupt --internal "Couldn't stay away from Twitter"
+      $ par interrupt
+      $ par interrupt --external
 
 Remaining arguments, if present, will be added to the interrupt as annotation. If no pomodoro is active, the command will throw an error.
 

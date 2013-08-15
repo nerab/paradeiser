@@ -4,8 +4,8 @@ module Paradeiser
       @phase = phase
     end
 
-    def execute(pom, transition)
-      name = "#{@phase}-#{transition.event}-#{pom.name}"
+    def execute(pom, event)
+      name = "#{@phase}-#{event}-#{pom.name}"
       hook = hook(name)
 
       if File.exist?(hook) && File.executable?(hook)

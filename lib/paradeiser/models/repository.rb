@@ -56,6 +56,15 @@ module Paradeiser
           backend.delete(id)
         end
       end
+
+      def next_id
+        if all.empty?
+          1
+        else
+          all.max{|a, b| a.id <=> b.id}.id + 1
+        end
+      end
+
     private
 
       def backend
@@ -63,14 +72,6 @@ module Paradeiser
           @backend ||= PStore.new(File.join(Paradeiser.par_dir, 'repository.pstore'), true)
         rescue PStore::Error => e
           raise NotInitializedError.new(e.message)
-        end
-      end
-
-      def next_id
-        if all.empty?
-          1
-        else
-          all.max{|a, b| a.id <=> b.id}.id + 1
         end
       end
     end

@@ -3,6 +3,8 @@ require 'tmpdir'
 
 class TestPomodoroHooks < MiniTest::Test
   def setup
+    # Cannot use fakefs because hooks will not execute under it, but as part of
+    # the real FS. Instead, we set the $PAR_DIR to point to a temp directory
     @orig_PAR_DIR = ENV['PAR_DIR']
     ENV['PAR_DIR'] = Dir.mktmpdir
   end
@@ -10,6 +12,17 @@ class TestPomodoroHooks < MiniTest::Test
   def teardown
     FileUtils.rm_rf(Paradeiser.par_dir)
     ENV['PAR_DIR'] = @orig_PAR_DIR
+  end
+
+  def test_before_start_pomodoro_success
+    hook_name = 'before-start-pomodoro'
+    pom = Pomodoro.new
+    token_file = create_hook('Pomodoro', hook_name)
+    refute_path_exists(token_file, "Token file must not exist before #{hook_name} hook is executed")
+    pom.start
+    assert_path_exists(token_file, "#{hook_name} hook should have created a token file")
+    assert_equal(:active, pom.status_name)
+    assert_equal("Pomodoro #{Repository.next_id} #{pom.started_at.strftime('%H:%M')}", File.read(token_file).chomp)
   end
 
   def test_before_finish_pomodoro_success
@@ -22,7 +35,7 @@ class TestPomodoroHooks < MiniTest::Test
     pom.finish
     assert_path_exists(token_file, "#{hook_name} hook should have created a token file")
     assert_equal(:finished, pom.status_name)
-    assert_equal("Pomodoro #{pom.id} started #{pom.started_at.strftime('%H:%M')}", File.read(token_file).chomp)
+    assert_equal("Pomodoro #{pom.id} #{pom.started_at.strftime('%H:%M')}", File.read(token_file).chomp)
   end
 
   def test_before_finish_pomodoro_error
@@ -51,7 +64,7 @@ class TestPomodoroHooks < MiniTest::Test
     br3ak.finish
     assert_path_exists(token_file, "#{hook_name} hook should have created a token file")
     assert_equal(:finished, br3ak.status_name)
-    assert_equal("Break #{br3ak.id} started #{br3ak.started_at.strftime('%H:%M')}", File.read(token_file).chomp)
+    assert_equal("Break #{br3ak.id} #{br3ak.started_at.strftime('%H:%M')}", File.read(token_file).chomp)
   end
 
   def test_before_finish_break_error
@@ -97,7 +110,7 @@ private
   def hook_contents_success(thing, token_file)
     hook_contents =<<"EOF"
 #!/bin/sh
-echo "#{thing} $PAR_#{thing.upcase}_ID started $PAR_#{thing.upcase}_STARTED_AT" > #{token_file}
+echo "#{thing} $PAR_#{thing.upcase}_ID $PAR_#{thing.upcase}_STARTED_AT" > #{token_file}
 EOF
   end
 

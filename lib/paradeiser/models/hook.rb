@@ -9,7 +9,7 @@ module Paradeiser
       hook = hook(name)
 
       if File.exist?(hook) && File.executable?(hook)
-        ENV["PAR_#{pom.name.upcase}_ID"] = pom.id.to_s
+        ENV["PAR_#{pom.name.upcase}_ID"] = pom.id ? pom.id.to_s : Repository.next_id.to_s
         ENV["PAR_#{pom.name.upcase}_STARTED_AT"] = pom.started_at.strftime('%H:%M') if pom.started_at
 
         out, err, status = Open3.capture3(hook)

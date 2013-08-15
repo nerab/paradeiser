@@ -15,8 +15,6 @@
 
 * Extend commander to allow abbreviated commands with Ruby's `Abbrev` module
 
-* PAR_POMODORO_ID and PAR_BREAK_ID are not available to `*-start` hooks because the pomodoro wasn't saved yet. We could either assign it before saving it or allow saving idle pomodori.
-
 * A text-based repo format would be much more UNIX-like. Think about a JSON repo. Loading it could share a lot of code with import (which we will need anyway). And we cannot trust a JSON repo any more than an import file.
 
 * Have the router catch warnings (those errors that extend Warning) and print the message to STDERR, but do not exit. The actual exit code is still determined by the controller.

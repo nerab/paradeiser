@@ -16,6 +16,12 @@ protected
     end
   end
 
+  def interrupt!(type = :internal, pom = @pom)
+    Scheduler.stub(:clear, nil) do
+      pom.interrupt!(type)
+    end
+  end
+
   def finish!(thing = @pom || @break)
     Scheduler.stub(:clear, nil) do
       thing.finish!

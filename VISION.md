@@ -435,11 +435,13 @@ They have a lot of what I wanted, but pomo focuses very much on the tasks themse
 ### State Machine
 Paradeiser uses a [state machine](https://github.com/pluginaweek/state_machine) to model a pomodoro. Internal event handlers do the actual work; among them is the task of calling the external hooks.
 
-![State Transition Diagram](https://rawgithub.com/nerab/paradeiser/master/doc/Paradeiser::Pomodoro_status.svg)
+![State Transition Diagram for Pomodoro](https://rawgithub.com/nerab/paradeiser/master/doc/Paradeiser::Pomodoro_status.svg)
+![State Transition Diagram for Break](https://rawgithub.com/nerab/paradeiser/master/doc/Paradeiser::Break_status.svg)
 
 The graph was created using the rake task that comes with `state_machine`:
 
     rake state_machine:draw CLASS=Paradeiser::Pomodoro TARGET=doc FORMAT=svg HUMAN_NAMES=true ORIENTATION=landscape
+    rake state_machine:draw CLASS=Paradeiser::Break    TARGET=doc FORMAT=svg HUMAN_NAMES=true ORIENTATION=landscape
 
 ### I18N
 Paradeiser uses [I18N](https://github.com/svenfuchs/i18n) to translate messages and localize time and date formats.

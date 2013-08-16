@@ -2,8 +2,6 @@
 
 * Add `par pomodoro cancel` (aliased to `par cancel`), but without annotations
 
-* Raising NotActiveError from the pomodoro feels wrong. Couldn't we model the interrupt as a state, where we only accept interrupt in the active state and the after-interupt transition moves the state back to active? Calling interrupt on an idle pomodoro would then raise a StateMachine::InvalidTransition, which feels much more natural.
-
 * Add `par report` with a single (global) view that implements the report format described in the vision document (but isn't scoped yet)
 
 * Implement `par pomodoro annotate` and annotations for most commands. Alias it it `par annotate`.

@@ -25,9 +25,9 @@ module Paradeiser
       raise SingletonError.new(Pomodoro, @pom, :interrupt) if Repository.active? && !@pom.kind_of?(Pomodoro)
 
       if @options.external
-        @pom.interrupt(:external)
+        @pom.interrupt!(:external)
       else
-        @pom.interrupt
+        @pom.interrupt!
       end
 
       Repository.save(@pom)

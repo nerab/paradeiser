@@ -12,4 +12,8 @@ class SchedulableMock < OpenStruct
   def finished?
     !!finished
   end
+
+  def canceled?
+    !!canceled
+  end
 end

@@ -71,15 +71,29 @@ class TestRepository < MiniTest::Test
   end
 
   def test_any
-    skip 'TODO'
+    refute(invoke(:any?){|p| p.length > 2})
+    @backend[:foo] = SchedulableMock.new(:length => 1)
+    @backend[:bar] = SchedulableMock.new(:length => 2)
+    @backend[:baz] = SchedulableMock.new(:length => 3)
+    assert(invoke(:any?){|p| p.length > 2})
   end
 
   def test_last_finished
-    skip 'TODO'
-  end
+    @backend[:foo] = SchedulableMock.new(:finished => false)
+    @backend[:bar] = SchedulableMock.new(:finished => true)
+    @backend[:baz] = SchedulableMock.new(:finished => false)
+
+    last_finished = invoke(:last_finished)
+    assert(last_finished)
+   end
 
   def test_last_canceled
-    skip 'TODO'
+    @backend[:foo] = SchedulableMock.new(:canceled => false)
+    @backend[:bar] = SchedulableMock.new(:canceled => true)
+    @backend[:baz] = SchedulableMock.new(:canceled => false)
+
+    last_canceled = invoke(:last_canceled)
+    assert(last_canceled)
   end
 
   def test_find

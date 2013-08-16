@@ -34,6 +34,10 @@ module Paradeiser
         find{|p| p.finished?}.sort{|a,b| a.started_at <=> b.started_at}.last
       end
 
+      def last_canceled
+        find{|p| p.canceled?}.sort{|a,b| a.started_at <=> b.started_at}.last
+      end
+
       def save(pom)
         raise IllegalStatusError if pom.idle?
         raise SingletonError.new(pom.class, self.active, :save) if self.active? && active.id != pom.id

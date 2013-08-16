@@ -71,6 +71,15 @@ class TestRepository < MiniTest::Test
   end
 
   def test_any
+    skip 'TODO'
+  end
+
+  def test_last_finished
+    skip 'TODO'
+  end
+
+  def test_last_canceled
+    skip 'TODO'
   end
 
   def test_find

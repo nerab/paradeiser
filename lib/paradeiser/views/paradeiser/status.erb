@@ -5,6 +5,8 @@ when :break
   %><%= @pom.name.capitalize %> is active for another <%= @pom.remaining.minutes %> minutes.<%
 when :finished
   %>Nothing active. Last <%= @pom.name %> was finished at <%= @pom.finished_at.strftime('%R') %>.<% unless !@pom.respond_to?(:interrupts) || @pom.interrupts.empty? %> It had <%= @pom.interrupts.size %> interrupts.<% end %><%
+when :canceled
+  %>Nothing active. Last <%= @pom.name %> was canceled at <%= @pom.canceled_at.strftime('%R') %>.<% unless !@pom.respond_to?(:interrupts) || @pom.interrupts.empty? %> It had <%= @pom.interrupts.size %> interrupts.<% end %><%
 else
   %>Current state is <%= @pom.status %>.<%
 end

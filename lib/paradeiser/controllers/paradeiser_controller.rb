@@ -13,7 +13,7 @@ module Paradeiser
     end
 
     def status
-      @pom = Repository.active || Repository.last_finished
+      @pom = Repository.active || Repository.all.last
       self.exitstatus = Status.of(@pom).to_i
       self.has_output = true
     end

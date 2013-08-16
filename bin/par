@@ -30,6 +30,13 @@ begin
   end
   alias_command :start, :'pomodoro start'
 
+  command :'pomodoro cancel' do |c|
+    c.syntax  = "#{program(:name)} #{c.name}"
+    c.summary = 'Cancel the active pomodoro'
+    c.action router.dispatch(c)
+  end
+  alias_command :cancel, :'pomodoro cancel'
+
   command :'pomodoro finish' do |c|
     c.syntax  = "#{program(:name)} #{c.name}"
     c.summary = 'Finish the active pomodoro'

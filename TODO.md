@@ -11,6 +11,8 @@
 
 * Simplify the status view. Separate views by class (break vs. pomodoro).
 
+* Refactor the hooks tests: extract the common code
+
 * Whenever par runs, it should garbage-collect pomodori or breaks (finish them and adjust their finish time) that weren't finished after they were over (e.g. because at isn't there or the hooks did not fire)
 
 * Extend commander to allow abbreviated commands with Ruby's `Abbrev` module

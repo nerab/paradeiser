@@ -32,12 +32,23 @@ This is scoped to a single user account (not just the `$PAR_DIR` directory, but 
 
       $ par pomodoro start
 
+      # Abbreviated version:
+      $ par start
+
 If a break is still active, it will be stopped before the new pomodoro is started. Because of Rule #1, calling start while a pomodoro is active will print an error message.
 
 ### Finish the pomodoro
 
       $ par pomodoro finish
+
+      # With annotation:
       $ par pomodoro finish This one went very well.
+
+      # Abbreviated version:
+      $ par finish
+
+      # Abbreviated version with annotation:
+      $ par finish This one went very well.
 
 If a pomodoro is active, it will be marked as successful after stopping it, regardless of whether the 25 minutes are over or not. Remaining arguments, if present, will be added to the pomodoro as annotation.
 
@@ -45,8 +56,18 @@ If there is no active pomodoro, an error message will be printed.
 
 ### Record an interruption of the current pomodoro
 
+      $ par pomodoro interrupt
+      $ par pomodoro interrupt --external
+
+      # Abbreviated version:
       $ par interrupt
-      $ par interrupt --external
+
+      # With annotation:
+      $ par pomodoro interrupt Could not help checking my mail
+      $ par pomodoro interrupt --external VP of engineering walked into my office
+
+      # Abbreviated version with annotation:
+      $ par interrupt Could not help checking my mail
 
 Remaining arguments, if present, will be added to the interrupt as annotation. If no pomodoro is active, the command will throw an error.
 
@@ -58,11 +79,20 @@ If there is an active pomodoro, an error message will be printed. The `start` co
 
 By default the break will be five minutes long. After four pomodori within a day, the break will be 30 minutes long. This can be overridden with `--short` or `--long`, with an optional argument value that determines the lenght of the break in minutes (e.g. `par break --short=10`).
 
-While there is a command to stop a break (see the section about `at`), it isn't really necessary to call it from a user's perspective. Either a new pomodoro is started, which will implicitely stop the break, or the break ends naturally because it is over. We do not track break time.
+There is a command to stop a break (see also the section about `at`):
+
+      $ par break finish
+
+From a user's perspective it isn't really necessary to call `par break finish`, because either a new pomodoro is started, which will implicitely stop the active break, or the break ends naturally because it is over.
+
+We do not track break time.
 
 ### Annotate a pomodoro
 
       $ par pomodoro annotate This was intense, but I am happy about the work I finished.
+
+      # Abbreviated version:
+      $ par annotate This was intense, but I am happy about the work I finished.
 
 The annotation will be added to the active or, if none is active, to the most recently finished or cancelled pomodoro. If no text is given, the annotation text is read from STDIN.
 
@@ -70,9 +100,16 @@ Breaks cannot have annotations.
 
 ### Cancel the pomodoro
 
+      $ par pomodoro cancel
       $ par pomodoro cancel Just couldn't concentrate anymore.
 
-It will be marked as unsuccessful (remember, a pomodoro is indivisible). If no pomodoro is active, the command will throw an error. If a break is active, the command will do nothing except printing a warning. Remaining arguments, if present, will be added to the pomodoro as annotation.
+      # Abbreviated version:
+      $ par cancel
+
+      # Abbreviated version with annotation:
+      $ par cancel Just couldn't concentrate anymore.
+
+The pomodoro will be marked as canceled and the timer will be cleared. If no pomodoro is active, the command will throw an error. If a break is active, the command will do nothing except printing a warning. Remaining arguments, if present, will be added to the pomodoro as annotation.
 
 ### Log a pomodoro
 
@@ -80,7 +117,7 @@ It will be marked as unsuccessful (remember, a pomodoro is indivisible). If no p
 
 Add a successfully finished pomodoro that was never recorded as being started (maybe the user forgot to call `par pomodoro start`). It will appear in the reports and will count towards efficiency calculations.
 
-The current time will be used for the finish timestamp, and the start time will be calculated from the finish time backwards.
+The current time will be used for the finish timestamp, and the start time will be calculated backwards from the finish time.
 
 ### Initialize Paradeiser
 
@@ -183,7 +220,7 @@ Paradeiser uses a dedicated at queue named 'p' to organize its jobs and to preve
 
 ## Status
 
-Paradeiser can print the current status to STDOUT with the `par status` command. The current state is provided as process exit status (which is also useful when the output is suppressed).
+Paradeiser can print the current status to STDOUT with the `par status` command. The current state is also provided as process exit status (which is useful when the output is suppressed).
 
 * Given an active pomodoro:
 
@@ -433,9 +470,14 @@ They have a lot of what I wanted, but pomo focuses very much on the tasks themse
 ## Implementation Notes
 
 ### State Machine
-Paradeiser uses a [state machine](https://github.com/pluginaweek/state_machine) to model a pomodoro. Internal event handlers do the actual work; among them is the task of calling the external hooks.
+Paradeiser uses a [state machine](https://github.com/pluginaweek/state_machine) to model the state of pomodori and breaks. Internal event handlers do the actual work. Calling the external hooks is one of these tasks.
+
+Pomodoro:
 
 ![State Transition Diagram for Pomodoro](https://rawgithub.com/nerab/paradeiser/master/doc/Paradeiser::Pomodoro_status.svg)
+
+Break:
+
 ![State Transition Diagram for Break](https://rawgithub.com/nerab/paradeiser/master/doc/Paradeiser::Break_status.svg)
 
 The graph was created using the rake task that comes with `state_machine`:

@@ -38,7 +38,7 @@ If a break is still active, it will be stopped before the new pomodoro is starte
 
       $ par pomodoro finish
 
-If a pomodoro is active, it will be marked as successful after stopping it, regardless of whether the 25 minutes are over or not. Remaining arguments, if present, will be added to the pomodoro as annotation.
+If a pomodoro is active, it will be marked as successful after stopping it, regardless of whether the 25 minutes are over or not.
 
 If there is no active pomodoro, an error message will be printed.
 
@@ -47,7 +47,7 @@ If there is no active pomodoro, an error message will be printed.
       $ par interrupt
       $ par interrupt --external
 
-Remaining arguments, if present, will be added to the interrupt as annotation. If no pomodoro is active, the command will throw an error.
+If no pomodoro is active, the command will throw an error.
 
 ### Start a break
 
@@ -61,9 +61,9 @@ While there is a command to stop a break (see the section about `at`), it isn't 
 
 ### Cancel the pomodoro
 
-      $ par pomodoro cancel Just couldn't concentrate anymore.
+      $ par pomodoro cancel
 
-It will be marked as unsuccessful (remember, a pomodoro is indivisible). If no pomodoro is active, the command will throw an error. If a break is active, the command will do nothing except printing a warning. Remaining arguments, if present, will be added to the pomodoro as annotation.
+It will be marked as unsuccessful (remember, a pomodoro is indivisible). If no pomodoro is active, the command will throw an error. If a break is active, the command will do nothing except printing a warning.
 
 ### Initialize Paradeiser
 

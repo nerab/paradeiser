@@ -29,6 +29,22 @@ class TestPomodoro < MiniTest::Test
     assert_equal(now, @pom.finished_at.to_i)
   end
 
+  def test_finish_finished
+    start!
+    finish!
+    assert_raises StateMachine::InvalidTransition do
+      finish!
+    end
+  end
+
+  def test_finish_canceled
+    start!
+    cancel!
+    assert_raises StateMachine::InvalidTransition do
+      finish!
+    end
+  end
+
   def test_length
     assert_equal(25 * 60, @pom.length)
   end
@@ -67,12 +83,20 @@ class TestPomodoro < MiniTest::Test
     assert_equal(later - now, @pom.duration)
   end
 
-  def test_finish_finished
-    start!
-    finish!
-    assert_raises StateMachine::InvalidTransition do
-      finish!
+  def test_duration_canceled
+    now = srand
+
+    Time.stub :now, Time.at(now) do
+      start!
     end
+
+    later = now + rand(42)
+
+    Time.stub :now, Time.at(later) do
+      cancel!
+    end
+
+    assert_equal(later - now, @pom.duration)
   end
 
   def test_start
@@ -136,5 +160,25 @@ class TestPomodoro < MiniTest::Test
     assert_raises InvalidTypeError do
       @pom.interrupt(:unknown)
     end
+  end
+
+  def test_cancel_idle
+    assert_raises StateMachine::InvalidTransition do
+      cancel!
+    end
+  end
+
+  def test_cancel_active
+    start!
+    assert_equal(:active, @pom.status_name)
+
+    now = srand
+
+    Time.stub :now, Time.at(now) do
+      cancel!
+    end
+
+    assert_equal(:canceled, @pom.status_name)
+    assert_equal(now, @pom.canceled_at.to_i)
   end
 end

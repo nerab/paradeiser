@@ -33,6 +33,7 @@ class TestPomodoro < MiniTest::Test
 
     assert_equal(:finished, @pom.status_name)
     assert_equal(now, @pom.finished_at.to_i)
+    refute(@pom.canceled_at)
   end
 
   def test_finish_finished
@@ -41,6 +42,7 @@ class TestPomodoro < MiniTest::Test
     assert_raises StateMachine::InvalidTransition do
       finish!
     end
+    refute(@pom.canceled_at)
   end
 
   def test_finish_canceled
@@ -49,6 +51,7 @@ class TestPomodoro < MiniTest::Test
     assert_raises StateMachine::InvalidTransition do
       finish!
     end
+    refute(@pom.finished_at)
   end
 
   def test_length
@@ -133,6 +136,7 @@ class TestPomodoro < MiniTest::Test
   end
 
   def test_interrupt
+    start!
     assert_equal(0, @pom.interrupts.size)
 
     now = srand
@@ -149,6 +153,7 @@ class TestPomodoro < MiniTest::Test
   end
 
   def test_interrupt_internal
+    start!
     @pom.interrupt(:internal)
     assert_equal(1, @pom.interrupts.size)
     int = @pom.interrupts.first
@@ -156,6 +161,7 @@ class TestPomodoro < MiniTest::Test
   end
 
   def test_interrupt_external
+    start!
     @pom.interrupt(:external)
     assert_equal(1, @pom.interrupts.size)
     int = @pom.interrupts.first
@@ -163,8 +169,31 @@ class TestPomodoro < MiniTest::Test
   end
 
   def test_interrupt_unknown
+    start!
     assert_raises InvalidTypeError do
       @pom.interrupt(:unknown)
+    end
+  end
+
+  def test_interrupt_idle
+    assert_raises NotActiveError do
+      @pom.interrupt
+    end
+  end
+
+  def test_interrupt_finished
+    start!
+    finish!
+    assert_raises NotActiveError do
+      @pom.interrupt
+    end
+  end
+
+  def test_interrupt_canceled
+    start!
+    cancel!
+    assert_raises NotActiveError do
+      @pom.interrupt
     end
   end
 

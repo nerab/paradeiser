@@ -51,6 +51,8 @@ module Paradeiser
     end
 
     def interrupt(type = nil)
+      raise NotActiveError unless active?
+
       Hook.new(:before).execute(self, :interrupt)
       @interrupts << Interrupt.new(type)
       Hook.new(:after).execute(self, :interrupt)

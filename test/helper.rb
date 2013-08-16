@@ -21,8 +21,13 @@ protected
       thing.finish!
     end
   end
-end
 
+  def cancel!(pom = @pom)
+    Scheduler.stub(:clear, nil) do
+      pom.cancel!
+    end
+  end
+end
 
 class ControllerTest < MiniTest::Test
 

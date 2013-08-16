@@ -7,12 +7,18 @@ class TestPomodoro < MiniTest::Test
 
   def test_virgin
     assert_equal(:idle, @pom.status_name)
+    refute(@pom.started_at)
+    refute(@pom.canceled_at)
+    refute(@pom.finished_at)
   end
 
   def test_finish_idle
     assert_raises StateMachine::InvalidTransition do
       finish!
     end
+    refute(@pom.started_at)
+    refute(@pom.canceled_at)
+    refute(@pom.finished_at)
   end
 
   def test_finish_active
@@ -166,6 +172,8 @@ class TestPomodoro < MiniTest::Test
     assert_raises StateMachine::InvalidTransition do
       cancel!
     end
+    refute(@pom.finished_at)
+    refute(@pom.canceled_at)
   end
 
   def test_cancel_active
@@ -180,5 +188,6 @@ class TestPomodoro < MiniTest::Test
 
     assert_equal(:canceled, @pom.status_name)
     assert_equal(now, @pom.canceled_at.to_i)
+    refute(@pom.finished_at)
   end
 end

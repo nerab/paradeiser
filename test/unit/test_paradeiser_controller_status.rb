@@ -1,14 +1,14 @@
 require 'helper'
 
-class TestParadeiserControllerStatus < ControllerTest
+class TestParadeiserControllerStatus < ParadeiserControllerTest
   def setup
     @backend = PStoreMock.new
   end
 
   def test_status_idle
-    exitstatus, has_output = invoke(:status, 'exitstatus', 'has_output')
-    assert_equal(-1, exitstatus)
-    assert_equal(true, has_output)
+    attrs = invoke(:status, 'exitstatus', 'has_output')
+    assert_equal(-1, attrs[:exitstatus])
+    assert_equal(true, attrs[:has_output])
     assert_equal(0, @backend.size)
   end
 
@@ -19,10 +19,10 @@ class TestParadeiserControllerStatus < ControllerTest
       :active => true,
       :name => 'pomodoro')
 
-    pom, has_output, exitstatus = invoke(:status, '@pom', 'has_output', 'exitstatus')
-    assert_equal(0, exitstatus)
-    assert_equal(:active, pom.status_name)
-    assert_equal(true, has_output)
+    attrs = invoke(:status, '@pom', 'has_output', 'exitstatus')
+    assert_equal(0, attrs[:exitstatus])
+    assert_equal(:active, attrs[:pom].status_name)
+    assert_equal(true, attrs[:has_output])
     assert_equal(1, @backend.size)
   end
 
@@ -33,10 +33,10 @@ class TestParadeiserControllerStatus < ControllerTest
       :finished => true,
       :name => 'pomodoro')
 
-    pom, has_output, exitstatus = invoke(:status, '@pom', 'has_output', 'exitstatus')
-    assert_equal(1, exitstatus)
-    assert_equal(:finished, pom.status_name)
-    assert_equal(true, has_output)
+    attrs = invoke(:status, '@pom', 'has_output', 'exitstatus')
+    assert_equal(1, attrs[:exitstatus])
+    assert_equal(:finished, attrs[:pom].status_name)
+    assert_equal(true, attrs[:has_output])
     assert_equal(1, @backend.size)
   end
 
@@ -47,10 +47,10 @@ class TestParadeiserControllerStatus < ControllerTest
       :active => true,
       :name => 'break')
 
-    pom, has_output, exitstatus = invoke(:status, '@pom', 'has_output', 'exitstatus')
-    assert_equal(2, exitstatus)
-    assert_equal(:active, pom.status_name)
-    assert_equal(true, has_output)
+    attrs = invoke(:status, '@pom', 'has_output', 'exitstatus')
+    assert_equal(2, attrs[:exitstatus])
+    assert_equal(:active, attrs[:pom].status_name)
+    assert_equal(true, attrs[:has_output])
     assert_equal(1, @backend.size)
   end
 
@@ -61,10 +61,10 @@ class TestParadeiserControllerStatus < ControllerTest
       :finished => true,
       :name => 'break')
 
-    pom, has_output, exitstatus = invoke(:status, '@pom', 'has_output', 'exitstatus')
-    assert_equal(3, exitstatus)
-    assert_equal(:finished, pom.status_name)
-    assert_equal(true, has_output)
+    attrs = invoke(:status, '@pom', 'has_output', 'exitstatus')
+    assert_equal(3, attrs[:exitstatus])
+    assert_equal(:finished, attrs[:pom].status_name)
+    assert_equal(true, attrs[:has_output])
     assert_equal(1, @backend.size)
   end
 end

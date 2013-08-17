@@ -1,4 +1,6 @@
 require 'fileutils'
+#require 'action_view/helpers/text_helper'
+require 'active_support/core_ext/enumerable'
 
 module Paradeiser
   class ParadeiserController < Controller
@@ -8,7 +10,17 @@ module Paradeiser
     end
 
     def report
-      @pom = Repository.all
+      pomodori = Repository.all.select{|p| p.kind_of?(Pomodoro)}
+
+      @finished = pomodori.select{|p| p.finished?}.size
+      @canceled = pomodori.select{|p| p.canceled?}.size
+      @external_interrupts = pomodori.map{|p| p.interrupts}.flatten.select{|i| :external == i.type}.size
+      @internal_interrupts = pomodori.map{|p| p.interrupts}.flatten.select{|i| :internal == i.type}.size
+
+      breaks = Repository.all.select{|b| b.kind_of?(Break)}
+      @breaks = breaks.size
+      @break_minutes = breaks.sum{|b| b.finished_at - b.started_at}.to_i.minutes
+
       self.has_output = true
     end
 

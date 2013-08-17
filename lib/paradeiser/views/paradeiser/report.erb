@@ -1,5 +1,9 @@
-ID | Name | Status | Started | Ended | Interrupts
-<% @pom.each do |pom| %>
-<% interrupts_by_type = pom.interrupts.group_by{|i| i.type } %>
-<%= pom.id %> | <%= pom.name %> | <%= pom.status %> | <%= pom.started_at.strftime('%R') %> | <%= pom.finished_at.strftime('%R') if pom.finished? %><%= pom.canceled_at.strftime('%R') if pom.canceled? %> | <%= interrupts[:internal].size rescue 0 %> I, <%= interrupts_by_type[:external].size rescue 0 %> E
-<% end %>
+Pomodoro Report
+
+<%= pluralize(@finished, 'pomodoro') %> finished
+<%= pluralize(@canceled, 'pomodoro') %> canceled
+<%= pluralize(@internal_interrupts, 'internal interrupt') %>
+
+<%= pluralize(@external_interrupts, 'external interrupt') %>
+
+<%= pluralize(@breaks, 'break') %> (<%= pluralize(@break_minutes, 'minute') %> in total)

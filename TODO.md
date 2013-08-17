@@ -1,7 +1,5 @@
 # Paradeiser Backlog
 
-* Add `par report` with a single (global) view that implements the report format described in the vision document (but isn't scoped yet)
-
 * Implement `par pomodoro annotate` and annotations for most commands. Alias it it `par annotate`.
 
 * Improve status messages with relative times and dates (`distance_of_time_in_words_to_now`)

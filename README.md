@@ -147,6 +147,13 @@ Paradeiser can print the current status to STDOUT with the `par status` command.
 ## Reports
 
       $ par report
+      Pomodoro Report
+
+      4 pomodori finished
+      2 pomodori canceled
+      4 internal interrupts
+      1 external interrupt
+      2 breaks (7 minutes in total)
 
 ## Output Policy
 Paradeiser follows the [Rule of Silence](http://www.faqs.org/docs/artu/ch01s06.html#id2878450). If all goes well, a command will not print any output to `STDOUT` unless `--verbose` is given. `status`, `report` and `timesheet` are exempted from this rule, as their primary purpose is to print to STDOUT.

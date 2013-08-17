@@ -29,7 +29,7 @@ module Paradeiser
       self.exitstatus = Status.of(@pom).to_i
       self.has_output = true
 
-      #render(:text => 'There are no pomodori or breaks.') unless @pom
+      render(:text => 'There are no pomodori or breaks.') unless @pom
     end
   end
 end

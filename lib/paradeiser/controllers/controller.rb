@@ -22,6 +22,18 @@ module Paradeiser
       return binding
     end
 
+    def render(options)
+      return if @already_rendered # only render once
+
+      if options.has_key?(:text)
+        puts options[:text]
+      else
+        puts View.new(model, options[:verb]).render(binding) if @options.verbose || has_output
+      end
+
+      @already_rendered = true
+    end
+
   protected
 
     attr_writer :exitstatus, :has_output

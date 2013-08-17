@@ -5,7 +5,7 @@ module Paradeiser
     end
 
     def render(controller_binding)
-      puts(template.result(controller_binding))
+      template.result(controller_binding)
     end
 
   private

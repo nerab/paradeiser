@@ -25,7 +25,9 @@ module Paradeiser
         controller = controller_class.new(verb)
         controller.call(args, options)
 
+        # TODO Move this to Controller#render
         View.new(controller.model, verb).render(controller.get_binding) if options.verbose || controller.has_output
+        #controller.render(:verb => verb) if options.verbose
 
         @status = controller.exitstatus
       end

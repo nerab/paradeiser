@@ -14,4 +14,5 @@ guard 'minitest' do
   # Integration tests
   watch(%r{^bin/([^/]+)$}){|m| "test/integration/test_#{m[1]}.rb"}
   watch(%r|^test/integration/test_(.*)\.rb|){|m| "test/integration/test_#{m[1]}.rb"}
+  watch(%r|^test/lib/*\.rb|){'test'}
 end

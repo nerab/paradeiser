@@ -4,7 +4,7 @@ module Paradeiser
 
     def initialize(method)
       @method = method
-      @exitstatus = -1
+      @exitstatus = 0
       @has_output = false
     end
 

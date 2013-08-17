@@ -28,6 +28,8 @@ module Paradeiser
       @pom = Repository.active || Repository.all.last
       self.exitstatus = Status.of(@pom).to_i
       self.has_output = true
+
+      #render(:text => 'There are no pomodori or breaks.') unless @pom
     end
   end
 end

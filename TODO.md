@@ -1,6 +1,17 @@
 # Paradeiser Backlog
 
-* Implement `par pomodoro annotate` and annotations for most commands. Alias it it `par annotate`.
+* Annotations
+  - Implement `par pomodoro annotate`
+  - Show annotations in `par status`
+  - Show annotations in `par report`
+  - Alias `par pomodoro annotate` as `par annotate`
+  - Add annotations to `par finish`
+  - Add annotations to `par interrupt`
+  - Add annotations to `par cancel`
+
+* `par timesheet`
+  - Implement basic timesheet (global; not grouped by anything)
+  - Show all annotations next to each pomodoro, interrupt and break
 
 * Improve status messages with relative times and dates (`distance_of_time_in_words_to_now`)
   => action_view/helpers/date_helper

@@ -1,6 +1,9 @@
 # Paradeiser Backlog
 
-* `par break --verbose` and `par break finish --verbose` fail with a missing view file. Tests are missing for the verbose mode of most commands.
+* Tests are missing for the verbose mode of most commands. See TestBreaksController#test_break_verbose for an example on how to test it.
+
+* Refactor controller tests
+  - Search for 'invoke(method' and extract a common controller test
 
 * Annotations
   - Implement `par pomodoro annotate`

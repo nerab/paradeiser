@@ -18,6 +18,6 @@ class TestPomodoriView < ViewTest
 protected
 
   def model
-    'Pomodori'
+    'Pomodoro'
   end
 end

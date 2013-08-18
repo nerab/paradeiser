@@ -184,8 +184,8 @@ class TestPomodoriController < ControllerTest
 
   def test_annotate
     invoke(:start)
-    annotation_text = %w[foobar w00t]
-    attrs = invoke(:annotate, annotation_text, nil, '@pom', 'has_output')
+    annotation_args = 'foobar w00t'.split
+    attrs = invoke(:annotate, annotation_args, nil, '@pom', 'has_output')
     assert_equal(:active, attrs[:pom].status_name)
     assert_equal(false, attrs[:has_output])
     assert_empty(attrs[:stdout])
@@ -194,6 +194,6 @@ class TestPomodoriController < ControllerTest
     annotations = attrs[:pom].annotations
     assert(annotations)
     assert_equal(1, annotations.size)
-    assert_equal(annotation_text.join(' '), annotations.first)
+    assert_equal(annotation_args.join(' '), annotations.first)
   end
 end

@@ -2,9 +2,10 @@
 
 * Annotations
   => Implement `par pomodoro annotate`
-  - Show annotations in `par status`
+  - Show number of annotations in `par status`
   - Show annotations in `par report`
   - Alias `par pomodoro annotate` as `par annotate`
+  - Implement `par pomodoro annotate --verbose`
   - Add annotations to `par finish`
   - Add annotations to `par interrupt`
   - Add annotations to `par cancel`

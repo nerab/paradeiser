@@ -16,20 +16,19 @@ class TestPomodoroHooks < MiniTest::Test
 
   def test_before_start_pomodoro_success
     hook_name = 'before-start-pomodoro'
-    pom = Pomodoro.new
     token_file = create_hook('Pomodoro', hook_name)
     refute_path_exists(token_file, "Token file must not exist before #{hook_name} hook is executed")
-    pom.start
+    pom = produce(Pomodoro)
     assert_path_exists(token_file, "#{hook_name} hook should have created a token file")
     assert_equal(:active, pom.status_name)
-    assert_equal("Pomodoro #{Repository.next_id} #{pom.started_at.strftime('%H:%M')}", File.read(token_file).chomp)
+    assert_match(/Pomodoro \d \d{1,2}:\d{1,2}/ , File.read(token_file).chomp)
+    #assert_equal("Pomodoro #{Repository.next_id} #{pom.started_at.strftime('%H:%M')}", File.read(token_file).chomp)
   end
 
   def test_before_finish_pomodoro_success
     hook_name = 'before-finish-pomodoro'
-    pom = Pomodoro.new
+    pom = produce(Pomodoro)
     pom.id = SecureRandom.random_number(1000)
-    pom.start
     token_file = create_hook('Pomodoro', hook_name)
     refute_path_exists(token_file, "Token file must not exist before #{hook_name} hook is executed")
     pom.finish
@@ -40,9 +39,8 @@ class TestPomodoroHooks < MiniTest::Test
 
   def test_before_finish_pomodoro_error
     hook_name = 'before-finish-pomodoro'
-    pom = Pomodoro.new
+    pom = produce(Pomodoro)
     pom.id = SecureRandom.random_number(1000)
-    pom.start
     token_file = create_hook('Pomodoro', hook_name, false)
     refute_path_exists(token_file, "Token file must not exist before #{hook_name} hook is executed")
 
@@ -58,7 +56,6 @@ class TestPomodoroHooks < MiniTest::Test
     hook_name = 'before-finish-break'
     br3ak = Break.new
     br3ak.id = SecureRandom.random_number(1000)
-    br3ak.start
     token_file = create_hook('Break', hook_name)
     refute_path_exists(token_file, "Token file must not exist before #{hook_name} hook is executed")
     br3ak.finish
@@ -71,7 +68,6 @@ class TestPomodoroHooks < MiniTest::Test
     hook_name = 'before-finish-break'
     br3ak = Break.new
     br3ak.id = SecureRandom.random_number(1000)
-    br3ak.start
     token_file = create_hook('Break', hook_name, false)
     refute_path_exists(token_file, "Token file must not exist before #{hook_name} hook is executed")
 
@@ -85,8 +81,7 @@ class TestPomodoroHooks < MiniTest::Test
 
   def test_before_interrupt_success
     hook_name = 'before-interrupt-pomodoro'
-    pom = Pomodoro.new
-    pom.start
+    pom = produce(Pomodoro)
     token_file = create_hook('Pomodoro', hook_name)
     refute_path_exists(token_file, "Token file must not exist before #{hook_name} hook is executed")
     pom.interrupt
@@ -97,8 +92,7 @@ class TestPomodoroHooks < MiniTest::Test
 
   def test_before_interrupt_error
     hook_name = 'before-interrupt-pomodoro'
-    pom = Pomodoro.new
-    pom.start
+    pom = produce(Pomodoro)
     token_file = create_hook('Pomodoro', hook_name, false)
     refute_path_exists(token_file, "Token file must not exist before #{hook_name} hook is executed")
 
@@ -112,8 +106,7 @@ class TestPomodoroHooks < MiniTest::Test
 
   def test_after_interrupt_success
     hook_name = 'after-interrupt-pomodoro'
-    pom = Pomodoro.new
-    pom.start
+    pom = produce(Pomodoro)
     token_file = create_hook('Pomodoro', hook_name, false)
     refute_path_exists(token_file, "Token file must not exist before #{hook_name} hook is executed")
 
@@ -127,8 +120,7 @@ class TestPomodoroHooks < MiniTest::Test
 
   def test_after_interrupt_error
     hook_name = 'after-interrupt-pomodoro'
-    pom = Pomodoro.new
-    pom.start
+    pom = produce(Pomodoro)
     token_file = create_hook('Pomodoro', hook_name)
     refute_path_exists(token_file, "Token file must not exist before #{hook_name} hook is executed")
     pom.interrupt
@@ -139,8 +131,7 @@ class TestPomodoroHooks < MiniTest::Test
 
   def test_before_cancel_success
     hook_name = 'before-cancel-pomodoro'
-    pom = Pomodoro.new
-    pom.start
+    pom = produce(Pomodoro)
     token_file = create_hook('Pomodoro', hook_name)
     refute_path_exists(token_file, "Token file must not exist before #{hook_name} hook is executed")
     pom.cancel
@@ -151,8 +142,7 @@ class TestPomodoroHooks < MiniTest::Test
 
   def test_before_cancel_error
     hook_name = 'before-cancel-pomodoro'
-    pom = Pomodoro.new
-    pom.start
+    pom = produce(Pomodoro)
     token_file = create_hook('Pomodoro', hook_name, false)
     refute_path_exists(token_file, "Token file must not exist before #{hook_name} hook is executed")
 
@@ -166,8 +156,7 @@ class TestPomodoroHooks < MiniTest::Test
 
   def test_after_cancel_success
     hook_name = 'after-cancel-pomodoro'
-    pom = Pomodoro.new
-    pom.start
+    pom = produce(Pomodoro)
     token_file = create_hook('Pomodoro', hook_name, false)
     refute_path_exists(token_file, "Token file must not exist before #{hook_name} hook is executed")
 
@@ -181,8 +170,7 @@ class TestPomodoroHooks < MiniTest::Test
 
   def test_after_cancel_error
     hook_name = 'after-cancel-pomodoro'
-    pom = Pomodoro.new
-    pom.start
+    pom = produce(Pomodoro)
     token_file = create_hook('Pomodoro', hook_name)
     refute_path_exists(token_file, "Token file must not exist before #{hook_name} hook is executed")
     pom.cancel

@@ -18,10 +18,9 @@ class TestParadeiserControllerReport < ParadeiserControllerTest
   end
 
   def test_finished
-    pom = Pomodoro.new # can't use mocks as long as the controller uses kind_of?
-    pom.started_at = 8
-    pom.finished_at = 16
-    pom.start!
+    pom = produce(Pomodoro) # can't use mocks as long as the controller uses kind_of?
+    pom.started_at = Time.new(8)
+    pom.finished_at = Time.new(16)
     pom.finish!
     @backend[:bar] = pom
 
@@ -30,10 +29,9 @@ class TestParadeiserControllerReport < ParadeiserControllerTest
   end
 
   def test_canceled
-    pom = Pomodoro.new
-    pom.started_at = 16
-    pom.canceled_at = 24
-    pom.start!
+    pom = produce(Pomodoro)
+    pom.started_at = Time.new(16)
+    pom.canceled_at = Time.new(24)
     pom.cancel!
     @backend[:bar] = pom
 
@@ -42,10 +40,9 @@ class TestParadeiserControllerReport < ParadeiserControllerTest
   end
 
   def test_external_interrupts
-    pom = Pomodoro.new
-    pom.started_at = 24
-    pom.canceled_at = 32
-    pom.start!
+    pom = produce(Pomodoro)
+    pom.started_at = Time.new(24)
+    pom.canceled_at = Time.new(32)
     pom.interrupt!(:external)
     @backend[:bar] = pom
 
@@ -54,10 +51,9 @@ class TestParadeiserControllerReport < ParadeiserControllerTest
   end
 
   def test_internal_interrupts
-    pom = Pomodoro.new
-    pom.started_at = 32
-    pom.canceled_at = 64
-    pom.start!
+    pom = produce(Pomodoro)
+    pom.started_at = Time.new(32)
+    pom.canceled_at = Time.new(64)
     pom.interrupt!(:internal)
     @backend[:bar] = pom
 
@@ -66,9 +62,9 @@ class TestParadeiserControllerReport < ParadeiserControllerTest
   end
 
   def test_breaks
-    br3ak = Break.new
-    br3ak.started_at = 164
-    br3ak.finished_at = 128
+    br3ak = produce(Break)
+    br3ak.started_at = Time.new(164)
+    br3ak.finished_at = Time.new(128)
     @backend[:foo] = br3ak
 
     attrs = invoke(:report, nil, *ATTR_NAMES)

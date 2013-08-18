@@ -2,7 +2,7 @@ require 'helper'
 
 class TestPomodoriView < ViewTest
   def setup
-    @pom = Pomodoro.new
+    @pom = produce(Pomodoro)
     @pom.id = 1
   end
 
@@ -11,12 +11,10 @@ class TestPomodoriView < ViewTest
   end
 
   def test_finish
-    start!
     assert_match(/^Finished pomodoro #1 after .* minutes\.$/m, render(:finish))
   end
 
   def test_cancel
-    start!
     cancel!
     assert_match(/^Canceled pomodoro #1 after .* minutes\.$/m, render(:cancel))
   end

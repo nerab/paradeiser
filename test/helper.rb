@@ -10,9 +10,13 @@ class MiniTest::Test
 
 protected
 
-  def start!(thing = @pom || @break)
-    Scheduler.stub(:add, nil) do
-      thing.start!
+  def produce(clazz)
+    @started = srand
+
+    Time.stub :now, Time.at(@started) do
+      Scheduler.stub(:add, nil) do
+        clazz.new
+      end
     end
   end
 

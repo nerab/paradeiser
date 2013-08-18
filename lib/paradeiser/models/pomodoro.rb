@@ -52,6 +52,7 @@ module Paradeiser
     def initialize
       super # required for state_machine
       @interrupts = []
+      start!
     end
 
     def length

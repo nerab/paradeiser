@@ -5,19 +5,8 @@ class TestRepository < MiniTest::Test
     @backend = PStoreMock.new
   end
 
-  def test_save_idle
-    pom = Pomodoro.new
-
-    assert_raises IllegalStatusError do
-      invoke(:save, pom)
-    end
-
-    assert_equal(0, @backend.size)
-  end
-
   def test_save_active
-    pom = Pomodoro.new
-    start!(pom)
+    pom = produce(Pomodoro)
 
     invoke(:save, pom)
 
@@ -25,11 +14,8 @@ class TestRepository < MiniTest::Test
   end
 
   def test_save_second_active
-    pom1 = Pomodoro.new
-    start!(pom1)
-
-    pom2 = Pomodoro.new
-    start!(pom2)
+    pom1 = produce(Pomodoro)
+    pom2 = produce(Pomodoro)
 
     invoke(:save, pom1)
 
@@ -41,8 +27,7 @@ class TestRepository < MiniTest::Test
   end
 
   def test_save_finished
-    pom = Pomodoro.new
-    start!(pom)
+    pom = produce(Pomodoro)
     finish!(pom)
 
     invoke(:save, pom)
@@ -51,8 +36,7 @@ class TestRepository < MiniTest::Test
   end
 
   def test_save_active_finish_save
-    pom = Pomodoro.new
-    start!(pom)
+    pom = produce(Pomodoro)
 
     invoke(:save, pom)
     finish!(pom)

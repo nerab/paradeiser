@@ -4,7 +4,7 @@ class TestScheduler < MiniTest::Test
   def setup
     if Scheduler.list.any?
       @do_not_clear = true
-      raise "The at queue 't' is not empty. Clean it up before running this test again."
+      raise "The at queue '#{queue}' is not empty. Clean it up before running this test again."
     end
   end
 

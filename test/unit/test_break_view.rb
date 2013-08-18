@@ -2,7 +2,7 @@ require 'helper'
 
 class TestBreakView < ViewTest
   def setup
-    @break = Break.new
+    @break = produce(Break)
     @break.id = 1
   end
 
@@ -11,7 +11,6 @@ class TestBreakView < ViewTest
   end
 
   def test_finish
-    start!
     assert_match(/^Finished break #1 after .* minutes\.$/m, render(:finish))
   end
 

@@ -31,6 +31,7 @@ module Paradeiser
     def initialize(length = 300.seconds)
       super() # required for state_machine
       @length = length
+      start!
     end
 
     def length

@@ -4,7 +4,6 @@ module Paradeiser
       raise SingletonError.new(Break, Repository.active, :start) if Repository.active?
 
       @break = Break.new
-      @break.start!
       Repository.save(@break)
     end
 

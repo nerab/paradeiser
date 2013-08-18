@@ -7,7 +7,6 @@ module Paradeiser
       raise SingletonError.new(Pomodoro, Repository.active, :start) if Repository.active?
 
       @pom = Pomodoro.new
-      @pom.start!
       Repository.save(@pom)
     end
 

@@ -12,6 +12,6 @@ module Executor
   end
 
   def queue
-    'p'
+    ENV['PAR_AT_QUEUE'] || 'p'
   end
 end

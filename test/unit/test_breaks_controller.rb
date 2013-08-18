@@ -1,8 +1,12 @@
 require 'helper'
 
-class TestBreaksController < MiniTest::Test
+class TestBreaksController < ControllerTest
   def setup
     @backend = PStoreMock.new
+  end
+
+  def model
+    'break'
   end
 
   def test_break
@@ -58,28 +62,5 @@ class TestBreaksController < MiniTest::Test
       invoke(:finish)
     end
     assert_equal(0, @backend.size)
-  end
-private
-
-  def invoke(method, options = nil, *attributes)
-    controller = BreaksController.new(method)
-
-    stdout, stderr = Repository.stub :backend, @backend do
-      Scheduler.stub(:add, nil) do
-        Scheduler.stub(:clear, nil) do
-          capture_io do
-            controller.call(nil, options)
-          end
-        end
-      end
-    end
-
-    result = Hash[attributes.map do |e|
-      [e.split('@').last.to_sym, controller.get_binding.eval(e)]
-    end]
-
-    result[:stdout] = stdout
-    result[:stderr] = stderr
-    result
   end
 end

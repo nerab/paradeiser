@@ -1,10 +1,5 @@
 # Paradeiser Backlog
 
-* Tests are missing for the verbose mode of most commands. See TestBreaksController#test_break_verbose for an example on how to test it.
-
-* Refactor controller tests
-  - Search for 'invoke(method' and extract a common controller test
-
 * Annotations
   - Implement `par pomodoro annotate`
   - Show annotations in `par status`

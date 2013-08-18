@@ -8,12 +8,12 @@ class TestParadeiserControllerReport < ParadeiserControllerTest
   end
 
   def test_idle
-    attrs = invoke(:report, *ATTR_NAMES)
+    attrs = invoke(:report, nil, *ATTR_NAMES)
     assert_equal(0, attrs[:finished])
   end
 
   def test_has_output
-    attrs = invoke(:report, *ATTR_NAMES)
+    attrs = invoke(:report, nil, *ATTR_NAMES)
     assert_equal(true, attrs[:has_output])
   end
 
@@ -25,7 +25,7 @@ class TestParadeiserControllerReport < ParadeiserControllerTest
     pom.finish!
     @backend[:bar] = pom
 
-    attrs = invoke(:report, *ATTR_NAMES)
+    attrs = invoke(:report, nil, *ATTR_NAMES)
     assert_equal(1, attrs[:finished])
   end
 
@@ -37,7 +37,7 @@ class TestParadeiserControllerReport < ParadeiserControllerTest
     pom.cancel!
     @backend[:bar] = pom
 
-    attrs = invoke(:report, *ATTR_NAMES)
+    attrs = invoke(:report, nil, *ATTR_NAMES)
     assert_equal(1, attrs[:canceled])
   end
 
@@ -49,7 +49,7 @@ class TestParadeiserControllerReport < ParadeiserControllerTest
     pom.interrupt!(:external)
     @backend[:bar] = pom
 
-    attrs = invoke(:report, *ATTR_NAMES)
+    attrs = invoke(:report, nil, *ATTR_NAMES)
     assert_equal(1, attrs[:external_interrupts])
   end
 
@@ -61,7 +61,7 @@ class TestParadeiserControllerReport < ParadeiserControllerTest
     pom.interrupt!(:internal)
     @backend[:bar] = pom
 
-    attrs = invoke(:report, *ATTR_NAMES)
+    attrs = invoke(:report, nil, *ATTR_NAMES)
     assert_equal(1, attrs[:internal_interrupts])
   end
 
@@ -71,7 +71,7 @@ class TestParadeiserControllerReport < ParadeiserControllerTest
     br3ak.finished_at = 128
     @backend[:foo] = br3ak
 
-    attrs = invoke(:report, *ATTR_NAMES)
+    attrs = invoke(:report, nil, *ATTR_NAMES)
     assert_equal(1, attrs[:breaks])
   end
 
@@ -80,7 +80,7 @@ class TestParadeiserControllerReport < ParadeiserControllerTest
     @backend[:bar] = make_break(3)
     @backend[:baz] = make_break(2)
 
-    attrs = invoke(:report, *ATTR_NAMES)
+    attrs = invoke(:report, nil, *ATTR_NAMES)
     assert_equal(10, attrs[:break_minutes])
   end
 

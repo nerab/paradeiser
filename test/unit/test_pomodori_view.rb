@@ -15,6 +15,12 @@ class TestPomodoriView < ViewTest
     assert_match(/^Finished pomodoro #1 after .* minutes\.$/m, render(:finish))
   end
 
+  def test_cancel
+    start!
+    cancel!
+    assert_match(/^Canceled pomodoro #1 after .* minutes\.$/m, render(:cancel))
+  end
+
 protected
 
   def model

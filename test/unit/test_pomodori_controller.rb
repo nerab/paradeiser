@@ -1,14 +1,29 @@
 require 'helper'
 
-class TestPomodoriController < MiniTest::Test
+class TestPomodoriController < ControllerTest
   def setup
     @backend = PStoreMock.new
   end
 
+  def model
+    'pomodoro'
+  end
+
   def test_start
-    pom, has_output = invoke(:start, nil, '@pom', 'has_output')
-    assert_equal(:active, pom.status_name)
-    assert_equal(false, has_output)
+    attrs = invoke(:start, nil, '@pom', 'has_output')
+    assert_equal(:active, attrs[:pom].status_name)
+    assert_equal(false, attrs[:has_output])
+    assert_empty(attrs[:stdout])
+    assert_empty(attrs[:stderr])
+    assert_equal(1, @backend.size)
+  end
+
+  def test_start_verbose
+    attrs = invoke(:start, OpenStruct.new(:verbose => true), '@pom', 'has_output')
+    assert_equal(:active, attrs[:pom].status_name)
+    assert_equal(false, attrs[:has_output])
+    refute_empty(attrs[:stdout])
+    assert_empty(attrs[:stderr])
     assert_equal(1, @backend.size)
   end
 
@@ -24,9 +39,21 @@ class TestPomodoriController < MiniTest::Test
 
   def test_finish
     invoke(:start)
-    pom, has_output = invoke(:finish, nil, '@pom', 'has_output')
-    assert_equal(:finished, pom.status_name)
-    assert_equal(false, has_output)
+    attrs = invoke(:finish, nil, '@pom', 'has_output')
+    assert_equal(:finished, attrs[:pom].status_name)
+    assert_equal(false, attrs[:has_output])
+    assert_empty(attrs[:stdout])
+    assert_empty(attrs[:stderr])
+    assert_equal(1, @backend.size)
+  end
+
+  def test_finish_verbose
+    invoke(:start)
+    attrs = invoke(:finish, OpenStruct.new(:verbose => true), '@pom', 'has_output')
+    assert_equal(:finished, attrs[:pom].status_name)
+    assert_equal(false, attrs[:has_output])
+    refute_empty(attrs[:stdout])
+    assert_empty(attrs[:stderr])
     assert_equal(1, @backend.size)
   end
 
@@ -58,10 +85,12 @@ class TestPomodoriController < MiniTest::Test
 
   def test_interrupt_active
     invoke(:start)
-    pom, has_output = invoke(:interrupt, OpenStruct.new, '@pom', 'has_output')
-    assert_equal(:active, pom.status_name)
+    attrs = invoke(:interrupt, OpenStruct.new, '@pom', 'has_output')
+    assert_equal(:active, attrs[:pom].status_name)
+    assert_empty(attrs[:stdout])
+    assert_empty(attrs[:stderr])
 
-    interrupts = pom.interrupts
+    interrupts = attrs[:pom].interrupts
     refute_nil(interrupts)
     refute_empty(interrupts)
     assert_equal(1, interrupts.size)
@@ -72,17 +101,25 @@ class TestPomodoriController < MiniTest::Test
     assert_equal(:internal, interrupt.type)
   end
 
+  def test_interrupt_active_verbose
+    invoke(:start)
+    attrs = invoke(:interrupt, OpenStruct.new(:verbose => true), '@pom', 'has_output')
+    assert_equal(:active, attrs[:pom].status_name)
+    refute_empty(attrs[:stdout])
+    assert_empty(attrs[:stderr])
+  end
+
   def test_interrupt_active_internal
     invoke(:start)
-    pom = invoke(:interrupt, OpenStruct.new(:internal => true), '@pom')
-    interrupt = pom.interrupts.first
+    attrs = invoke(:interrupt, OpenStruct.new(:internal => true), '@pom')
+    interrupt = attrs[:pom].interrupts.first
     assert_equal(:internal, interrupt.type)
   end
 
   def test_interrupt_active_external
     invoke(:start)
-    pom = invoke(:interrupt, OpenStruct.new(:external => true), '@pom')
-    interrupt = pom.interrupts.first
+    attrs = invoke(:interrupt, OpenStruct.new(:external => true), '@pom')
+    interrupt = attrs[:pom].interrupts.first
     assert_equal(:external, interrupt.type)
   end
 
@@ -107,9 +144,21 @@ class TestPomodoriController < MiniTest::Test
 
   def test_cancel_active
     invoke(:start)
-    pom, has_output = invoke(:cancel, nil, '@pom', 'has_output')
-    assert_equal(:canceled, pom.status_name)
-    assert_equal(false, has_output)
+    attrs = invoke(:cancel, nil, '@pom', 'has_output')
+    assert_equal(:canceled, attrs[:pom].status_name)
+    assert_equal(false, attrs[:has_output])
+    assert_empty(attrs[:stdout])
+    assert_empty(attrs[:stderr])
+    assert_equal(1, @backend.size)
+  end
+
+  def test_cancel_active_verbose
+    invoke(:start)
+    attrs = invoke(:cancel, OpenStruct.new(:verbose => true), '@pom', 'has_output')
+    assert_equal(:canceled, attrs[:pom].status_name)
+    assert_equal(false, attrs[:has_output])
+    refute_empty(attrs[:stdout])
+    assert_empty(attrs[:stderr])
     assert_equal(1, @backend.size)
   end
 
@@ -131,29 +180,5 @@ class TestPomodoriController < MiniTest::Test
     assert_equal(1, @backend.size)
     invoke(:start)
     assert_equal(2, @backend.size)
-  end
-
-private
-
-  def invoke(method, options = nil, *attributes)
-    controller = PomodoriController.new(method)
-
-    Repository.stub :backend, @backend do
-      Scheduler.stub(:add, nil) do
-        Scheduler.stub(:clear, nil) do
-          controller.call(nil, options)
-        end
-      end
-    end
-
-    result = attributes.map do |attribute|
-      controller.get_binding.eval(attribute)
-    end
-
-    if 1 == result.size
-      result.first
-    else
-      result
-    end
   end
 end

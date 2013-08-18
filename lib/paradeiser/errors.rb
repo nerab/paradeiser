@@ -34,4 +34,10 @@ module Paradeiser
       super("'#{type}' is not a valid type. Valid are only #{choices}.")
     end
   end
+
+  class MissingAnnotationError < StandardError
+    def initialize
+      super('The mandatory text is missing for the annotation')
+    end
+  end
 end

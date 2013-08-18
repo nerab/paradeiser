@@ -10,7 +10,7 @@ class TestPomodoriController < ControllerTest
   end
 
   def test_start
-    attrs = invoke(:start, nil, '@pom', 'has_output')
+    attrs = invoke(:start, nil, nil, '@pom', 'has_output')
     assert_equal(:active, attrs[:pom].status_name)
     assert_equal(false, attrs[:has_output])
     assert_empty(attrs[:stdout])
@@ -19,7 +19,7 @@ class TestPomodoriController < ControllerTest
   end
 
   def test_start_verbose
-    attrs = invoke(:start, OpenStruct.new(:verbose => true), '@pom', 'has_output')
+    attrs = invoke(:start, nil, OpenStruct.new(:verbose => true), '@pom', 'has_output')
     assert_equal(:active, attrs[:pom].status_name)
     assert_equal(false, attrs[:has_output])
     refute_empty(attrs[:stdout])
@@ -39,7 +39,7 @@ class TestPomodoriController < ControllerTest
 
   def test_finish
     invoke(:start)
-    attrs = invoke(:finish, nil, '@pom', 'has_output')
+    attrs = invoke(:finish, nil, nil, '@pom', 'has_output')
     assert_equal(:finished, attrs[:pom].status_name)
     assert_equal(false, attrs[:has_output])
     assert_empty(attrs[:stdout])
@@ -49,7 +49,7 @@ class TestPomodoriController < ControllerTest
 
   def test_finish_verbose
     invoke(:start)
-    attrs = invoke(:finish, OpenStruct.new(:verbose => true), '@pom', 'has_output')
+    attrs = invoke(:finish, nil, OpenStruct.new(:verbose => true), '@pom', 'has_output')
     assert_equal(:finished, attrs[:pom].status_name)
     assert_equal(false, attrs[:has_output])
     refute_empty(attrs[:stdout])
@@ -85,7 +85,7 @@ class TestPomodoriController < ControllerTest
 
   def test_interrupt_active
     invoke(:start)
-    attrs = invoke(:interrupt, OpenStruct.new, '@pom', 'has_output')
+    attrs = invoke(:interrupt, nil, OpenStruct.new, '@pom', 'has_output')
     assert_equal(:active, attrs[:pom].status_name)
     assert_empty(attrs[:stdout])
     assert_empty(attrs[:stderr])
@@ -103,7 +103,7 @@ class TestPomodoriController < ControllerTest
 
   def test_interrupt_active_verbose
     invoke(:start)
-    attrs = invoke(:interrupt, OpenStruct.new(:verbose => true), '@pom', 'has_output')
+    attrs = invoke(:interrupt, nil, OpenStruct.new(:verbose => true), '@pom', 'has_output')
     assert_equal(:active, attrs[:pom].status_name)
     refute_empty(attrs[:stdout])
     assert_empty(attrs[:stderr])
@@ -111,14 +111,14 @@ class TestPomodoriController < ControllerTest
 
   def test_interrupt_active_internal
     invoke(:start)
-    attrs = invoke(:interrupt, OpenStruct.new(:internal => true), '@pom')
+    attrs = invoke(:interrupt, nil, OpenStruct.new(:internal => true), '@pom')
     interrupt = attrs[:pom].interrupts.first
     assert_equal(:internal, interrupt.type)
   end
 
   def test_interrupt_active_external
     invoke(:start)
-    attrs = invoke(:interrupt, OpenStruct.new(:external => true), '@pom')
+    attrs = invoke(:interrupt, nil, OpenStruct.new(:external => true), '@pom')
     interrupt = attrs[:pom].interrupts.first
     assert_equal(:external, interrupt.type)
   end
@@ -144,7 +144,7 @@ class TestPomodoriController < ControllerTest
 
   def test_cancel_active
     invoke(:start)
-    attrs = invoke(:cancel, nil, '@pom', 'has_output')
+    attrs = invoke(:cancel, nil, nil, '@pom', 'has_output')
     assert_equal(:canceled, attrs[:pom].status_name)
     assert_equal(false, attrs[:has_output])
     assert_empty(attrs[:stdout])
@@ -154,7 +154,7 @@ class TestPomodoriController < ControllerTest
 
   def test_cancel_active_verbose
     invoke(:start)
-    attrs = invoke(:cancel, OpenStruct.new(:verbose => true), '@pom', 'has_output')
+    attrs = invoke(:cancel, nil, OpenStruct.new(:verbose => true), '@pom', 'has_output')
     assert_equal(:canceled, attrs[:pom].status_name)
     assert_equal(false, attrs[:has_output])
     refute_empty(attrs[:stdout])
@@ -182,13 +182,18 @@ class TestPomodoriController < ControllerTest
     assert_equal(2, @backend.size)
   end
 
-  # def test_annotate
-  #   invoke(:start)
-  #   attrs = invoke(:annotate, OpenStruct.new(:verbose => true), '@pom', 'has_output')
-  #   assert_equal(:active, attrs[:pom].status_name)
-  #   assert_equal(false, attrs[:has_output])
-  #   refute_empty(attrs[:stdout])
-  #   assert_empty(attrs[:stderr])
-  #   assert_equal(1, @backend.size)
-  # end
+  def test_annotate
+    invoke(:start)
+    annotation_text = 'foobar w00t'
+    attrs = invoke(:annotate, annotation_text, nil, '@pom', 'has_output')
+    assert_equal(:active, attrs[:pom].status_name)
+    assert_equal(false, attrs[:has_output])
+    assert_empty(attrs[:stdout])
+    assert_empty(attrs[:stderr])
+    assert_equal(1, @backend.size)
+    annotations = attrs[:pom].annotations
+    assert(annotations)
+    assert_equal(1, annotations.size)
+    assert_equal(annotation_text, annotations.first)
+  end
 end

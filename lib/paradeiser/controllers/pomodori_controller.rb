@@ -42,6 +42,13 @@ module Paradeiser
       Repository.save(@pom)
     end
 
+    def annotate
+      raise MissingAnnotationError unless @args && @args.any?
+      @pom = Repository.active || Repository.all.last
+      @pom.annotate(@args.join)
+      Repository.save(@pom)
+    end
+
   private
 
     def end_break

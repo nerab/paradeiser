@@ -1,7 +1,7 @@
 # Paradeiser Backlog
 
 * Annotations
-  - Implement `par pomodoro annotate`
+  => Implement `par pomodoro annotate`
   - Show annotations in `par status`
   - Show annotations in `par report`
   - Alias `par pomodoro annotate` as `par annotate`

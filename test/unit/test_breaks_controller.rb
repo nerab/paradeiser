@@ -10,7 +10,7 @@ class TestBreaksController < ControllerTest
   end
 
   def test_break
-    attrs = invoke(:start, nil, '@break', 'exitstatus', 'has_output')
+    attrs = invoke(:start, nil, nil, '@break', 'exitstatus', 'has_output')
     assert_equal(:active, attrs[:break].status_name)
     assert_equal(false, attrs[:has_output])
     assert_empty(attrs[:stdout])
@@ -19,7 +19,7 @@ class TestBreaksController < ControllerTest
   end
 
   def test_break_verbose
-    attrs = invoke(:start, OpenStruct.new(:verbose => true), '@break', 'exitstatus', 'has_output')
+    attrs = invoke(:start, nil, OpenStruct.new(:verbose => true), '@break', 'exitstatus', 'has_output')
     assert_equal(:active, attrs[:break].status_name)
     assert_equal(false, attrs[:has_output])
     refute_empty(attrs[:stdout])
@@ -39,7 +39,7 @@ class TestBreaksController < ControllerTest
 
   def test_finish
     invoke(:start)
-    attrs = invoke(:finish, nil, '@break', 'exitstatus', 'has_output')
+    attrs = invoke(:finish, nil, nil, '@break', 'exitstatus', 'has_output')
     assert_equal(:finished, attrs[:break].status_name)
     assert_equal(false, attrs[:has_output])
     assert_empty(attrs[:stdout])
@@ -49,7 +49,7 @@ class TestBreaksController < ControllerTest
 
   def test_finish_verbose
     invoke(:start)
-    attrs = invoke(:finish, OpenStruct.new(:verbose => true), '@break', 'exitstatus', 'has_output')
+    attrs = invoke(:finish, nil, OpenStruct.new(:verbose => true), '@break', 'exitstatus', 'has_output')
     assert_equal(:finished, attrs[:break].status_name)
     assert_equal(false, attrs[:has_output])
     refute_empty(attrs[:stdout])

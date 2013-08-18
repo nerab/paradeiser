@@ -1,5 +1,7 @@
 # Paradeiser Backlog
 
+* `par break --verbose` and `par break finish --verbose` fail with a missing view file. Tests are missing for the verbose mode of most commands.
+
 * Annotations
   - Implement `par pomodoro annotate`
   - Show annotations in `par status`

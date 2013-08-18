@@ -1,6 +1,6 @@
 module Paradeiser
   class Pomodoro < Scheduled
-    attr_reader :interrupts, :interrupt_type
+    attr_reader :interrupts, :interrupt_type, :annotations
     attr_accessor :canceled_at
 
     MINUTES_25 = 25
@@ -52,6 +52,7 @@ module Paradeiser
     def initialize
       super # required for state_machine
       @interrupts = []
+      @annotations = []
       start!
     end
 
@@ -62,6 +63,10 @@ module Paradeiser
     def interrupt!(type = nil)
       @interrupt_type = type
       super
+    end
+
+    def annotate(text)
+      @annotations << text
     end
   end
 end

@@ -148,4 +148,17 @@ class TestPomodoro < MiniTest::Test
     assert_equal(now, @pom.canceled_at.to_i)
     refute(@pom.finished_at)
   end
+
+  def test_annotate_active
+    annotations = @pom.annotations
+    assert(annotations)
+    assert_empty(annotations)
+
+    text = 'foobar something'
+    @pom.annotate(text)
+
+    assert_equal(:active, @pom.status_name)
+    refute_empty(@pom.annotations)
+    assert_equal(text, @pom.annotations.first)
+  end
 end

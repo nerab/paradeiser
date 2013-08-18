@@ -181,4 +181,14 @@ class TestPomodoriController < ControllerTest
     invoke(:start)
     assert_equal(2, @backend.size)
   end
+
+  # def test_annotate
+  #   invoke(:start)
+  #   attrs = invoke(:annotate, OpenStruct.new(:verbose => true), '@pom', 'has_output')
+  #   assert_equal(:active, attrs[:pom].status_name)
+  #   assert_equal(false, attrs[:has_output])
+  #   refute_empty(attrs[:stdout])
+  #   assert_empty(attrs[:stderr])
+  #   assert_equal(1, @backend.size)
+  # end
 end

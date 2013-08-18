@@ -24,7 +24,6 @@ module Paradeiser
 
         controller = controller_class.new(verb)
         controller.call(args, options)
-        controller.render(:verb => verb)
 
         @status = controller.exitstatus
       end

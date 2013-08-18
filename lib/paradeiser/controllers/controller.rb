@@ -12,6 +12,7 @@ module Paradeiser
       @args = args
       @options = options
       send(@method)
+      render
     end
 
     def model
@@ -22,13 +23,14 @@ module Paradeiser
       return binding
     end
 
-    def render(options)
-      return if @already_rendered # only render once
+    def render(options = {})
+      return if @already_rendered # render only once
+      return unless (@options && @options.verbose) || has_output
 
       if options.has_key?(:text)
         puts options[:text]
       else
-        puts View.new(model, options[:verb]).render(binding) if @options.verbose || has_output
+        puts View.new(model, @method).render(binding)
       end
 
       @already_rendered = true

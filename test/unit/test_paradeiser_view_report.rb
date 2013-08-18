@@ -1,9 +1,8 @@
 require 'helper'
 
-class TestViewStatus < MiniTest::Test
+class TestParadeiserViewReport < ParadeiserViewTest
   def test_report_0
-    out, err = render(:report)
-    assert_empty(err)
+    out = render(:report)
     assert(out)
     lines = out.lines
     assert_equal(7, lines.size)
@@ -36,8 +35,7 @@ class TestViewStatus < MiniTest::Test
     @breaks = 1
     @break_minutes = 1
 
-    out, err = render(:report)
-    assert_empty(err)
+    out = render(:report)
     assert(out)
     lines = out.lines
     assert_equal(7, lines.size)
@@ -60,13 +58,5 @@ class TestViewStatus < MiniTest::Test
     assert_match(/^\d break \(\d minute in total\)$/, lines[6].chomp)
     assert_equal('1', lines[6][0])
     assert_equal('1', lines[6][9])
-  end
-
-private
-
-  def render(method)
-    capture_io do
-      View.new('Paradeiser', method).render(binding)
-    end
   end
 end

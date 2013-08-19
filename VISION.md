@@ -318,7 +318,7 @@ A report can produced for a specific pomodoro or break (here, it was started ear
       # Annotations
       * Right before lunch doesn't seem like a good time for a pomodoro.
 
-Reports can also be grouped by `--day`, `--week`, `--month` or `--year`:
+Reports can also be grouped by `--day`, `--week`, `--month`, `--year`, or `--all`:
 
       $ par report --day
       # Daily Report for 2013-07-16

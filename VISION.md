@@ -283,37 +283,96 @@ Paradeiser can print the current status to STDOUT with the `par status` command.
 
 ## Reports
 
+Without arguments, a report is shown for the most recent pomodoro or break.
+
+* Given the most recent item was a pomodoro, finished today:
+
       $ par report
-      Daily Pomodoro Report for 2013-07-16
+      # Report for pomodoro #12
 
-      3 pomodori finished
-      1 pomodoro cancelled
-      1 internal interruptions
-      2 external interruptions
-      4 breaks (3 short, 1 long; 45 minutes in total)
+      Started 17:07, finished 17:32
 
-      Most efficient location: Home Office
-      Least efficient location: Coffeshop
+      ## Interrupts
+      0 internal
+      0 external
 
-By default, the command groups by `--day`. Alternative options are `--week`, `--month` or `--year`. Without a value, the argument assumes the current day / week / month / year. The first day of the period can be specified as argument, e.g. `par report --day=2013-07-18`. The period is parsed with [Chronic](http://chronic.rubyforge.org/), which also enables symbolic values like `par report --month="last month"`.
+      ## Annotations
+      * This one went very well.
+
+A report can produced for a specific pomodoro or break (here, it was started earlier today and then cancelled after a few interruptions):
+
+      $ par report 11
+      # Report for pomodoro #11
+
+      Started 11:34, canceled 11:40
+
+      ## Interrupts
+      2 internal:
+
+      * Could not help checking my mail
+      * Surfin' the web
+
+      1 external:
+      * VP of engineering walked into my office
+
+      # Annotations
+      * Right before lunch doesn't seem like a good time for a pomodoro.
+
+Reports can also be grouped by `--day`, `--week`, `--month` or `--year`:
+
+      $ par report --day
+      # Daily Report for 2013-07-16
+
+      ## Pomodori
+      - 3 finished
+      - 1 cancelled
+
+      ## Interrupts
+      - 1 internal
+      - 2 external
+
+      ## Breaks
+      - 3 short
+      - 1 long
+
+      Total: 4 breaks, 45 minutes
+
+      ## Locations
+      Most efficient: Home Office
+      Least efficient: Coffeshop
+
+Without a value, the argument assumes the current day / week / month / year. The first day of the period can be specified as argument, e.g. `par report --day=2013-07-18`. The period is parsed with [Chronic](http://chronic.rubyforge.org/), which also enables symbolic values like `par report --month="last month"`.
+
+Note that the annotations section is not shown if there are no annotations.
 
 The report can also be grouped by location:
 
-      $ par report location
-      Pomodoro Location Report
+      $ par report --location
+      # Location Report
 
-      Home Office: 38 finished, 12 cancelled, 21 interrupts
-      Starbucks:   12 finished, 2 cancelled, 45 interrupts
-      On the road: 14 finished, 0 cancelled, 12 interrupts
+      ## Home Office
+      38 finished
+      12 cancelled
+      21 interrupts
+
+      ## Starbucks
+      12 finished
+      2 cancelled
+      45 interrupts
+
+      ## On the road
+      14 finished
+      0 cancelled
+      12 interrupts
 
       The following locations do not have a label. Assign it with
 
-        $ par location macbook@01:23:45:67:89:0A "Your Label"
+        $ par --location macbook@01:23:45:67:89:0A "Your Label"
 
 Detailed report for a single location:
 
-      $ par report location "Home Office"
-      Pomodoro Location Report for Home Office
+      $ par report --location="Home Office"
+      # Location Report for Home Office
 
       58 pomodori finished
       12 pomodoro cancelled
@@ -325,7 +384,7 @@ Detailed report for a single location:
 
 Further grouping is also possible, e.g. by year:
 
-      $ par report location --year=2012
+      $ par report --location --year=2012
       Pomodoro Location Report for 2012
 
       233 pomodori finished
@@ -359,6 +418,13 @@ Efficiency can be reported by day, week, month, year, or location:
       TODO Ordered list of pomodori and breaks, each with annotations (like a time sheet)
 
 The same options as for regular reports apply. The timesheet report also details the efficiency of each location.
+
+### Report Formatting
+By default The output of reports is formatted as [markdown](http://TODO), so that it can easily be read at the command line, but also piped into a markdown processor, e.g. for HTML generation with [redcloth](http://TODO):
+
+      $ par report | redcloth | bcat
+
+Here, the HTML produced by redcloth is piped into `bcat`, which opens a browser with the produced HTML.
 
 ### Exporting a Report
 

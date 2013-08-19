@@ -7,7 +7,7 @@ class TestBreakView < ViewTest
   end
 
   def test_start
-    assert_match(/^Starting a new break \(5 minutes\)\.$/m, render(:start))
+    assert_match(/^Started a new break \(5 minutes\)\.$/m, render(:start))
   end
 
   def test_finish

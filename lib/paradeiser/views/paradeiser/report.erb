@@ -1,9 +1,11 @@
-Pomodoro Report
+# Pomodoro Report
+- <%= pluralize(@finished, 'pomodoro') %> finished
+- <%= pluralize(@canceled, 'pomodoro') %> canceled
+- <%= pluralize(@internal_interrupts, 'internal interrupt') %>
+- <%= pluralize(@external_interrupts, 'external interrupt') %>
+- <%= pluralize(@breaks, 'break') %> (<%= pluralize(@break_minutes, 'minute') %> in total)
+<% if @annotations.any? %>
 
-<%= pluralize(@finished, 'pomodoro') %> finished
-<%= pluralize(@canceled, 'pomodoro') %> canceled
-<%= pluralize(@internal_interrupts, 'internal interrupt') %>
-
-<%= pluralize(@external_interrupts, 'external interrupt') %>
-
-<%= pluralize(@breaks, 'break') %> (<%= pluralize(@break_minutes, 'minute') %> in total)
+## Annotations<% @annotations.each do |annotation| %>
+* <%= annotation %><% end %>
+<% end %>

@@ -21,6 +21,8 @@ module Paradeiser
       @breaks = breaks.size
       @break_minutes = breaks.sum{|b| b.duration}.to_i.minutes
 
+      @annotations = pomodori.collect{|p| p.annotations}.flatten
+
       self.has_output = true
     end
 

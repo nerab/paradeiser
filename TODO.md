@@ -1,7 +1,5 @@
 # Paradeiser Backlog
 
-* Add annotations to `par cancel`
-
 * Implement scoped reports
 
 * `par timesheet`

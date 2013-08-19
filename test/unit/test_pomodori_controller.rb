@@ -296,4 +296,19 @@ class TestPomodoriController < ControllerTest
     assert_equal(1, annotations.size)
     assert_equal(annotation_args.join(' '), annotations.first)
   end
+
+  def test_annotate_cancel
+    invoke(:start)
+    annotation_args = name.split('_')
+    attrs = invoke(:cancel, annotation_args, nil, '@pom', 'has_output')
+    assert_equal(:canceled, attrs[:pom].status_name)
+    assert_equal(false, attrs[:has_output])
+    assert_empty(attrs[:stdout])
+    assert_empty(attrs[:stderr])
+    assert_equal(1, @backend.size)
+    annotations = attrs[:pom].annotations
+    assert(annotations)
+    assert_equal(1, annotations.size)
+    assert_equal(annotation_args.join(' '), annotations.first)
+  end
 end

@@ -14,6 +14,7 @@ module Paradeiser
       @pom = Repository.active
       raise NotActiveError unless @pom
       raise SingletonError.new(Pomodoro, @pom, :finish) if Repository.active? && !@pom.kind_of?(Pomodoro)
+      @pom.annotate(@args.join(' ')) if @args.any?
       @pom.cancel!
       Repository.save(@pom)
     end

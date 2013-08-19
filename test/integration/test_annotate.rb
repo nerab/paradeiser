@@ -9,4 +9,11 @@ class TestAnnotateCommand < Paradeiser::IntegrationTest
     assert_command('start')
     assert_command('annotate', 0, name.split('_'))
   end
+
+  def test_annotate_second_last_successful
+    assert_command('start')
+    assert_command('finish')
+    assert_command('break')
+    assert_command('annotate', 0, name.split('_'))
+  end
 end

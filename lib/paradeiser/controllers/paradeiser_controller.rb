@@ -19,7 +19,7 @@ module Paradeiser
 
       breaks = Repository.all.select{|b| b.kind_of?(Break)}
       @breaks = breaks.size
-      @break_minutes = breaks.sum{|b| b.finished_at - b.started_at}.to_i.minutes
+      @break_minutes = breaks.sum{|b| b.duration}.to_i.minutes
 
       self.has_output = true
     end

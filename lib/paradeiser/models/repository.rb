@@ -40,7 +40,9 @@ module Paradeiser
 
       def save(pom)
         raise IllegalStatusError if pom.idle?
-        raise SingletonError.new(pom.class, self.active, :save) if self.active? && active.id != pom.id
+
+        # Do not allow saving of a new active pomodoro while another pomodoro or break is active
+        raise SingletonError.new(pom.class, self.active, :save) if self.active? && pom.new?
 
         pom.id = next_id if pom.new?
         backend.transaction do

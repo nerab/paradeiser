@@ -1,7 +1,6 @@
 # Paradeiser Backlog
 
 * Annotations
-  - Add annotations to `par finish`
   - Add annotations to `par interrupt`
   - Add annotations to `par cancel`
 

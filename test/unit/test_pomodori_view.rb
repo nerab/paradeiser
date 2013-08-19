@@ -29,6 +29,10 @@ class TestPomodoriView < ViewTest
     assert_match(/^Marked pomodoro #1 as externally interrupted\.$/m, render(:interrupt))
   end
 
+  def test_annotate
+    assert_match(/^Successfully annotated pomodoro #1\.$/m, render(:annotate))
+  end
+
 protected
 
   def model

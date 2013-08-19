@@ -29,14 +29,14 @@ module Paradeiser
       ENV.delete('PAR_AT_QUEUE')
     end
 
-    def assert_command(cmd, expected_status = 0)
-      out, err, status = Open3.capture3("#{PAR} #{cmd}")
+    def assert_command(cmd, expected_status = 0, *args)
+      out, err, status = Open3.capture3("#{PAR} #{cmd} #{Shellwords.join(args)}")
       assert_equal(expected_status, status.exitstatus, "Expected exit status to be #{expected_status}, but it was #{status.exitstatus}. STDERR is: '#{err}'")
       assert_empty(err)
       out
     end
 
-    def refute_command(cmd, expected_status = 1)
+    def refute_command(cmd, expected_status = 1, *args)
       out, err, status = Open3.capture3("#{PAR} #{cmd}")
       assert_equal(expected_status, status.exitstatus, "Expected exit status to be #{expected_status}, but it was #{status.exitstatus}.")
       [out, err]

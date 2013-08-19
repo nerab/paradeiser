@@ -182,11 +182,81 @@ class TestPomodoriController < ControllerTest
     assert_equal(2, @backend.size)
   end
 
-  def test_annotate
+  def test_annotate_active
     invoke(:start)
     annotation_args = 'foobar w00t'.split
     attrs = invoke(:annotate, annotation_args, nil, '@pom', 'has_output')
     assert_equal(:active, attrs[:pom].status_name)
+    assert_equal(false, attrs[:has_output])
+    assert_empty(attrs[:stdout])
+    assert_empty(attrs[:stderr])
+    assert_equal(1, @backend.size)
+    annotations = attrs[:pom].annotations
+    assert(annotations)
+    assert_equal(1, annotations.size)
+    assert_equal(annotation_args.join(' '), annotations.first)
+  end
+
+  def test_annotate_active_verbose
+    invoke(:start)
+    attrs = invoke(:annotate, ['annotation', 'args'], OpenStruct.new(:verbose => true), '@pom', 'has_output')
+    refute_empty(attrs[:stdout])
+    assert_empty(attrs[:stderr])
+  end
+
+  def test_annotate_second_last_successful
+    invoke(:start)
+    invoke(:finish)
+
+    @backend[:foo] = SchedulableMock.new(
+      :status => 'finished',
+      :status_name => :finished,
+      :finished => true,
+      :name => 'break',
+      :remaining => 0,
+      :finished_at => Time.now)
+
+
+    last = Repository.stub :backend, @backend do
+      Repository.all.last
+    end
+    assert_kind_of(SchedulableMock, last)
+
+    annotation_args = name.split('_')
+    attrs = invoke(:annotate, annotation_args, nil, '@pom', 'has_output')
+
+    pom = attrs[:pom]
+    assert_kind_of(Pomodoro, pom)
+    assert_equal(:finished, pom.status_name)
+
+    annotations = pom.annotations
+    assert(annotations)
+    assert_equal(1, annotations.size)
+    assert_equal(annotation_args.join(' '), annotations.first)
+  end
+
+  def test_annotate_last_successful
+    invoke(:start)
+    invoke(:finish)
+    annotation_args = 'foobar w00t'.split
+    attrs = invoke(:annotate, annotation_args, nil, '@pom', 'has_output')
+    assert_equal(:finished, attrs[:pom].status_name)
+    assert_equal(false, attrs[:has_output])
+    assert_empty(attrs[:stdout])
+    assert_empty(attrs[:stderr])
+    assert_equal(1, @backend.size)
+    annotations = attrs[:pom].annotations
+    assert(annotations)
+    assert_equal(1, annotations.size)
+    assert_equal(annotation_args.join(' '), annotations.first)
+  end
+
+  def test_annotate_last_canceled
+    invoke(:start)
+    invoke(:cancel)
+    annotation_args = 'foobar w00t'.split
+    attrs = invoke(:annotate, annotation_args, nil, '@pom', 'has_output')
+    assert_equal(:canceled, attrs[:pom].status_name)
     assert_equal(false, attrs[:has_output])
     assert_empty(attrs[:stdout])
     assert_empty(attrs[:stderr])

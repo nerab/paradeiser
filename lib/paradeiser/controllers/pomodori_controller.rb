@@ -44,7 +44,7 @@ module Paradeiser
 
     def annotate
       raise MissingAnnotationError unless @args && @args.any?
-      @pom = Repository.active || Repository.all.last
+      @pom = Repository.all.select{|p| p.kind_of?(Pomodoro)}.sort{|a,b| a.started_at <=> b.started_at}.last
       @pom.annotate(@args.join(' '))
       Repository.save(@pom)
     end

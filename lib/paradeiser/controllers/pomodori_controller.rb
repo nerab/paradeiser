@@ -32,6 +32,8 @@ module Paradeiser
       raise NotActiveError unless @pom
       raise SingletonError.new(Pomodoro, @pom, :interrupt) if Repository.active? && !@pom.kind_of?(Pomodoro)
 
+      @pom.annotate(@args.join(' ')) if @args.any?
+
       if @options.external
         @interrupt_type = 'externally'
         @pom.interrupt!(:external)

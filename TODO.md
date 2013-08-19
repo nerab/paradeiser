@@ -1,8 +1,6 @@
 # Paradeiser Backlog
 
-* Annotations
-  - Add annotations to `par interrupt`
-  - Add annotations to `par cancel`
+* Add annotations to `par cancel`
 
 * Implement scoped reports
 

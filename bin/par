@@ -87,7 +87,6 @@ begin
   command :status do |c|
     c.syntax  = "#{program(:name)} #{c.name}"
     c.summary = 'Show status of active pomodoro or break'
-    c.option '--quiet', 'Be quiet - no output is printed. The exit code reflects the status.'
     c.action router.dispatch(c)
   end
 rescue

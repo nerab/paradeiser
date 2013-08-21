@@ -1,3 +1,5 @@
+require 'active_support/core_ext/enumerable'
+
 module Paradeiser
   class Scheduled
     attr_accessor :id, :started_at, :finished_at
@@ -7,6 +9,7 @@ module Paradeiser
     end
 
     # from https://github.com/travis-ci/travis/blob/master/lib/travis/client/job.rb
+    # TODO Handle canceled_at in those subclasses that define canceled_at (by overriding duration)
     def duration
       start  = started_at  || Time.now
       finish = finished_at || (respond_to?(:canceled_at) ? canceled_at : nil) || Time.now
@@ -20,6 +23,10 @@ module Paradeiser
 
     def name
       self.class.name.split("::").last.downcase
+    end
+
+    def as_json(*options)
+      {:type => name.titlecase, :length => length}.merge(super(*options))
     end
   end
 end

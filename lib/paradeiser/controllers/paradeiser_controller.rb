@@ -1,6 +1,8 @@
 require 'fileutils'
 #require 'action_view/helpers/text_helper'
 require 'active_support/core_ext/enumerable'
+require 'active_model'
+require 'active_model/serializers/json'
 
 module Paradeiser
   class ParadeiserController < Controller
@@ -31,6 +33,11 @@ module Paradeiser
       self.exitstatus = Status.of(@pom).to_i
       self.has_output = true
       render(:text => 'There are no pomodori or breaks.') unless @pom
+    end
+
+    def export
+      self.has_output = true
+      render(:text => Repository.all.to_json)
     end
   end
 end

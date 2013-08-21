@@ -24,6 +24,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'activesupport'
   spec.add_runtime_dependency 'actionpack'
 #  spec.add_runtime_dependency 'actionview'
+  spec.add_runtime_dependency 'activemodel'
 
   # Moved to the Gemfile so that Travis CI can load the test group
   # spec.add_development_dependency 'rake'

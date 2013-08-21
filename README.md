@@ -261,6 +261,13 @@ Variable | Used in | Description
 `$PAR_BREAK_ID` | Hooks | Identifier of the break
 `$PAR_BREAK_STARTED_AT` | Hooks | Timestamp of when the break was started
 
+## Export
+
+Paradeiser can export the pomodori and breaks it has stored to JSON:
+
+      $ par export
+      [{"type":"Pomodoro","length":1500,"status":"finished","interrupts":[],"annotati ...
+
 ## Similar Projects
 
 These and many more exist, why another tool?

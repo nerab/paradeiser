@@ -78,6 +78,12 @@ begin
     c.action router.dispatch(c)
   end
 
+  command :export do |c|
+    c.syntax  = "#{program(:name)} #{c.name}"
+    c.summary = 'Export all pomodori as JSON'
+    c.action router.dispatch(c)
+  end
+
   command :status do |c|
     c.syntax  = "#{program(:name)} #{c.name}"
     c.summary = 'Show status of active pomodoro or break'

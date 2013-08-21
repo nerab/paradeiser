@@ -111,13 +111,31 @@ Breaks cannot have annotations.
 
 The pomodoro will be marked as canceled and the timer will be cleared. If no pomodoro is active, the command will throw an error. If a break is active, the command will do nothing except printing a warning. Remaining arguments, if present, will be added to the pomodoro as annotation.
 
-### Log a pomodoro
+### Log a pomodoro or break
+
+Add a successfully finished pomodoro that was never recorded as being started (maybe the user forgot to call `par pomodoro start`):
 
       $ par pomodoro log
 
-Add a successfully finished pomodoro that was never recorded as being started (maybe the user forgot to call `par pomodoro start`). It will appear in the reports and will count towards efficiency calculations.
+      # Abbreviated version:
+      $ par log
 
-The current time will be used for the finish timestamp, and the start time will be calculated backwards from the finish time.
+      # Logging a break is also possible:
+      $ par break log
+
+It will appear in the reports and will count towards efficiency calculations. The current time will be used for the finish timestamp, and the start time will be calculated backwards from the finish time based on the default length of a pomodoro / break.
+
+### Delete a pomodoro or break
+
+      $ par delete
+
+Without arguments, the active pomodoro or break will be canceled and then deleted. If none is active, the most recently finished or cancelled pomodoro or break is deleted. Note that there is no long form of this command as it pertains to pomodori _and_ breaks.
+
+A specific pomodoro or break to be deleted can be specified as argument:
+
+      $ par delete 42
+
+This will delete the pomodoro or break identified as #42.
 
 ### Initialize Paradeiser
 
@@ -509,6 +527,25 @@ The configuration is stored in a config file. It is user-editable file, but edit
   --- | ---
   `PAR_DIR` | Directory where the data store and the hooks are stored. Defaults to `~/.paradeiser/`. Overridden by `$PAR_DIR`.
   `AT_QUEUE` | Name of the `at` queue to use. Defaults to `p`.
+
+## Export
+
+Paradeiser can export the pomodori and breaks it has stored to JSON:
+
+      $ par export
+      [{"type":"Pomodoro","length":1500,"status":"finished","interrupts":[],"annotati ...
+
+## Import
+
+Paradeiser can import pomodori and breaks from a JSON file:
+
+      $ par import pomodori.json
+
+If the second argument is missing, `par import` will expect the JSON that is to be imported to appear on STDIN:
+
+      $ cat pomodori.json | par import
+
+If the import succeeds, no further message will printed and the exit status will be zero. If there is an existing pomodoro or break that overlaps with one imported from JSON, the entire import will fail and paradeiser will exit with a non-zero exit status.
 
 ## Taskwarrior Integration
 

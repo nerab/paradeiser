@@ -12,14 +12,14 @@ module Paradeiser
     end
 
     def report
-      pomodori = Repository.all.select{|p| p.kind_of?(Pomodoro)}
+      pomodori = Repository.all_pomodori
 
       @finished = pomodori.select{|p| p.finished?}.size
       @canceled = pomodori.select{|p| p.canceled?}.size
       @external_interrupts = pomodori.map{|p| p.interrupts}.flatten.select{|i| :external == i.type}.size
       @internal_interrupts = pomodori.map{|p| p.interrupts}.flatten.select{|i| :internal == i.type}.size
 
-      breaks = Repository.all.select{|b| b.kind_of?(Break)}
+      breaks = Repository.all_breaks
       @breaks = breaks.size
       @break_minutes = breaks.sum{|b| b.duration}.to_i.minutes
 

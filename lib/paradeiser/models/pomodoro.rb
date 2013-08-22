@@ -65,6 +65,12 @@ module Paradeiser
       super
     end
 
+    def duration
+      start  = started_at  || Time.now
+      finish = finished_at || canceled_at || Time.now
+      (finish - start).to_i
+    end
+
     def annotate(text)
       @annotations << text
     end

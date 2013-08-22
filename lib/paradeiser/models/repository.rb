@@ -7,6 +7,14 @@ module Paradeiser
         end
       end
 
+      def all_pomodori
+        all.select{|p| p.kind_of?(Pomodoro)}
+      end
+
+      def all_breaks
+        all.select{|b| b.kind_of?(Break)}
+      end
+
       def any?(&blk)
         all.any?(&blk)
       end

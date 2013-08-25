@@ -1,5 +1,12 @@
 # Paradeiser Backlog
 
+* Improve tests with more doubles
+  - Sandy Metz rules about testing messages:
+    - Incoming: Assert state
+    - Outgoing
+      * Queries: Ignore
+      * Commands: Expect behavior
+
 * Implement scoped reports
 
 * `par timesheet`

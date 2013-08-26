@@ -6,4 +6,4 @@ rvm:
 before_install:
  - sudo apt-get update
  - sudo apt-get install at
- - alias notify-send=true
+ - export PATH=${TRAVIS_BUILD_DIR}/test/bin:${PATH}

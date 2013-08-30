@@ -109,6 +109,17 @@ Breaks cannot have annotations.
 
 The pomodoro will be marked as canceled and the timer will be cleared. If no pomodoro is active, the command will throw an error. If a break is active, the command will do nothing except printing a warning. Remaining arguments, if present, will be added to the pomodoro as annotation.
 
+### Log a pomodoro or break
+
+Add a successfully finished pomodoro that was never recorded as being started (maybe the user forgot to call `par pomodoro start`):
+
+      $ par pomodoro log
+
+      # Abbreviated version:
+      $ par log
+
+It will appear in the reports and will count towards efficiency calculations. The current time will be used for the finish timestamp, and the start time will be calculated backwards from the finish time based on the default length of a pomodoro / break.
+
 ### Initialize Paradeiser
 
 * Initialize the default directory that is used to store the Paradeiser configuration and data:

@@ -53,6 +53,16 @@ module Paradeiser
       Repository.save(@pom)
     end
 
+    def log
+      @pom = Pomodoro.new
+      @pom.id = Repository.next_id
+      @pom.annotate(@args.join(' ')) if @args.any?
+      @pom.status = :finished
+      @pom.finished_at = Time.now
+      @pom.started_at = @pom.finished_at - Pomodoro::MINUTES_25 * 60
+      Repository.save(@pom)
+    end
+
   private
 
     def end_break

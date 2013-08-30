@@ -1,5 +1,11 @@
 # Paradeiser Backlog
 
+* Add validations to models. `finished_at` must occur at after created at, etc.
+
+* There must be no overlap in pomodori, even if we log one.
+  - Logging one while another one is active must fail unless finished at is before the active one's started at.
+
+There may be a validation missing in the repo!
 * Improve tests with more doubles
   - Sandy Metz rules about testing messages:
     - Incoming: Assert state

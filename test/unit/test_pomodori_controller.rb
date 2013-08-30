@@ -182,6 +182,49 @@ class TestPomodoriController < ControllerTest
     assert_equal(2, @backend.size)
   end
 
+  def test_log_active
+    invoke(:start)
+    annotation_args = name.split('_')
+    attrs = invoke(:log, annotation_args, nil, '@pom', 'has_output')
+    pom = attrs[:pom]
+    assert_kind_of(Pomodoro, pom)
+    assert_equal(:finished, pom.status_name)
+  end
+
+  def test_log_inactive
+    annotation_args = name.split('_')
+    now = srand
+
+    attrs = Time.stub :now, Time.at(now) do
+      invoke(:log, annotation_args, nil, '@pom', 'has_output')
+    end
+
+    assert(attrs)
+    pom = attrs[:pom]
+    assert(pom)
+    assert_kind_of(Pomodoro, pom)
+    assert_equal(:finished, pom.status_name)
+    assert_equal(Time.at(now - Pomodoro::MINUTES_25 * 60), pom.started_at)
+    assert_equal(Time.at(now), pom.finished_at)
+
+    assert_empty(attrs[:stdout])
+    assert_empty(attrs[:stderr])
+    assert_equal(1, @backend.size)
+
+    annotations = attrs[:pom].annotations
+    assert(annotations)
+    assert_equal(1, annotations.size)
+    assert_equal(annotation_args.join(' '), annotations.first)
+  end
+
+  def test_log_active_verbose
+    skip 'TODO'
+  end
+
+  def test_log_inactive_verbose
+    skip 'TODO'
+  end
+
   def test_annotate_active
     invoke(:start)
     annotation_args = 'foobar w00t'.split
@@ -215,7 +258,6 @@ class TestPomodoriController < ControllerTest
       :name => 'break',
       :remaining => 0,
       :finished_at => Time.now)
-
 
     last = Repository.stub :backend, @backend do
       Repository.all.last

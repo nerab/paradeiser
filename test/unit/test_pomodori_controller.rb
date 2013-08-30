@@ -218,11 +218,22 @@ class TestPomodoriController < ControllerTest
   end
 
   def test_log_active_verbose
-    skip 'TODO'
+    invoke(:start)
+    attrs = invoke(:log, nil, OpenStruct.new(:verbose => true), '@pom', 'has_output')
+    assert_equal(:finished, attrs[:pom].status_name)
+    assert_equal(false, attrs[:has_output])
+    refute_empty(attrs[:stdout])
+    assert_empty(attrs[:stderr])
+    assert_equal(2, @backend.size)
   end
 
   def test_log_inactive_verbose
-    skip 'TODO'
+    attrs = invoke(:log, nil, OpenStruct.new(:verbose => true), '@pom', 'has_output')
+    assert_equal(:finished, attrs[:pom].status_name)
+    assert_equal(false, attrs[:has_output])
+    refute_empty(attrs[:stdout])
+    assert_empty(attrs[:stderr])
+    assert_equal(1, @backend.size)
   end
 
   def test_annotate_active

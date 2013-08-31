@@ -7,4 +7,6 @@
 # $PAR_POMODORO_ID - the ID of the pomodoro that just ended
 # $PAR_POMODORO_STARTED_AT - the time when the pomodoro was started
 #
+# In order to use this hook, you'll have to chmod +x the hook in ~/paradeiser/hooks/*.
+#
 terminal-notifier-success -message "The pomodoro $PAR_POMODORO_ID (started at $PAR_POMODORO_STARTED_AT) is over." > /dev/null

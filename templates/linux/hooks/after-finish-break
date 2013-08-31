@@ -7,4 +7,6 @@
 # $PAR_BREAK_ID - the ID of the break that just ended
 # $PAR_BREAK_STARTED_AT - the time when the break was started
 #
+# In order to use this hook, you'll have to chmod +x the hook in ~/paradeiser/hooks/*.
+#
 notify-send "Pomodoro" "The break $PAR_BREAK_ID (started at $PAR_BREAK_STARTED_AT) is over." -u critical > /dev/null

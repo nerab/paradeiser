@@ -198,7 +198,8 @@ private
 
     File.chmod(0700, hook_file)
 
-    assert(File.exist?(hook_file))
+    assert(File.exist?(hook_file), "Hook #{hook_file} must exist")
+    assert(File.executable?(hook_file), "Hook #{hook_file} must be executable")
     token_file
   end
 

@@ -4,4 +4,6 @@
 # Sample after-start-pomodoro hook for Paradeiser (called after a pomodoro started). It
 # displays a simple notification.
 #
+# In order to use this hook, you'll have to chmod +x the hook in ~/paradeiser/hooks/*.
+#
 notify-send "Pomodoro" "A new pomodoro started." -u critical > /dev/null

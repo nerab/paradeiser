@@ -1,7 +1,5 @@
 # Paradeiser Backlog
 
-* By default, hooks copied by `par init` should not be executable, otherwise the hooks will fail if the optional dependencies (e.g. `notify-send` on Linux) are not present
-
 * Add validations to models. `finished_at` must occur at after created at, etc.
 
 * There must be no overlap in pomodori, even if we log one.

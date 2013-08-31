@@ -1,5 +1,4 @@
 require 'fileutils'
-#require 'action_view/helpers/text_helper'
 require 'active_support/core_ext/enumerable'
 require 'active_model'
 require 'active_model/serializers/json'

@@ -1,11 +1,30 @@
 # Paradeiser Backlog
 
+* The unit tests must not use the hooks from $HOME. Right now, for instance, TestBreak uses instantiates a plain Break, which will happily call the real ~/.paradeiser/hooks/*, which is surely not what we want.
+
+  The integration tests do this right by setting
+
+        ENV['PAR_DIR'] = Dir.mktmpdir
+
+    in the setup method. We could set this in a base class for all unit tests. Alternatively, FakeFS might help here.
+
+* BUG: A failing after-start-pomodoro hook seems to prevent `par start` from running, but it actually should not: Only before-hooks are allowed to cancel actions.
+
 * Add validations to models. `finished_at` must occur at after created at, etc.
 
 * There must be no overlap in pomodori, even if we log one.
   - Logging one while another one is active must fail unless finished at is before the active one's started at.
+  - Could use a range operator with it, e.g. within a pomodoro:
+
+    class Pomodoro
+      def include?(time)
+        (started_at..finished_at).cover?(time)
+      end
+    end
 
 * `par log` needs options for when the logged pomodoro was started and / or stopped
+
+* Refactoring: Replace our custom `pluralize` with the one from actionview
 
 * Improve tests with more doubles
   - Sandy Metz rules about testing messages:

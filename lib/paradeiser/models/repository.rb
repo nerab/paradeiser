@@ -62,7 +62,7 @@ module Paradeiser
         if all.empty?
           1
         else
-          all.max{|a, b| a.id <=> b.id}.id + 1
+          all.max{|a, b| a.id <=> b.id}.id.next
         end
       end
 

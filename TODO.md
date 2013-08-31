@@ -1,11 +1,18 @@
 # Paradeiser Backlog
 
+* By default, hooks copied by `par init` should not be executable, otherwise the hooks will fail if the optional dependencies (e.g. `notify-send` on Linux) are not present
+
+* Remove bundler reference from bin script (or move it down). Otherwise, the deployed script will fail with
+
+    Could not locate Gemfile (Bundler::GemfileNotFound)
+
 * Add validations to models. `finished_at` must occur at after created at, etc.
 
 * There must be no overlap in pomodori, even if we log one.
   - Logging one while another one is active must fail unless finished at is before the active one's started at.
 
-There may be a validation missing in the repo!
+* `par log` needs options for when the logged pomodoro was started and / or stopped
+
 * Improve tests with more doubles
   - Sandy Metz rules about testing messages:
     - Incoming: Assert state
@@ -23,8 +30,6 @@ There may be a validation missing in the repo!
   => action_view/helpers/date_helper
 
 * Simplify the status view. Separate views by class (break vs. pomodoro).
-
-* Refactor the hooks tests: extract the common code
 
 * Whenever par runs, it should garbage-collect pomodori or breaks (finish them and adjust their finish time) that weren't finished after they were over (e.g. because at isn't there or the hooks did not fire)
 
@@ -57,7 +62,7 @@ There may be a validation missing in the repo!
   - test with `if $stdin.tty?`
   - If that approach works well, suggest it for TaskWarrior too (for bulk actions, e.g. in scripts)
 
-* Implement documentation Approach
+* Implement documentation approach
   - `par help` is what the user will use to get information.
   - Not sure how to allow the user to look at features that are not related to a command. Either extend `par help` to accept arbitrary keywords, or look into 'gem man`.
 
@@ -70,7 +75,7 @@ There may be a validation missing in the repo!
   - As part of finishing a feature, the feature file is moved from the backlog file to in individual doc file, and the README is updated to mention that feature.
 
 * Promote Paradeiser
-  - Publish an [ASCII cast](http://ascii.io/)
+  - Publish an [ASCII cast](http://ascii.io/) or with [Showterm](http://showterm.io/)
   - Tell the TaskWarrior community about Paradeiser
   - Tell the Pomodoro community about Paradeiser
   - Tell the Ruby community about Paradeiser (e.g. @neverbendeasy does kanban)

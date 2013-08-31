@@ -21,7 +21,7 @@ class TestPomodoroHooks < MiniTest::Test
     pom = produce(Pomodoro)
     assert_path_exists(token_file, "#{hook_name} hook should have created a token file")
     assert_equal(:active, pom.status_name)
-    assert_match(/Pomodoro \d \d{1,2}:\d{1,2}/ , File.read(token_file).chomp)
+    assert_match(/Pomodoro \d+ \d{1,2}:\d{1,2}/, File.read(token_file).chomp)
   end
 
   def test_before_finish_pomodoro_success

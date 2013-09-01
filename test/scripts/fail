@@ -1,4 +1,5 @@
 #!/bin/bash
 
-echo Must not execute hooks from home directory >&2
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+echo Tests must not execute the "$(basename "${BASH_SOURCE[0]}")" hook from "$DIR". >&2
 false

@@ -1,5 +1,7 @@
-module Paradeiser
-  class ControllerTest < MiniTest::Test
+require 'helper'
+
+module ParadeiserTest
+  class ControllerTest < UnitTest
     def invoke(method, args = nil, options = nil, *attributes)
       controller = Paradeiser.const_get("#{model.pluralize.capitalize}Controller".to_sym).new(method)
 

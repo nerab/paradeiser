@@ -1,12 +1,6 @@
 # Paradeiser Backlog
 
-* The unit tests must not use the hooks from $HOME. Right now, for instance, TestBreak uses instantiates a plain Break, which will happily call the real ~/.paradeiser/hooks/*, which is surely not what we want.
-
-  The integration tests do this right by setting
-
-        ENV['PAR_DIR'] = Dir.mktmpdir
-
-    in the setup method. We could set this in a base class for all unit tests. Alternatively, FakeFS might help here.
+* Remove the token files generated in TestPomodoroHooks
 
 * BUG: A failing after-start-pomodoro hook seems to prevent `par start` from running, but it actually should not: Only before-hooks are allowed to cancel actions.
 

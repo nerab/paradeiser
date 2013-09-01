@@ -5,7 +5,7 @@ require 'paradeiser'
 require 'tasks/state_machine'
 
 Rake::TestTask.new(:test) do |test|
-  test.libs << 'lib' << 'test' << 'test/helpers'
+  test.libs << 'test'
   test.test_files = FileList['test/**/test_*.rb']
 end
 

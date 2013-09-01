@@ -3,7 +3,7 @@ require 'erb'
 require 'state_machine'
 
 require 'require_all'
-require_rel "paradeiser"
+require_rel 'paradeiser'
 
 module Paradeiser
   def self.par_dir

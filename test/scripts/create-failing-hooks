@@ -1,0 +1,1 @@
+cat hooks | while read h; do ln -s fail "$h"; done

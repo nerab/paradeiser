@@ -1,6 +1,6 @@
 require 'helper'
 
-module Paradeiser
+module ParadeiserTest
   #
   # We put all integration tests into separate files so we only run one at a
   # time after a change. These tests are expensive to run.

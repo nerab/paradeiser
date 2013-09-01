@@ -1,0 +1,4 @@
+#!/bin/bash
+
+echo Must not execute hooks from home directory >&2
+false

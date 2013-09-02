@@ -1,16 +1,15 @@
 require 'helper'
-require 'tmpdir'
 
 module ParadeiserTest
   class TestPomodoroHooks < UnitTest
     def setup
       super
-      @token_files =[]
+      @token_file_registry = TokenFileRegistry.new
     end
 
     def teardown
       if passed?
-        @token_files.each{|tf| FileUtils.rm(tf) if File.exist?(tf)}
+        @token_file_registry.cleanup
         super
       end
     end
@@ -182,8 +181,7 @@ module ParadeiserTest
   private
 
     def create_hook(thing, hook_name, hook_succeeds = true)
-      token_file = File.join(Dir.tmpdir, SecureRandom.uuid)
-      @token_files << token_file
+      token_file = @token_file_registry.create
 
       hooks_dir = Paradeiser.hooks_dir
       FileUtils.mkdir(hooks_dir)

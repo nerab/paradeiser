@@ -16,7 +16,7 @@ module ParadeiserTest
       end
 
       @orig_PAR_DIR = ENV['PAR_DIR']
-      ENV['PAR_DIR'] = Dir.mktmpdir
+      ENV['PAR_DIR'] = Dir.mktmpdir(name)
       ENV['PAR_AT_QUEUE'] = 'i'
       assert_command('init')
     end

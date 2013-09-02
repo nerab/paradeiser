@@ -13,6 +13,10 @@ module Paradeiser
         ENV["PAR_#{pom.name.upcase}_STARTED_AT"] = pom.started_at.strftime('%H:%M') if pom.started_at
 
         out, err, status = Open3.capture3(hook)
+
+        ENV.delete("PAR_#{pom.name.upcase}_ID")
+        ENV.delete("PAR_#{pom.name.upcase}_STARTED_AT")
+
         raise HookFailedError.new(hook, out, err, status) if 0 != status.exitstatus
       end
     end

@@ -50,7 +50,7 @@ class TestParadeiserControllerInit < MiniTest::Test
   def test_init_existing_with_env_override
     ENV.delete('PAR_DIR')
 
-    Dir.mktmpdir do |dir|
+    Dir.mktmpdir(name) do |dir|
       refute_equal(dir, Paradeiser.par_dir)
       ENV['PAR_DIR'] = dir
       assert_equal(dir, Paradeiser.par_dir)

@@ -6,11 +6,11 @@ module ParadeiserTest
       # Cannot use fakefs because hooks will not execute under it, but as part of
       # the real FS. Instead, we set the $PAR_DIR to point to a temp directory
       @orig_PAR_DIR = ENV['PAR_DIR']
-      ENV['PAR_DIR'] = Dir.mktmpdir
+      ENV['PAR_DIR'] = Dir.mktmpdir(name)
     end
 
     def teardown
-      FileUtils.rm_rf(Paradeiser.par_dir)
+      FileUtils.rm_rf(ENV['PAR_DIR'])
       ENV['PAR_DIR'] = @orig_PAR_DIR
     end
 

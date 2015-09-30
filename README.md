@@ -128,7 +128,7 @@ It will appear in the reports and will count towards efficiency calculations. Th
 
   Creates the `$PAR_DIR` directory and the sample hooks in `$PAR_DIR/hooks`. The data store will not be created on `par init`, but when the first write operation happens (e.g. `par pomodoro start`, but not `par report`).
 
-* Initialize an abritrary directory
+* Initialize an arbitrary directory
 
           $ par init /tmp
 

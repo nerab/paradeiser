@@ -5,6 +5,6 @@ gemspec
 
 group :test do
   gem 'rake'
-  gem 'minitest', '~> 5.0.0'
+  gem 'minitest', '~> 5.10.3'
   gem 'fakefs', :require => "fakefs/safe"
 end

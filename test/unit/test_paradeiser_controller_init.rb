@@ -26,7 +26,7 @@ class TestParadeiserControllerInit < MiniTest::Test
   end
 
   def test_init_existing
-    FileUtils.mkdir_p(Paradeiser.par_dir, 0700)
+    FileUtils.mkdir_p(Paradeiser.par_dir, mode: 0700)
     assert(Dir.exists?(Paradeiser.par_dir))
 
     invoke(:init)

@@ -1,4 +1,5 @@
 require 'helper'
+require 'shellwords'
 
 module ParadeiserTest
   #
@@ -8,6 +9,11 @@ module ParadeiserTest
   class IntegrationTest < MiniTest::Test
     PAR = 'bin/par'
     include Executor
+
+    def initialize(*args)
+      super(*args)
+      @do_not_clear = nil
+    end
 
     def setup
       if Scheduler.list.any?

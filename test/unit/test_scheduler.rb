@@ -2,6 +2,11 @@ require 'helper'
 
 module ParadeiserTest
   class TestScheduler < UnitTest
+    def initialize(*args)
+      super(*args)
+      @do_not_clear = nil
+    end
+
     def setup
       super
       if Scheduler.list.any?

@@ -4,6 +4,10 @@ module Paradeiser
   class Scheduled
     attr_accessor :id, :started_at, :finished_at
 
+    def initialize
+      @id = nil
+    end
+
     def new?
       @id.nil?
     end

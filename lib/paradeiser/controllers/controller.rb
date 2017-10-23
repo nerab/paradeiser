@@ -6,6 +6,7 @@ module Paradeiser
       @method = method
       @exitstatus = 0
       @has_output = false
+      @already_rendered = nil
     end
 
     def call(args, options)

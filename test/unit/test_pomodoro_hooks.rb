@@ -204,17 +204,17 @@ module ParadeiserTest
     end
 
     def hook_contents_success(thing, token_file)
-      hook_contents =<<"EOF"
-#!/bin/sh
-echo "#{thing} $PAR_#{thing.upcase}_ID $PAR_#{thing.upcase}_STARTED_AT" > #{token_file}
-EOF
-  end
+      <<~EOF
+        #!/bin/sh
+        echo "#{thing} $PAR_#{thing.upcase}_ID $PAR_#{thing.upcase}_STARTED_AT" > #{token_file}
+      EOF
+    end
 
-  def hook_contents_failure
-    hook_contents =<<"EOF"
-#!/bin/sh
-exit 1
-EOF
+    def hook_contents_failure
+      <<~EOF
+        #!/bin/sh
+        exit 1
+      EOF
     end
   end
 end

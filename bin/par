@@ -1,10 +1,13 @@
 #!/usr/bin/env ruby
 
-require 'commander/import'
+$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+
 require 'paradeiser'
+require 'commander/import'
+
 include Paradeiser
 
-program :version, Paradeiser::VERSION
+program :version, VERSION
 program :description, "Paradeiser is a command-line tool for the Pomodoro Technique. It keeps track of the current pomodoro and assists the user in managing active and past pomodori as well as breaks. Status commands and reports are provided to get insights."
 program :help, 'Author', 'Nicholas E. Rabenau <nerab@gmx.at>'
 

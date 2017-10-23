@@ -19,19 +19,14 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_runtime_dependency 'commander'
-  spec.add_runtime_dependency 'require_all'
   spec.add_runtime_dependency 'state_machine'
   spec.add_runtime_dependency 'activesupport'
   spec.add_runtime_dependency 'actionpack'
-#  spec.add_runtime_dependency 'actionview'
   spec.add_runtime_dependency 'activemodel'
-
-  # Moved to the Gemfile so that Travis CI can load the test group
-  # spec.add_development_dependency 'rake'
-  # spec.add_development_dependency 'minitest'
 
   spec.add_development_dependency 'guard-minitest'
   spec.add_development_dependency 'guard-bundler'
+  spec.add_development_dependency 'terminal-notifier'
   spec.add_development_dependency 'terminal-notifier-guard'
   spec.add_development_dependency 'libnotify'
   spec.add_development_dependency 'rb-inotify'
